@@ -1,4 +1,4 @@
-namespace VirtualVistaHub.PL.Models
+namespace VirtualVistaHub.Models
 {
     public class ErrorViewModel
     {

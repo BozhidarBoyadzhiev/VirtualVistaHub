@@ -1,10 +1,4 @@
-using VirtualVistaHub.BLL;
-using VirtualVistaHub.DAL.Repositories;
-using VirtualVistaHub.DAL.Models;
-using VirtualVistaHub.DAL.Data;
-using Microsoft.EntityFrameworkCore;
-
-namespace VirtualVistaHub.PL
+namespace VirtualVistaHub
 {
     public class Program
     {
@@ -14,9 +8,6 @@ namespace VirtualVistaHub.PL
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddDbContext<ApplicationDBContext>(options=>options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-            builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
-            builder.Services.AddScoped<ICustomerService, CustomerService>();
 
             var app = builder.Build();
 

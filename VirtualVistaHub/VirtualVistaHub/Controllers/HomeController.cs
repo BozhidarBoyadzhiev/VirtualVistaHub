@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using VirtualVistaHub.PL.Models;
+using VirtualVistaHub.Models;
 
-namespace VirtualVistaHub.PL.Controllers
+namespace VirtualVistaHub.Controllers
 {
     public class HomeController : Controller
     {
@@ -19,6 +19,10 @@ namespace VirtualVistaHub.PL.Controllers
         }
 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+        public IActionResult Login()
         {
             return View();
         }
