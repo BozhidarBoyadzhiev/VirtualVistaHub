@@ -1,52 +1,30 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
 using VirtualVistaHub.Models;
 
 namespace VirtualVistaHub.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        VirtualVistaBaseEntities db = new VirtualVistaBaseEntities();
 
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
-        public IActionResult Index()
+        public ActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-        public IActionResult Buy()
-        {
-            return View();
-        }
-        public IActionResult SellRent()
-        {
-            return View();
-        }
-        public IActionResult Search()
-        {
-            return View();
-        }
-        public IActionResult LogIn()
-        {
-            return View();
-        }
-        public IActionResult SignUp()
+        public ActionResult Signup()
         {
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpPost]
+        public ActionResult Signup(TBL tBLUserInfo)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View();
         }
     }
 }

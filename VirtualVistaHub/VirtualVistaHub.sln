@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.4.33213.308
+VisualStudioVersion = 17.9.34902.65
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtualVistaHub", "VirtualVistaHub\VirtualVistaHub.csproj", "{568BC453-0407-4CAB-BFDE-F25E0A7562DD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtualVistaHub", "VirtualVistaHub\VirtualVistaHub.csproj", "{679D2FAE-D6B1-458E-96E1-E8A742F9DC01}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{568BC453-0407-4CAB-BFDE-F25E0A7562DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{568BC453-0407-4CAB-BFDE-F25E0A7562DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{568BC453-0407-4CAB-BFDE-F25E0A7562DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{568BC453-0407-4CAB-BFDE-F25E0A7562DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{679D2FAE-D6B1-458E-96E1-E8A742F9DC01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{679D2FAE-D6B1-458E-96E1-E8A742F9DC01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{679D2FAE-D6B1-458E-96E1-E8A742F9DC01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{679D2FAE-D6B1-458E-96E1-E8A742F9DC01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {1B6C09D7-EC45-4D94-904B-346882FFB5DD}
+		SolutionGuid = {6996A7CF-1D45-437C-A6C2-5D648969DF9C}
 	EndGlobalSection
 EndGlobal
