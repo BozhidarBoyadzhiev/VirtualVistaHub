@@ -13,6 +13,19 @@ namespace VirtualVistaHub.Controllers
 
         public ActionResult Index()
         {
+            return View(db.Users.ToList());
+        }
+
+        public ActionResult Buy()
+        {
+            return View();
+        }
+        public ActionResult SellRent()
+        {
+            return View();
+        }
+        public ActionResult Search()
+        {
             return View();
         }
 
@@ -22,9 +35,24 @@ namespace VirtualVistaHub.Controllers
         }
 
         [HttpPost]
-        public ActionResult Signup(TBL tBLUserInfo)
+        public ActionResult Signup(User tBLUserInfo)
         {
-            return View();
+            if (db.Users.Any(x => x.Email == tBLUserInfo.Email))
+            {
+                ViewBag.Notification = "This account has already existed";
+                return View();
+            }
+            else
+            {
+                db.Users.Add(tBLUserInfo);
+                db.SaveChanges();
+
+                Session["idUser"] = tBLUserInfo.UserId.ToString();
+                Session["UserFirstName"] = tBLUserInfo.FirstName.ToString();
+                Session["UserEmail"] = tBLUserInfo.Email.ToString();
+
+                return RedirectToAction("Index", "Home");
+            }
         }
     }
 }

@@ -137,10 +137,24 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DBmodel.Context.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DBmodel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DBmodel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DBmodel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DBmodel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Propety.cs">
+      <DependentUpon>DBmodel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Staff.cs">
+      <DependentUpon>DBmodel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\User.cs">
+      <DependentUpon>DBmodel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -167,6 +181,12 @@
     <Content Include="Models\DBmodel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>DBmodel.Context.cs</LastGenOutput>
+      <DependentUpon>DBmodel.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\DBmodel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>DBmodel.edmx</DependentUpon>
+      <LastGenOutput>DBmodel.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -178,9 +198,9 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>DBmodel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="Models\DBmodel.edmx.diagram">
+    <Content Include="Models\DBmodel.edmx.diagram">
       <DependentUpon>DBmodel.edmx</DependentUpon>
-    </None>
+    </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -205,6 +225,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Signup.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>

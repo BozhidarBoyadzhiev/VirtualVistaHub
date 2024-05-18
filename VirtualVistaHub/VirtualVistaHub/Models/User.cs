@@ -11,7 +11,9 @@ namespace VirtualVistaHub.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
     public partial class User
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -21,10 +23,32 @@ namespace VirtualVistaHub.Models
         }
     
         public int UserId { get; set; }
+
+        [Required(ErrorMessage = "This field is required!")]
+        [Display(Name = "First name:")]
         public string FirstName { get; set; }
+
+        [Required(ErrorMessage = "This field is required!")]
+        [Display(Name = "Last name:")]
         public string LastName { get; set; }
+
+        [Required(ErrorMessage = "This field is required!")]
+        [Display(Name = "Email:")]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
-        public string Password { get; set; }
+      
+        [Required(ErrorMessage = "This field is required!")]
+        [Display(Name = "Password:")]
+        [DataType(DataType.Password)]
+        public string Password { get; set; } 
+        
+
+        [Required(ErrorMessage = "This field is required!")]
+        [Display(Name = "Reenter your password:")]
+        [DataType(DataType.Password)]
+        [NotMapped]
+        [Compare("Password", ErrorMessage = "Confirm password doesn't match, type again!")]
+        public string RePassword { get; set; }
         public Nullable<bool> Deleted { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
