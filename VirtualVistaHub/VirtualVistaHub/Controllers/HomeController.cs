@@ -22,7 +22,23 @@ namespace VirtualVistaHub.Controllers
         {
             return View();
         }
-        public IActionResult Login()
+        public IActionResult Buy()
+        {
+            return View();
+        }
+        public IActionResult SellRent()
+        {
+            return View();
+        }
+        public IActionResult Search()
+        {
+            return View();
+        }
+        public IActionResult LogIn()
+        {
+            return View();
+        }
+        public IActionResult SignUp()
         {
             return View();
         }
