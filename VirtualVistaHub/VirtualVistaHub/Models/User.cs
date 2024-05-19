@@ -24,30 +24,41 @@ namespace VirtualVistaHub.Models
     
         public int UserId { get; set; }
 
-        [Required(ErrorMessage = "This field is required!")]
+        [Required(ErrorMessage = "This field is required.")]
         [Display(Name = "First name:")]
+        [MaxLength(50, ErrorMessage = "First name must be at most 50 characters long.")]
+        [MinLength(3, ErrorMessage = "First name must be at least 3 characters long.")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "First name must contain only letters.")]
         public string FirstName { get; set; }
 
-        [Required(ErrorMessage = "This field is required!")]
+
+        [Required(ErrorMessage = "Last name is required.")]
         [Display(Name = "Last name:")]
+        [MaxLength(50, ErrorMessage = "Last name must be at most 50 characters long.")]
+        [MinLength(3, ErrorMessage = "Last name must be at least 3 characters long.")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Last name must contain only letters.")]
         public string LastName { get; set; }
 
-        [Required(ErrorMessage = "This field is required!")]
+        [Required(ErrorMessage = "Email is required.")]
         [Display(Name = "Email:")]
-        [DataType(DataType.EmailAddress)]
+        [MaxLength(100, ErrorMessage = "Email must be at most 100 characters long.")]
+        [MinLength(4, ErrorMessage = "Email must be at least 4 characters long.")]
+        [DataType(DataType.EmailAddress, ErrorMessage = "Invalid email format.")]
         public string Email { get; set; }
-      
-        [Required(ErrorMessage = "This field is required!")]
-        [Display(Name = "Password:")]
-        [DataType(DataType.Password)]
-        public string Password { get; set; } 
-        
 
+        [Required(ErrorMessage = "Password is required.")]
+        [Display(Name = "Password:")]
+        [MaxLength(400, ErrorMessage = "Password must be at most 400 characters long.")]
+        [MinLength(8, ErrorMessage = "Password must be at least 8 characters long.")]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+
+
+        [NotMapped]
         [Required(ErrorMessage = "This field is required!")]
         [Display(Name = "Reenter your password:")]
-        [DataType(DataType.Password)]
-        [NotMapped]
-        [Compare("Password", ErrorMessage = "Confirm password doesn't match, type again!")]
+        [DataType(DataType.Password)]        
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string RePassword { get; set; }
         public Nullable<bool> Deleted { get; set; }
     
