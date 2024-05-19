@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
 using VirtualVistaHub.Models;
-using BCrypt.Net;
+using VirtualVistaHub.Filters;
 
 namespace VirtualVistaHub.Controllers
 {
@@ -12,32 +9,50 @@ namespace VirtualVistaHub.Controllers
     {
         VirtualVistaBaseEntities db = new VirtualVistaBaseEntities();
 
+        [AllowAnonymous]
         public ActionResult Index()
         {
             return View(db.Users.ToList());
         }
 
+        [AllowAnonymous]
         public ActionResult Buy()
         {
             return View();
         }
+
+        [AllowAnonymous]
         public ActionResult SellRent()
         {
             return View();
         }
+
+        [AllowAnonymous]
         public ActionResult Search()
         {
             return View();
         }
 
+        [AllowAnonymous]
         public ActionResult Signup()
         {
             return View();
         }
+
+        [SessionAuthorize]
         public ActionResult Properties()
         {
-            return View();
+            var userId = Session["idUser"];
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            var properties = db.Properties.Where(p => p.UserId.ToString() == userId.ToString()).ToList();
+            return View(properties);
         }
+
+        [SessionAuthorize]
         public ActionResult Account()
         {
             return View();
@@ -54,27 +69,34 @@ namespace VirtualVistaHub.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public ActionResult Signup(User user)
         {
             if (db.Users.Any(x => x.Email == user.Email))
             {
-                ViewBag.Notification = "This account has already existed";
+                ViewBag.Notification = "This account already exists";
                 return View();
             }
             else
             {
-                if (ModelState.IsValid)
+                if (ModelState.IsValid && user.Password == user.RePassword)
                 {
                     user.Password = HashPassword(user.Password);
                     db.Users.Add(user);
                     db.SaveChanges();
 
                     Session["idUser"] = user.UserId.ToString();
-                    Session["UserFirstName"] = user.FirstName.ToString();
-                    Session["UserEmail"] = user.Email.ToString();
-                }
+                    Session["UserFirstName"] = user.FirstName;
+                    Session["UserEmail"] = user.Email;
 
-                return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ViewBag.Notification = "The password and confirmation password do not match.";
+                    return View();
+                }
             }
         }
 
@@ -85,12 +107,14 @@ namespace VirtualVistaHub.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public ActionResult Login()
         {
             return View();
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public ActionResult Login(User user)
         {
@@ -104,8 +128,12 @@ namespace VirtualVistaHub.Controllers
                 {
                     Session["idUser"] = checkLogin.UserId.ToString();
                     Session["UserFirstName"] = checkLogin.FirstName;
-                    Session["UserEmail"] = user.Email;
+                    Session["UserEmail"] = checkLogin.Email;
                     return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ViewBag.Notification = "Wrong email or password";
                 }
             }
             else

@@ -12,21 +12,15 @@ namespace VirtualVistaHub.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Propety
+    public partial class PropertyVisualDetail
     {
         public int PropertyId { get; set; }
-        public string TypeOfProperty { get; set; }
-        public string District { get; set; }
-        public Nullable<int> Price { get; set; }
-        public Nullable<int> Area { get; set; }
-        public string TypeOfContrusction { get; set; }
-        public string PhoneNumber { get; set; }
-        public string AdditionalInformation { get; set; }
-        public string ApprovalStatus { get; set; }
-        public Nullable<bool> Deleted { get; set; }
-        public Nullable<bool> Sold { get; set; }
+        public string CoordinatesOfVTour { get; set; }
+        public string Image { get; set; }
+        public string Video { get; set; }
         public Nullable<int> UserId { get; set; }
     
+        public virtual Property Property { get; set; }
         public virtual User User { get; set; }
     }
 }

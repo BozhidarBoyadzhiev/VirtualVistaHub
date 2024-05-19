@@ -14,40 +14,40 @@
                 <div class="d-flex w-100 justify-content-between">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            @Html.ActionLink("Buy", "Buy", "Home", new { area = "" }, new { @class = "nav-link text-dark" })
+                            @Html.ActionLink("Купи", "Buy", "Home", new { area = "" }, new { @class = "nav-link text-dark border-end border-dark pe-3" })
                         </li>
                         <li class="nav-item">
-                            @Html.ActionLink("Sell & Rent", "SellRent", "Home", new { area = "" }, new { @class = "nav-link text-dark" })
+                            @Html.ActionLink("Продай и отдай под наем", "SellRent", "Home", new { area = "" }, new { @class = "nav-link text-dark border-end border-dark pe-3" })
                         </li>
                         <li class="nav-item">
-                            @Html.ActionLink("Search", "Search", "Home", new { area = "" }, new { @class = "nav-link text-dark" })
-                        </li>                       
+                            @Html.ActionLink("Търси", "Search", "Home", new { area = "" }, new { @class = "nav-link text-dark pe-3" })
+                        </li>
                     </ul>
 
                     <a class="navbar-brand mx-auto" href="@Url.Action("Index", "Home", new { area = "" })">
-                        <img width="200" src="@Url.Content("~/Content/imgs/logo.png")" />                   
+                        <img width="200" src="@Url.Content("~/Content/imgs/logo.png")" />
                     </a>
 
                     <ul class="navbar-nav ms-auto">
                         @if (Session["UserFirstname"] != null)
                         {
                             <li class="nav-item">
-                                @Html.ActionLink("Your properties", "Properties", "Home", new { area = "" }, new { @class = "nav-link text-dark" })
+                                @Html.ActionLink("Твойте имоти", "Properties", "Home", new { area = "" }, new { @class = "nav-link text-dark" })
                             </li>
                             <li class="nav-item">
-                                @Html.ActionLink("Account", "Account", "Home", new { area = "" }, new { @class = "nav-link text-dark" })
+                                @Html.ActionLink("Акаунт", "Account", "Home", new { area = "" }, new { @class = "nav-link text-dark border-start border-dark ps-3" })
                             </li>
                             <li class="nav-item">
-                                @Html.ActionLink("Log Out", "Logout", "Home", new { area = "" }, new { @class = "nav-link text-dark" })
+                                @Html.ActionLink("Отпиши се", "Logout", "Home", new { area = "" }, new { @class = "nav-link text-dark border-start border-dark ps-3" })
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                @Html.ActionLink("Log In", "Login", "Home", new { area = "" }, new { @class = "nav-link text-dark" })
+                                @Html.ActionLink("Впиши се", "Login", "Home", new { area = "" }, new { @class = "nav-link text-dark" })
                             </li>
                             <li class="nav-item">
-                                @Html.ActionLink("Sign Up", "Signup", "Home", new { area = "" }, new { @class = "nav-link text-dark" })
+                                @Html.ActionLink("Регистрирай се", "Signup", "Home", new { area = "" }, new { @class = "nav-link text-dark border-start border-dark ps-3" })
                             </li>
                         }
                     </ul>
@@ -55,6 +55,7 @@
             </div>
         </nav>
     </header>
+
 
 
     <div class="container body-content">

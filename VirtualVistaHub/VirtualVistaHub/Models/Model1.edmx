@@ -5,7 +5,7 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
       <Schema Namespace="VirtualVistaBaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="Propeties">
+        <EntityType Name="Property">
           <Key>
             <PropertyRef Name="PropertyId" />
           </Key>
@@ -20,6 +20,16 @@
           <Property Name="ApprovalStatus" Type="varchar" MaxLength="50" />
           <Property Name="Deleted" Type="bit" />
           <Property Name="Sold" Type="bit" />
+          <Property Name="UserId" Type="int" />
+        </EntityType>
+        <EntityType Name="PropertyVisualDetails">
+          <Key>
+            <PropertyRef Name="PropertyId" />
+          </Key>
+          <Property Name="PropertyId" Type="int" Nullable="false" />
+          <Property Name="CoordinatesOfVTour" Type="nvarchar" MaxLength="1" />
+          <Property Name="Image" Type="nvarchar" MaxLength="1" />
+          <Property Name="Video" Type="nvarchar" MaxLength="1" />
           <Property Name="UserId" Type="int" />
         </EntityType>
         <EntityType Name="Staff">
@@ -37,22 +47,46 @@
           <Property Name="FirstName" Type="varchar" MaxLength="50" />
           <Property Name="LastName" Type="varchar" MaxLength="50" />
           <Property Name="Email" Type="varchar" MaxLength="100" />
-          <Property Name="Password" Type="varchar" MaxLength="100" />
+          <Property Name="Password" Type="varchar" MaxLength="1000" />
           <Property Name="Deleted" Type="bit" />
         </EntityType>
-        <Association Name="FK__Propeties__UserI__3B75D760">
+        <Association Name="FK__Property__UserId__6477ECF3">
           <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
-          <End Role="Propeties" Type="Self.Propeties" Multiplicity="*" />
+          <End Role="Property" Type="Self.Property" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Users">
               <PropertyRef Name="UserId" />
             </Principal>
-            <Dependent Role="Propeties">
+            <Dependent Role="Property">
               <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Staff__UserId__3E52440B">
+        <Association Name="FK__PropertyV__Prope__6B24EA82">
+          <End Role="Property" Type="Self.Property" Multiplicity="1" />
+          <End Role="PropertyVisualDetails" Type="Self.PropertyVisualDetails" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Property">
+              <PropertyRef Name="PropertyId" />
+            </Principal>
+            <Dependent Role="PropertyVisualDetails">
+              <PropertyRef Name="PropertyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PropertyV__UserI__6C190EBB">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="PropertyVisualDetails" Type="Self.PropertyVisualDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="PropertyVisualDetails">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Staff__UserId__5FB337D6">
           <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="Staff" Type="Self.Staff" Multiplicity="0..1" />
           <ReferentialConstraint>
@@ -65,14 +99,23 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="VirtualVistaBaseModelStoreContainer">
-          <EntitySet Name="Propeties" EntityType="Self.Propeties" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Property" EntityType="Self.Property" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PropertyVisualDetails" EntityType="Self.PropertyVisualDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Staff" EntityType="Self.Staff" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__Propeties__UserI__3B75D760" Association="Self.FK__Propeties__UserI__3B75D760">
+          <AssociationSet Name="FK__Property__UserId__6477ECF3" Association="Self.FK__Property__UserId__6477ECF3">
             <End Role="Users" EntitySet="Users" />
-            <End Role="Propeties" EntitySet="Propeties" />
+            <End Role="Property" EntitySet="Property" />
           </AssociationSet>
-          <AssociationSet Name="FK__Staff__UserId__3E52440B" Association="Self.FK__Staff__UserId__3E52440B">
+          <AssociationSet Name="FK__PropertyV__Prope__6B24EA82" Association="Self.FK__PropertyV__Prope__6B24EA82">
+            <End Role="Property" EntitySet="Property" />
+            <End Role="PropertyVisualDetails" EntitySet="PropertyVisualDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PropertyV__UserI__6C190EBB" Association="Self.FK__PropertyV__UserI__6C190EBB">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="PropertyVisualDetails" EntitySet="PropertyVisualDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Staff__UserId__5FB337D6" Association="Self.FK__Staff__UserId__5FB337D6">
             <End Role="Users" EntitySet="Users" />
             <End Role="Staff" EntitySet="Staff" />
           </AssociationSet>
@@ -82,7 +125,7 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="VirtualVistaBaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Propety">
+        <EntityType Name="Property">
           <Key>
             <PropertyRef Name="PropertyId" />
           </Key>
@@ -98,7 +141,20 @@
           <Property Name="Deleted" Type="Boolean" />
           <Property Name="Sold" Type="Boolean" />
           <Property Name="UserId" Type="Int32" />
-          <NavigationProperty Name="User" Relationship="Self.FK__Propeties__UserI__3B75D760" FromRole="Propeties" ToRole="Users" />
+          <NavigationProperty Name="User" Relationship="Self.FK__Property__UserId__6477ECF3" FromRole="Property" ToRole="Users" />
+          <NavigationProperty Name="PropertyVisualDetail" Relationship="Self.FK__PropertyV__Prope__6B24EA82" FromRole="Property" ToRole="PropertyVisualDetails" />
+        </EntityType>
+        <EntityType Name="PropertyVisualDetail">
+          <Key>
+            <PropertyRef Name="PropertyId" />
+          </Key>
+          <Property Name="PropertyId" Type="Int32" Nullable="false" />
+          <Property Name="CoordinatesOfVTour" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="Image" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="Video" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="Int32" />
+          <NavigationProperty Name="Property" Relationship="Self.FK__PropertyV__Prope__6B24EA82" FromRole="PropertyVisualDetails" ToRole="Property" />
+          <NavigationProperty Name="User" Relationship="Self.FK__PropertyV__UserI__6C190EBB" FromRole="PropertyVisualDetails" ToRole="Users" />
         </EntityType>
         <EntityType Name="Staff">
           <Key>
@@ -106,7 +162,7 @@
           </Key>
           <Property Name="UserId" Type="Int32" Nullable="false" />
           <Property Name="UserLevel" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="User" Relationship="Self.FK__Staff__UserId__3E52440B" FromRole="Staff" ToRole="Users" />
+          <NavigationProperty Name="User" Relationship="Self.FK__Staff__UserId__5FB337D6" FromRole="Staff" ToRole="Users" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -116,24 +172,49 @@
           <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
           <Property Name="Deleted" Type="Boolean" />
-          <NavigationProperty Name="Propeties" Relationship="Self.FK__Propeties__UserI__3B75D760" FromRole="Users" ToRole="Propeties" />
-          <NavigationProperty Name="Staff" Relationship="Self.FK__Staff__UserId__3E52440B" FromRole="Users" ToRole="Staff" />
+          <NavigationProperty Name="Properties" Relationship="Self.FK__Property__UserId__6477ECF3" FromRole="Users" ToRole="Property" />
+          <NavigationProperty Name="PropertyVisualDetails" Relationship="Self.FK__PropertyV__UserI__6C190EBB" FromRole="Users" ToRole="PropertyVisualDetails" />
+          <NavigationProperty Name="Staff" Relationship="Self.FK__Staff__UserId__5FB337D6" FromRole="Users" ToRole="Staff" />
         </EntityType>
-        <Association Name="FK__Propeties__UserI__3B75D760">
+        <Association Name="FK__Property__UserId__6477ECF3">
           <End Role="Users" Type="Self.User" Multiplicity="0..1" />
-          <End Role="Propeties" Type="Self.Propety" Multiplicity="*" />
+          <End Role="Property" Type="Self.Property" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Users">
               <PropertyRef Name="UserId" />
             </Principal>
-            <Dependent Role="Propeties">
+            <Dependent Role="Property">
               <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Staff__UserId__3E52440B">
+        <Association Name="FK__PropertyV__Prope__6B24EA82">
+          <End Role="Property" Type="Self.Property" Multiplicity="1" />
+          <End Role="PropertyVisualDetails" Type="Self.PropertyVisualDetail" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Property">
+              <PropertyRef Name="PropertyId" />
+            </Principal>
+            <Dependent Role="PropertyVisualDetails">
+              <PropertyRef Name="PropertyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PropertyV__UserI__6C190EBB">
+          <End Role="Users" Type="Self.User" Multiplicity="0..1" />
+          <End Role="PropertyVisualDetails" Type="Self.PropertyVisualDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="PropertyVisualDetails">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Staff__UserId__5FB337D6">
           <End Role="Users" Type="Self.User" Multiplicity="1" />
           <End Role="Staff" Type="Self.Staff" Multiplicity="0..1" />
           <ReferentialConstraint>
@@ -146,14 +227,23 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="VirtualVistaBaseEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Propeties" EntityType="Self.Propety" />
+          <EntitySet Name="Properties" EntityType="Self.Property" />
+          <EntitySet Name="PropertyVisualDetails" EntityType="Self.PropertyVisualDetail" />
           <EntitySet Name="Staffs" EntityType="Self.Staff" />
           <EntitySet Name="Users" EntityType="Self.User" />
-          <AssociationSet Name="FK__Propeties__UserI__3B75D760" Association="Self.FK__Propeties__UserI__3B75D760">
+          <AssociationSet Name="FK__Property__UserId__6477ECF3" Association="Self.FK__Property__UserId__6477ECF3">
             <End Role="Users" EntitySet="Users" />
-            <End Role="Propeties" EntitySet="Propeties" />
+            <End Role="Property" EntitySet="Properties" />
           </AssociationSet>
-          <AssociationSet Name="FK__Staff__UserId__3E52440B" Association="Self.FK__Staff__UserId__3E52440B">
+          <AssociationSet Name="FK__PropertyV__Prope__6B24EA82" Association="Self.FK__PropertyV__Prope__6B24EA82">
+            <End Role="Property" EntitySet="Properties" />
+            <End Role="PropertyVisualDetails" EntitySet="PropertyVisualDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PropertyV__UserI__6C190EBB" Association="Self.FK__PropertyV__UserI__6C190EBB">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="PropertyVisualDetails" EntitySet="PropertyVisualDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Staff__UserId__5FB337D6" Association="Self.FK__Staff__UserId__5FB337D6">
             <End Role="Users" EntitySet="Users" />
             <End Role="Staff" EntitySet="Staffs" />
           </AssociationSet>
@@ -164,9 +254,9 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="VirtualVistaBaseModelStoreContainer" CdmEntityContainer="VirtualVistaBaseEntities">
-          <EntitySetMapping Name="Propeties">
-            <EntityTypeMapping TypeName="VirtualVistaBaseModel.Propety">
-              <MappingFragment StoreEntitySet="Propeties">
+          <EntitySetMapping Name="Properties">
+            <EntityTypeMapping TypeName="VirtualVistaBaseModel.Property">
+              <MappingFragment StoreEntitySet="Property">
                 <ScalarProperty Name="PropertyId" ColumnName="PropertyId" />
                 <ScalarProperty Name="TypeOfProperty" ColumnName="TypeOfProperty" />
                 <ScalarProperty Name="District" ColumnName="District" />
@@ -178,6 +268,17 @@
                 <ScalarProperty Name="ApprovalStatus" ColumnName="ApprovalStatus" />
                 <ScalarProperty Name="Deleted" ColumnName="Deleted" />
                 <ScalarProperty Name="Sold" ColumnName="Sold" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PropertyVisualDetails">
+            <EntityTypeMapping TypeName="VirtualVistaBaseModel.PropertyVisualDetail">
+              <MappingFragment StoreEntitySet="PropertyVisualDetails">
+                <ScalarProperty Name="PropertyId" ColumnName="PropertyId" />
+                <ScalarProperty Name="CoordinatesOfVTour" ColumnName="CoordinatesOfVTour" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Video" ColumnName="Video" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
               </MappingFragment>
             </EntityTypeMapping>

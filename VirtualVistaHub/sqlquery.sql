@@ -4,32 +4,41 @@ USE VirtualVistaBase
 
 CREATE TABLE Users (
 	[UserId] INT PRIMARY KEY IDENTITY,
-	[FirstName] VARCHAR(50),
-	[LastName] VARCHAR(50),
-	[Email] VARCHAR(100),
-	[Password] VARCHAR(100),
-	[Deleted] BIT DEFAULT 0
+	[FirstName] VARCHAR(50) NOT NULL,
+	[LastName] VARCHAR(50) NOT NULL,
+	[Email] VARCHAR(100) NOT NULL,
+	[Password] VARCHAR(1000) NOT NULL,
+	[Deleted] BIT DEFAULT 0 NOT NULL
 );
 
 CREATE TABLE Staff (
-	[UserId] INT FOREIGN KEY REFERENCES Users([UserId]),
-	[UserLevel] VARCHAR(50),
+	[UserId] INT FOREIGN KEY REFERENCES Users([UserId]) NOT NULL,
+	[UserLevel] VARCHAR(50) NOT NULL,
 	PRIMARY KEY([UserId])
 );
 
-CREATE TABLE Propeties (
+CREATE TABLE Property (
 	[PropertyId] INT PRIMARY KEY IDENTITY,
-	[TypeOfProperty] VARCHAR(70),
-	[District] VARCHAR(150),
-	[Price] INT,
-	[Area] INT,
-	[TypeOfContrusction] VARCHAR(20),
-	[PhoneNumber] VARCHAR(50),
-	[AdditionalInformation] VARCHAR(2500),
-	[ApprovalStatus] VARCHAR(50),
-	[Deleted] BIT DEFAULT 0,
-	[Sold] BIT DEFAULT 0,
+	[TypeOfProperty] VARCHAR(70) NOT NULL,
+	[District] VARCHAR(150) NOT NULL,
+	[Price] INT NOT NULL,
+	[Area] INT NOT NULL,
+	[TypeOfContrusction] VARCHAR(20) NOT NULL,
+	[PhoneNumber] VARCHAR(50) NOT NULL,
+	[AdditionalInformation] VARCHAR(2500) NOT NULL,
+	[ApprovalStatus] VARCHAR(50) NOT NULL,
+	[Deleted] BIT DEFAULT 0 NOT NULL,
+	[Sold] BIT DEFAULT 0 NOT NULL,
 	[UserId] INT FOREIGN KEY REFERENCES Users([UserId])
+);
+
+CREATE TABLE PropertyVisualDetails (
+	[PropertyId] INT FOREIGN KEY REFERENCES Property([PropertyId]),
+	[CoordinatesOfVTour] NVARCHAR NOT NULL,
+	[Image] NVARCHAR NOT NULL,
+	[Video] NVARCHAR NOT NULL,
+	[UserId] INT FOREIGN KEY REFERENCES Users([UserId]) NOT NULL
+	PRIMARY KEY([PropertyId])
 );
 
 /* 

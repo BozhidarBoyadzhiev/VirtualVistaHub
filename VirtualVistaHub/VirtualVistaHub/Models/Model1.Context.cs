@@ -25,7 +25,8 @@ namespace VirtualVistaHub.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Propety> Propeties { get; set; }
+        public virtual DbSet<Property> Properties { get; set; }
+        public virtual DbSet<PropertyVisualDetail> PropertyVisualDetails { get; set; }
         public virtual DbSet<Staff> Staffs { get; set; }
         public virtual DbSet<User> Users { get; set; }
     }

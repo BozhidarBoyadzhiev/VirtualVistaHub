@@ -13,17 +13,16 @@ namespace VirtualVistaHub.Models
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-
     public partial class User
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public User()
         {
-            this.Propeties = new HashSet<Propety>();
+            this.Properties = new HashSet<Property>();
+            this.PropertyVisualDetails = new HashSet<PropertyVisualDetail>();
         }
     
         public int UserId { get; set; }
-
         [Required(ErrorMessage = "This field is required.")]
         [Display(Name = "First name:")]
         [MaxLength(50, ErrorMessage = "First name must be at most 50 characters long.")]
@@ -57,13 +56,14 @@ namespace VirtualVistaHub.Models
         [NotMapped]
         [Required(ErrorMessage = "This field is required!")]
         [Display(Name = "Reenter your password:")]
-        [DataType(DataType.Password)]        
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [DataType(DataType.Password)]
         public string RePassword { get; set; }
-        public Nullable<bool> Deleted { get; set; }
-    
+        public Nullable<bool> Deleted { get; set; } = false;
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Propety> Propeties { get; set; }
+        public virtual ICollection<Property> Properties { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PropertyVisualDetail> PropertyVisualDetails { get; set; }
         public virtual Staff Staff { get; set; }
     }
 }

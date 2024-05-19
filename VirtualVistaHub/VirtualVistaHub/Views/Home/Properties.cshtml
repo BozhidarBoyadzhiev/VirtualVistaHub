@@ -1,7 +1,94 @@
-﻿
+﻿@model IEnumerable<VirtualVistaHub.Models.Property>
+
 @{
     ViewBag.Title = "Properties";
 }
 
 <h2>Properties</h2>
 
+<p>
+    @Html.ActionLink("Create New", "Information", "Property")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.TypeOfProperty)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.District)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Area)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TypeOfContrusction)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AdditionalInformation)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ApprovalStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Deleted)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Sold)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserId)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TypeOfProperty)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.District)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Area)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TypeOfContrusction)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AdditionalInformation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApprovalStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Deleted)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sold)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserId)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.PropertyId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.PropertyId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.PropertyId })
+            </td>
+        </tr>
+    }
+
+</table>
