@@ -33,8 +33,6 @@ CREATE TABLE Property (
 	[UserId] INT FOREIGN KEY REFERENCES Users([UserId])
 );
 
-DROP TABLE PropertyDetailsTemplate
-
 CREATE TABLE PropertyDetailsTemplate (
 	[PropertyId] INT FOREIGN KEY REFERENCES Property([PropertyId]),
 	[CoordinatesOfVTour] NVARCHAR NOT NULL,

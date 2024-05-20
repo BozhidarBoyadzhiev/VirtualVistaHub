@@ -103,6 +103,7 @@ namespace VirtualVistaHub.Controllers
         public ActionResult Logout()
         {
             Session.Clear();
+            Session["userLevel"] = "None";
             return RedirectToAction("Index", "Home");
         }
 
@@ -129,6 +130,13 @@ namespace VirtualVistaHub.Controllers
                     Session["idUser"] = checkLogin.UserId.ToString();
                     Session["UserFirstName"] = checkLogin.FirstName;
                     Session["UserEmail"] = checkLogin.Email;
+
+                    var assignUserLevel = db.Staffs.FirstOrDefault(x => x.UserId.Equals(checkLogin.UserId));
+
+                    if (assignUserLevel == null)
+                        Session["userLevel"] = "None";
+                    else
+                        Session["userLevel"] = assignUserLevel.UserLevel;
 
                     return RedirectToAction("Index", "Home");
                 }
