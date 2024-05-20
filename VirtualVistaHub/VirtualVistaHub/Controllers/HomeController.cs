@@ -129,6 +129,7 @@ namespace VirtualVistaHub.Controllers
                     Session["idUser"] = checkLogin.UserId.ToString();
                     Session["UserFirstName"] = checkLogin.FirstName;
                     Session["UserEmail"] = checkLogin.Email;
+
                     return RedirectToAction("Index", "Home");
                 }
                 else

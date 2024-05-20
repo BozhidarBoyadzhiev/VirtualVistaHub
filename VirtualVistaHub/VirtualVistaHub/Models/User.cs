@@ -13,13 +13,14 @@ namespace VirtualVistaHub.Models
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+
     public partial class User
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public User()
         {
             this.Properties = new HashSet<Property>();
-            this.PropertyVisualDetails = new HashSet<PropertyVisualDetail>();
+            this.PropertyDetailsTemplates = new HashSet<PropertyDetailsTemplate>();
         }
     
         public int UserId { get; set; }
@@ -27,7 +28,6 @@ namespace VirtualVistaHub.Models
         [Display(Name = "First name:")]
         [MaxLength(50, ErrorMessage = "First name must be at most 50 characters long.")]
         [MinLength(3, ErrorMessage = "First name must be at least 3 characters long.")]
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "First name must contain only letters.")]
         public string FirstName { get; set; }
 
 
@@ -35,7 +35,6 @@ namespace VirtualVistaHub.Models
         [Display(Name = "Last name:")]
         [MaxLength(50, ErrorMessage = "Last name must be at most 50 characters long.")]
         [MinLength(3, ErrorMessage = "Last name must be at least 3 characters long.")]
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Last name must contain only letters.")]
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "Email is required.")]
@@ -58,12 +57,12 @@ namespace VirtualVistaHub.Models
         [Display(Name = "Reenter your password:")]
         [DataType(DataType.Password)]
         public string RePassword { get; set; }
-        public Nullable<bool> Deleted { get; set; } = false;
-
+        public bool Deleted { get; set; }
+    
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Property> Properties { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PropertyVisualDetail> PropertyVisualDetails { get; set; }
+        public virtual ICollection<PropertyDetailsTemplate> PropertyDetailsTemplates { get; set; }
         public virtual Staff Staff { get; set; }
     }
 }

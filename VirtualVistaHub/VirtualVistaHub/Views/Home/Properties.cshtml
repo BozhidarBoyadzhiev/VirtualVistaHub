@@ -33,13 +33,7 @@
             @Html.DisplayNameFor(model => model.AdditionalInformation)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ApprovalStatus)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Deleted)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Sold)
+            @Html.DisplayNameFor(model => model.PropertyDetailsTable)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.UserId)
@@ -72,21 +66,13 @@
                 @Html.DisplayFor(modelItem => item.AdditionalInformation)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ApprovalStatus)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Deleted)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sold)
+                @Html.DisplayFor(modelItem => item.PropertyDetailsTable)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.UserId)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.PropertyId }) |
-                @Html.ActionLink("Details", "Details", new { id = item.PropertyId }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.PropertyId })
+                @Html.ActionLink("Edit Images", "VisualDetails", "Property", new { propertyId = item.PropertyId, tableName = item.PropertyDetailsTable }, null)
             </td>
         </tr>
     }

@@ -11,25 +11,24 @@ namespace VirtualVistaHub.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-
+    
     public partial class Property
     {
         public int PropertyId { get; set; }
         public string TypeOfProperty { get; set; }
         public string District { get; set; }
-        public Nullable<int> Price { get; set; }
-        public Nullable<int> Area { get; set; }
+        public int Price { get; set; }
+        public int Area { get; set; }
         public string TypeOfContrusction { get; set; }
         public string PhoneNumber { get; set; }
         public string AdditionalInformation { get; set; }
         public string ApprovalStatus { get; set; } = "Not Approved";
-        public Nullable<bool> Deleted { get; set; } = false;
-        public Nullable<bool> Sold { get; set; } = false;
+        public bool Deleted { get; set; }
+        public bool Sold { get; set; }
+        public string PropertyDetailsTable { get; set; }
         public Nullable<int> UserId { get; set; }
     
         public virtual User User { get; set; }
-        public virtual PropertyVisualDetail PropertyVisualDetail { get; set; }
+        public virtual PropertyDetailsTemplate PropertyDetailsTemplate { get; set; }
     }
 }

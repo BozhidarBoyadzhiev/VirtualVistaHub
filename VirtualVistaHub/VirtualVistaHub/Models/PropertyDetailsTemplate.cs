@@ -12,13 +12,13 @@ namespace VirtualVistaHub.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PropertyVisualDetail
+    public partial class PropertyDetailsTemplate
     {
         public int PropertyId { get; set; }
         public string CoordinatesOfVTour { get; set; }
         public string Image { get; set; }
         public string Video { get; set; }
-        public Nullable<int> UserId { get; set; }
+        public int UserId { get; set; }
     
         public virtual Property Property { get; set; }
         public virtual User User { get; set; }
