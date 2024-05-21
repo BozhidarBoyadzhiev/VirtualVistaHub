@@ -37,14 +37,14 @@ namespace VirtualVistaHub.Controllers
         }
 
         [SessionAuthorize("admin", "superadmin", "moderator")]
-        public ActionResult ApproveProperties()
+        public ActionResult ApproveInformation()
         {
-            var properties = db.Properties.Where(p => p.ApprovalStatus == "Not Approved").ToString();
-            return View();
+            var properties = db.Properties.Where(p => p.ApprovalStatus == "Not Approved").ToList();
+            return View(properties);
         }
 
         [SessionAuthorize("admin", "superadmin", "moderator")]
-        public ActionResult Approve(int propertyId, string tableName)
+        public ActionResult ApproveVisuals(int propertyId, string tableName)
         {
             string sql = $"SELECT * FROM {tableName} WHERE PropertyId = @propertyId";
             var propertyIdParam = new SqlParameter("propertyId", propertyId);
@@ -53,6 +53,24 @@ namespace VirtualVistaHub.Controllers
             return View(properties);
         }
 
+        [HttpGet]
+        [SessionAuthorize("admin", "superadmin", "moderator")]
+        public ActionResult Approve(int propertyId, bool approvedstatus = false, string approvedmessage = "")
+        {
+            var property = db.Properties.FirstOrDefault(p => p.PropertyId == propertyId);
+
+            if (approvedstatus == true)
+                property.ApprovalStatus = "Approved";
+            else
+                property.ApprovalStatus = approvedmessage;
+
+            db.Entry(property).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return RedirectToAction("ApproveInformation", "Staff");
+        }
+
+        [HttpGet]
         [SessionAuthorize("admin", "superadmin", "moderator")]
         public ActionResult DeleteProperty(int propertyId, string tableName)
         {
@@ -79,6 +97,7 @@ namespace VirtualVistaHub.Controllers
             return RedirectToAction("Properties", "Staff");
         }
 
+        [HttpGet]
         [SessionAuthorize("superadmin")]
         public ActionResult DeleteUser(int userId)
         {
@@ -100,6 +119,7 @@ namespace VirtualVistaHub.Controllers
             return RedirectToAction("Users", "Staff");
         }
 
+        [HttpGet]
         [SessionAuthorize("superadmin")]
         public ActionResult ChangeUserLevel(int userId, string userlevel)
         {

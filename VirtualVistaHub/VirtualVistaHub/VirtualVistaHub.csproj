@@ -259,7 +259,8 @@
     <Content Include="Views\Staff\Users.cshtml" />
     <Content Include="Views\Staff\UserLevel.cshtml" />
     <Content Include="Views\Home\Unauthorized.cshtml" />
-    <Content Include="Views\Staff\Approve.cshtml" />
+    <Content Include="Views\Staff\ApproveVisuals.cshtml" />
+    <Content Include="Views\Staff\ApproveInformation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

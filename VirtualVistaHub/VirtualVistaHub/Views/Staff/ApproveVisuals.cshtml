@@ -1,0 +1,108 @@
+﻿@model List<VirtualVistaHub.Models.PropertyDetailsTemplate>
+
+<h2>Visual Details</h2>
+
+@if (Model != null && Model.Count > 0)
+{
+    <div>
+        @foreach (var property in Model)
+        {
+            <h4>Property Details</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>Property Id</dt>
+                <dd>@Html.DisplayFor(modelItem => property.PropertyId)</dd>
+
+                <dt>Coordinates Of VTour</dt>
+                <dd>@Html.DisplayFor(modelItem => property.CoordinatesOfVTour)</dd>
+
+                <dt>Image</dt>
+                <dd>@Html.DisplayFor(modelItem => property.Image)</dd>
+
+                <dt>Video</dt>
+                <dd>@Html.DisplayFor(modelItem => property.Video)</dd>
+
+                <dt>User Id</dt>
+                <dd>@Html.DisplayFor(modelItem => property.UserId)</dd>
+            </dl>
+
+            <!-- Button to open modal for approval/decline -->
+            <button type="button" class="btn btn-primary approve-decline-btn" data-property-id="@property.PropertyId" data-bs-toggle="modal" data-bs-target="#approveDeclineModal">
+                Approve/Decline
+            </button>
+        }
+    </div>
+}
+else
+{
+    <p>No properties found for the specified criteria.</p>
+}
+
+<!-- Modal for Approve/Decline -->
+<div class="modal fade" id="approveDeclineModal" tabindex="-1" aria-labelledby="approveDeclineModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="approveDeclineModalLabel">Approve/Decline Property</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to approve or decline this property?</p>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="approvalStatus" id="approveRadio" value="approve" checked>
+                    <label class="form-check-label" for="approveRadio">Approve</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="approvalStatus" id="declineRadio" value="decline">
+                    <label class="form-check-label" for="declineRadio">Decline</label>
+                </div>
+                <div id="reasonInput" style="display: none;">
+                    <label for="declineReason">Reason for Decline (Max 50 characters):</label>
+                    <input type="text" class="form-control" id="declineReason" maxlength="50">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirmApprovalBtn">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            var propertyId;
+
+            // When the modal is shown, get the property ID
+            $('.approve-decline-btn').click(function () {
+                propertyId = $(this).data('property-id');
+            });
+
+            // Show or hide the reason input based on the selected radio button
+            $('input[name="approvalStatus"]').change(function () {
+                if ($('#declineRadio').is(':checked')) {
+                    $('#reasonInput').show();
+                } else {
+                    $('#reasonInput').hide();
+                }
+            });
+
+            // Handle the confirmation button click
+            $('#confirmApprovalBtn').click(function () {
+                var approvalStatus = $('input[name=approvalStatus]:checked').val();
+                var reason = $('#declineReason').val();
+
+                if (approvalStatus === "approve") {
+                    window.location.href = '@Url.Action("Approve", "Staff")?propertyId=' + propertyId + '&approvedstatus=true';
+                } else {
+                    if (reason.length > 0 && reason.length <= 50) {
+                        window.location.href = '@Url.Action("Approve", "Staff")?propertyId=' + propertyId + '&approvedstatus=false&approvedmessage=' + encodeURIComponent(reason);
+                    } else {
+                        alert("Please provide a reason for declining (Max 50 characters).");
+                    }
+                }
+            });
+        });
+    </script>
+}
