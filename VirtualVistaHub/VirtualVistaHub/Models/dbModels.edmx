@@ -38,7 +38,7 @@
             <PropertyRef Name="UserId" />
           </Key>
           <Property Name="UserId" Type="int" Nullable="false" />
-          <Property Name="UserLevel" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserLevel" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -87,7 +87,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Staff__UserId__540C7B00">
+        <Association Name="FK__Staff__UserId__793DFFAF">
           <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="Staff" Type="Self.Staff" Multiplicity="0..1" />
           <ReferentialConstraint>
@@ -116,7 +116,7 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="PropertyDetailsTemplate" EntitySet="PropertyDetailsTemplate" />
           </AssociationSet>
-          <AssociationSet Name="FK__Staff__UserId__540C7B00" Association="Self.FK__Staff__UserId__540C7B00">
+          <AssociationSet Name="FK__Staff__UserId__793DFFAF" Association="Self.FK__Staff__UserId__793DFFAF">
             <End Role="Users" EntitySet="Users" />
             <End Role="Staff" EntitySet="Staff" />
           </AssociationSet>
@@ -163,8 +163,8 @@
             <PropertyRef Name="UserId" />
           </Key>
           <Property Name="UserId" Type="Int32" Nullable="false" />
-          <Property Name="UserLevel" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="User" Relationship="Self.FK__Staff__UserId__540C7B00" FromRole="Staff" ToRole="Users" />
+          <Property Name="UserLevel" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="User" Relationship="Self.FK__Staff__UserId__793DFFAF" FromRole="Staff" ToRole="Users" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -178,7 +178,7 @@
           <Property Name="Deleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Properties" Relationship="Self.FK__Property__UserId__58D1301D" FromRole="Users" ToRole="Property" />
           <NavigationProperty Name="PropertyDetailsTemplates" Relationship="Self.FK__PropertyD__UserI__5CA1C101" FromRole="Users" ToRole="PropertyDetailsTemplate" />
-          <NavigationProperty Name="Staff" Relationship="Self.FK__Staff__UserId__540C7B00" FromRole="Users" ToRole="Staff" />
+          <NavigationProperty Name="Staff" Relationship="Self.FK__Staff__UserId__793DFFAF" FromRole="Users" ToRole="Staff" />
         </EntityType>
         <Association Name="FK__Property__UserId__58D1301D">
           <End Role="Users" Type="Self.User" Multiplicity="0..1" />
@@ -216,7 +216,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Staff__UserId__540C7B00">
+        <Association Name="FK__Staff__UserId__793DFFAF">
           <End Role="Users" Type="Self.User" Multiplicity="1" />
           <End Role="Staff" Type="Self.Staff" Multiplicity="0..1" />
           <ReferentialConstraint>
@@ -245,7 +245,7 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="PropertyDetailsTemplate" EntitySet="PropertyDetailsTemplates" />
           </AssociationSet>
-          <AssociationSet Name="FK__Staff__UserId__540C7B00" Association="Self.FK__Staff__UserId__540C7B00">
+          <AssociationSet Name="FK__Staff__UserId__793DFFAF" Association="Self.FK__Staff__UserId__793DFFAF">
             <End Role="Users" EntitySet="Users" />
             <End Role="Staff" EntitySet="Staffs" />
           </AssociationSet>

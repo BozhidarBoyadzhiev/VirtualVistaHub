@@ -15,7 +15,7 @@ namespace VirtualVistaHub.Models
     public partial class Staff
     {
         public int UserId { get; set; }
-        public string UserLevel { get; set; }
+        public string UserLevel { get; set; } = "None";
     
         public virtual User User { get; set; }
     }

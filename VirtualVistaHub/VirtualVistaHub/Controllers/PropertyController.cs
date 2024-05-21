@@ -10,7 +10,7 @@ namespace VirtualVistaHub.Controllers
 {
     public class PropertyController : Controller
     {
-        VirtualVistaBaseEntities db = new VirtualVistaBaseEntities();
+        readonly VirtualVistaBaseEntities db = new VirtualVistaBaseEntities();
 
         [SessionAuthorize]
         public ActionResult Visual()
@@ -27,13 +27,6 @@ namespace VirtualVistaHub.Controllers
         [SessionAuthorize]
         public ActionResult VisualDetails(int propertyId, string tableName)
         {
-            var userId = Session["idUser"];
-
-            if (userId == null)
-            {
-                return RedirectToAction("Login", "Home");
-            }
-
             string sql = $"SELECT * FROM {tableName} WHERE PropertyId = @propertyId";
             var propertyIdParam = new SqlParameter("propertyId", propertyId);
             var properties = db.Database.SqlQuery<PropertyDetailsTemplate>(sql, propertyIdParam).ToList();
@@ -53,10 +46,6 @@ namespace VirtualVistaHub.Controllers
         public ActionResult Information(Property property)
         {
             var userId = Session["idUser"];
-            if (userId == null)
-            {
-                return RedirectToAction("Login", "Home");
-            }
 
             if (ModelState.IsValid)
             {
@@ -95,10 +84,6 @@ namespace VirtualVistaHub.Controllers
         {
             var userId = Session["idUser"];
             var propertyId = Session["idProperty"];
-            if (userId == null)
-            {
-                return RedirectToAction("Login", "Home");
-            }
 
             var tableName = Session["tableDetails"];
 

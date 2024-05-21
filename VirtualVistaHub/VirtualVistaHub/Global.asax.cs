@@ -19,7 +19,7 @@ namespace VirtualVistaHub
         }
         protected void Session_Start(object sender, EventArgs e)
         {
-            Session["userLevel"] = "None";
+            Session["userLevel"] = "none";
         }
     }
 }

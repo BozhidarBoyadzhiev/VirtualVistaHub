@@ -7,7 +7,12 @@ namespace VirtualVistaHub.Controllers
 {
     public class HomeController : Controller
     {
-        VirtualVistaBaseEntities db = new VirtualVistaBaseEntities();
+        readonly VirtualVistaBaseEntities db = new VirtualVistaBaseEntities();
+
+        public ActionResult Unauthorized()
+        {
+            return View();
+        }
 
         [AllowAnonymous]
         public ActionResult Index()
@@ -43,16 +48,12 @@ namespace VirtualVistaHub.Controllers
         public ActionResult Properties()
         {
             var userId = Session["idUser"];
-            if (userId == null)
-            {
-                return RedirectToAction("Login", "Home");
-            }
 
             var properties = db.Properties.Where(p => p.UserId.ToString() == userId.ToString()).ToList();
             return View(properties);
         }
 
-        [SessionAuthorize]
+        [SessionAuthorize("none")]
         public ActionResult Account()
         {
             return View();
@@ -103,7 +104,7 @@ namespace VirtualVistaHub.Controllers
         public ActionResult Logout()
         {
             Session.Clear();
-            Session["userLevel"] = "None";
+            Session["userLevel"] = "none";
             return RedirectToAction("Index", "Home");
         }
 
@@ -127,18 +128,26 @@ namespace VirtualVistaHub.Controllers
 
                 if (verified)
                 {
-                    Session["idUser"] = checkLogin.UserId.ToString();
-                    Session["UserFirstName"] = checkLogin.FirstName;
-                    Session["UserEmail"] = checkLogin.Email;
+                    bool isDeleted = checkLogin.Deleted;
+                    if (!isDeleted)
+                    {
+                        Session["idUser"] = checkLogin.UserId.ToString();
+                        Session["UserFirstName"] = checkLogin.FirstName;
+                        Session["UserEmail"] = checkLogin.Email;
 
-                    var assignUserLevel = db.Staffs.FirstOrDefault(x => x.UserId.Equals(checkLogin.UserId));
+                        var assignUserLevel = db.Staffs.FirstOrDefault(x => x.UserId.Equals(checkLogin.UserId));
 
-                    if (assignUserLevel == null)
-                        Session["userLevel"] = "None";
+                        if (assignUserLevel == null)
+                            Session["userLevel"] = "none";
+                        else
+                            Session["userLevel"] = assignUserLevel.UserLevel;
+
+                        return RedirectToAction("Index", "Home");
+                    }
                     else
-                        Session["userLevel"] = assignUserLevel.UserLevel;
-
-                    return RedirectToAction("Index", "Home");
+                    {
+                        ViewBag.Notification = "Този акаунт е изтрит";
+                    }
                 }
                 else
                 {
