@@ -28,7 +28,7 @@
                 <td>@property.District</td>
                 <td>@property.Price</td>
                 <td>@property.Area</td>
-                <td>@property.TypeOfContrusction</td>
+                <td>@property.TypeOfConstruction</td>
                 <td>@property.PhoneNumber</td>
                 <td>@property.AdditionalInformation</td>
                 <td>@property.ApprovalStatus</td>
@@ -37,7 +37,8 @@
                 <td>@property.User.FirstName</td>
                 <td>@property.User.LastName</td>
                 <td>
-                    <a href="#" class="delete-link" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-property-id="@property.PropertyId" data-table-name="@property.PropertyDetailsTable">Изтрий</a>
+                    <a href="#" class="delete-link" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-property-id="@property.PropertyId" data-table-name="@property.PropertyDetailsTable">Delete</a>
+                    <a href="#" class="edit-link" data-user-id="@property.UserId" data-property-id="@property.PropertyId" data-table-name="@property.PropertyDetailsTable">Edit</a>
                 </td>
             </tr>
         }
@@ -74,6 +75,13 @@
 
             $('#confirmDeleteBtn').click(function () {
                 window.location.href = '@Url.Action("DeleteProperty", "Staff")?propertyId=' + propertyId + '&tableName=' + tableName;
+            });
+
+            $('.edit-link').click(function () {
+                userId = $(this).data('user-id');
+                propertyId = $(this).data('property-id');
+                tableName = $(this).data('table-name');
+                window.location.href = '@Url.Action("EditProperty", "Property")?userId=' + userId + '&propertyId=' + propertyId + '&tableName=' + tableName;
             });
 
             @if (TempData["AlreadyDeleted"] != null && (bool)TempData["AlreadyDeleted"])

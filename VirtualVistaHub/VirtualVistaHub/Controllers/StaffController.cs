@@ -22,14 +22,15 @@ namespace VirtualVistaHub.Controllers
             return View(properties);
         }
 
-        [SessionAuthorize("superadmin")]
+        [SessionAuthorize("admin", "superadmin")]
         public ActionResult Users()
         {
             var users = db.Users.Include(p => p.Staff).ToList();
+
             return View(users);
         }
 
-        [SessionAuthorize("superadmin")]
+        [SessionAuthorize("admin", "superadmin")]
         public ActionResult UserLevel()
         {
             var users = db.Users.Include(p => p.Staff).ToList();
@@ -59,6 +60,11 @@ namespace VirtualVistaHub.Controllers
         {
             var property = db.Properties.FirstOrDefault(p => p.PropertyId == propertyId);
 
+            if (property == null)
+            {
+                return RedirectToAction("NotFound", "Home");
+            }
+
             if (approvedstatus == true)
                 property.ApprovalStatus = "Approved";
             else
@@ -68,13 +74,19 @@ namespace VirtualVistaHub.Controllers
             db.SaveChanges();
 
             return RedirectToAction("ApproveInformation", "Staff");
-        }
+        }        
 
         [HttpGet]
         [SessionAuthorize("admin", "superadmin", "moderator")]
         public ActionResult DeleteProperty(int propertyId, string tableName)
         {
             var property = db.Properties.FirstOrDefault(p => p.PropertyId == propertyId);
+
+            if (property == null)
+            {
+                return RedirectToAction("NotFound", "Home");
+            }
+
             if (property != null)
             {
                 if (property.Deleted == true)
@@ -97,33 +109,16 @@ namespace VirtualVistaHub.Controllers
             return RedirectToAction("Properties", "Staff");
         }
 
-        [HttpGet]
-        [SessionAuthorize("superadmin")]
-        public ActionResult DeleteUser(int userId)
-        {
-            var user = db.Users.FirstOrDefault(p => p.UserId == userId);
-            if (user != null)
-            {
-                if (user.Deleted == true)
-                {
-                    TempData["AlreadyDeleted"] = true;
-                }
-                else
-                {
-                    user.Deleted = true;
-                    db.Entry(user).State = EntityState.Modified;
-                    db.SaveChanges();
-                }
-            }
-
-            return RedirectToAction("Users", "Staff");
-        }
-
-        [HttpGet]
+        [HttpPost]
         [SessionAuthorize("superadmin")]
         public ActionResult ChangeUserLevel(int userId, string userlevel)
         {
             var user = db.Staffs.FirstOrDefault(p => p.UserId == userId);
+
+            if (user == null)
+            {
+                return RedirectToAction("NotFound", "Home");
+            }
 
             if (user == null)
             {

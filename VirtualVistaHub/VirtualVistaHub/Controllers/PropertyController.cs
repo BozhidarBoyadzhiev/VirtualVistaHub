@@ -5,12 +5,27 @@ using VirtualVistaHub.Filters;
 using System;
 using System.Data.SqlClient;
 using System.Data;
+using System.Data.Entity;
 
 namespace VirtualVistaHub.Controllers
 {
+    public class EditPropertyViewModel
+    {
+        public VirtualVistaHub.Models.Property Property { get; set; }
+        public VirtualVistaHub.Models.PropertyDetailsTemplate PropertyDetails { get; set; }
+        public string TableName { get; set; }
+        public int UserId { get; set; }
+        public EditPropertyViewModel() { }
+    }
+
     public class PropertyController : Controller
     {
         readonly VirtualVistaBaseEntities db = new VirtualVistaBaseEntities();
+
+        public static string GenerateTableName()
+        {
+            return "PropertyDetails_" + Guid.NewGuid().ToString("N");
+        }
 
         [SessionAuthorize]
         public ActionResult Visual()
@@ -34,10 +49,71 @@ namespace VirtualVistaHub.Controllers
             return View(properties);
         }
 
-
-        public static string GenerateTableName()
+        [HttpGet]
+        [SessionAuthorize]
+        public ActionResult EditProperty(int propertyId, string tableName)
         {
-            return "PropertyDetails_" + Guid.NewGuid().ToString("N");
+            var information = db.Properties.FirstOrDefault(p => p.PropertyId == propertyId);
+
+            if (information == null)
+            {
+                return RedirectToAction("NotFound", "Home");
+            }
+
+            if (Session["idUser"].ToString() == information.UserId.ToString() || Session["userLevel"].ToString() != "none")
+            {
+                string sql = $"SELECT * FROM {tableName} WHERE PropertyId = @propertyId";
+                var propertyIdParam = new SqlParameter("propertyId", propertyId);
+                var visual = db.Database.SqlQuery<PropertyDetailsTemplate>(sql, propertyIdParam).FirstOrDefault();
+
+                var model = new EditPropertyViewModel
+                {
+                    Property = information,
+                    PropertyDetails = visual,
+                    TableName = tableName,
+                    UserId = visual.UserId
+                };
+
+                return View(model);
+            }
+            else
+            {
+                return RedirectToAction("Unauthorized", "Home");
+            }
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditProperty(EditPropertyViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var property = model.Property;
+
+                property.PropertyDetailsTable = model.TableName;
+                property.UserId = model.UserId;
+                db.Entry(property).State = EntityState.Modified;
+                db.SaveChanges();
+
+                var propertyDetails = model.PropertyDetails;
+
+                string updatePropertyDetailsQuery = $"UPDATE {model.TableName} SET CoordinatesOfVTour = @CoordinatesOfVTour, Image = @Image, Video = @Video WHERE PropertyId = @PropertyId";
+                SqlParameter[] propertyDetailsParams =
+                {
+                    new SqlParameter("@CoordinatesOfVTour", propertyDetails.CoordinatesOfVTour),
+                    new SqlParameter("@Image", propertyDetails.Image),
+                    new SqlParameter("@Video", propertyDetails.Video),
+                    new SqlParameter("@PropertyId", property.PropertyId)
+                };
+                db.Database.ExecuteSqlCommand(updatePropertyDetailsQuery, propertyDetailsParams);
+
+            }
+
+            if (Session["userLevel"].ToString() != "none")
+                return RedirectToAction("Properties", "Staff");
+            else
+                return RedirectToAction("Properties", "Home");
         }
 
         [HttpPost]
@@ -87,12 +163,10 @@ namespace VirtualVistaHub.Controllers
 
             var tableName = Session["tableDetails"];
 
-            // Insert data into the dynamically created table
             string insertSql = $@"
             INSERT INTO {tableName} (PropertyId, CoordinatesOfVTour, Image, Video, UserId)
             VALUES (@PropertyId, @CoordinatesOfVTour, @Image, @Video, @UserId);";
 
-            // Execute the command with parameters
             db.Database.ExecuteSqlCommand(
                 insertSql,
                 new SqlParameter("@PropertyId", int.Parse(propertyId.ToString())),

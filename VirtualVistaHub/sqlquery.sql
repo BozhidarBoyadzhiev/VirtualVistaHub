@@ -13,7 +13,7 @@ CREATE TABLE Users (
 
 CREATE TABLE Staff (
 	[UserId] INT FOREIGN KEY REFERENCES Users([UserId]) NOT NULL,
-	[UserLevel] VARCHAR(50) NOT NULL,
+	[UserLevel] VARCHAR(50),
 	PRIMARY KEY([UserId])
 );
 
@@ -23,7 +23,7 @@ CREATE TABLE Property (
 	[District] NVARCHAR(150) NOT NULL,
 	[Price] INT NOT NULL,
 	[Area] INT NOT NULL,
-	[TypeOfContrusction] NVARCHAR(20) NOT NULL,
+	[TypeOfConstruction] NVARCHAR(20) NOT NULL,
 	[PhoneNumber] NVARCHAR(50) NOT NULL,
 	[AdditionalInformation] NVARCHAR(2500) NOT NULL,
 	[ApprovalStatus] NVARCHAR(50) NOT NULL,

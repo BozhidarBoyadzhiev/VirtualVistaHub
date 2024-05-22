@@ -2,12 +2,18 @@
 using System.Web.Mvc;
 using VirtualVistaHub.Models;
 using VirtualVistaHub.Filters;
+using System.Data.Entity;
 
 namespace VirtualVistaHub.Controllers
 {
     public class HomeController : Controller
     {
         readonly VirtualVistaBaseEntities db = new VirtualVistaBaseEntities();
+
+        public ActionResult NotFound()
+        {
+            return View();
+        }
 
         public ActionResult Unauthorized()
         {
@@ -21,13 +27,13 @@ namespace VirtualVistaHub.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult Buy()
+        public ActionResult AboutUs()
         {
             return View();
         }
 
         [AllowAnonymous]
-        public ActionResult SellRent()
+        public ActionResult Contacts()
         {
             return View();
         }
@@ -53,7 +59,7 @@ namespace VirtualVistaHub.Controllers
             return View(properties);
         }
 
-        [SessionAuthorize("none")]
+        [SessionAuthorize]
         public ActionResult Account()
         {
             return View();
@@ -108,7 +114,6 @@ namespace VirtualVistaHub.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpGet]
         [AllowAnonymous]
         public ActionResult Login()
         {
@@ -161,5 +166,108 @@ namespace VirtualVistaHub.Controllers
 
             return View();
         }
+
+        [SessionAuthorize("superadmin", "admin", "none")]
+        public ActionResult EditUser(int userId)
+        {
+            var user = db.Users.FirstOrDefault(p => p.UserId == userId);
+
+            if (user == null)
+            {
+                return RedirectToAction("NotFound", "Home");
+            }
+
+            var currentUserId = Session["idUser"].ToString();
+            var currentUserLevel = Session["userLevel"].ToString();
+
+            if (currentUserLevel == "superadmin")
+            {
+                return View(user);
+            }
+
+            if (currentUserLevel == "admin")
+            {
+                var targetStaff = db.Staffs.FirstOrDefault(u => u.UserId == userId);
+                if (userId.ToString() == currentUserId || (targetStaff == null || (targetStaff.UserLevel != "admin" && targetStaff.UserLevel != "superadmin")))
+                {
+                    return View(user);
+                }
+                else
+                {
+                    return RedirectToAction("Users", "Staff");
+                }
+            }
+
+            if (currentUserLevel == "none" && userId.ToString() == currentUserId)
+            {
+                return View(user);
+            }
+
+            return RedirectToAction("Unauthorized", "Home");
+        }
+
+
+        [HttpGet]
+        [SessionAuthorize("superadmin", "admin", "none")]
+        public ActionResult DeleteUser(int userId)
+        {
+            var user = db.Users.FirstOrDefault(p => p.UserId == userId);
+
+            if (user == null)
+            {
+                return RedirectToAction("NotFound", "Home");
+            }
+
+            if (user != null)
+            {
+                if (Session["idUser"].ToString() == user.UserId.ToString() || Session["userLevel"].ToString() != "none")
+                {
+                    if (user.Deleted == true)
+                    {
+                        TempData["AlreadyDeleted"] = true;
+                    }
+                    else
+                    {
+                        user.Deleted = true;
+                        db.Entry(user).State = EntityState.Modified;
+                        db.SaveChanges();
+
+                        if (Session["userLevel"].ToString() == "none")
+                        {
+                            return RedirectToAction("Logout", "Home");
+                        }
+                    }
+                }
+            }
+
+            return RedirectToAction("Users", "Staff");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [SessionAuthorize("superadmin", "admin", "none")]
+        public ActionResult EditUser(User user)
+        {
+            var existingUser = db.Users.Find(user.UserId);
+
+            if (!string.IsNullOrWhiteSpace(user.Password) && user.Password != existingUser.Password)
+            {
+                existingUser.Password = HashPassword(user.Password);
+            }
+
+            existingUser.FirstName = user.FirstName;
+            existingUser.LastName = user.LastName;
+            existingUser.Email = user.Email;
+
+            db.Entry(existingUser).State = EntityState.Modified;
+            db.SaveChanges();
+
+            if (Session["userLevel"].ToString() != "none")
+                return RedirectToAction("Users", "Staff");
+            else
+                return RedirectToAction("Account", "Home");
+        }
+
+
     }
 }

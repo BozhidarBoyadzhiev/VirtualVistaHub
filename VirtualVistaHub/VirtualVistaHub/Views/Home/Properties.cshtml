@@ -24,7 +24,7 @@
             @Html.DisplayNameFor(model => model.Area)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TypeOfContrusction)
+            @Html.DisplayNameFor(model => model.TypeOfConstruction)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.PhoneNumber)
@@ -57,7 +57,7 @@
                 @Html.DisplayFor(modelItem => item.Area)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TypeOfContrusction)
+                @Html.DisplayFor(modelItem => item.TypeOfConstruction)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PhoneNumber)
@@ -72,7 +72,7 @@
                 @Html.DisplayFor(modelItem => item.UserId)
             </td>
             <td>
-                @Html.ActionLink("Edit Images", "VisualDetails", "Property", new { propertyId = item.PropertyId, tableName = item.PropertyDetailsTable }, null)
+                @Html.ActionLink("Edit Images", "EditProperty", "Property", new { propertyId = item.PropertyId, tableName = item.PropertyDetailsTable }, null)
             </td>
         </tr>
     }

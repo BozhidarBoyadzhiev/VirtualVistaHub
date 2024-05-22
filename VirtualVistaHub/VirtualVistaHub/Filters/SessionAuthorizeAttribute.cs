@@ -23,12 +23,19 @@ namespace VirtualVistaHub.Filters
                 return;
             }
 
-            if (allowedUserLevels.Length > 0)
+            var userLevel = HttpContext.Current.Session["userLevel"]?.ToString();
+
+            if (allowedUserLevels.Length > 0 && userLevel != null)
             {
-                var userLevel = HttpContext.Current.Session["userLevel"];
+               if (userLevel == "none" && allowedUserLevels.Contains("none"))
+                {
+                    base.OnActionExecuting(filterContext);
+                    return;
+                }
+
                 using (var db = new VirtualVistaBaseEntities())
                 {
-                    var user = db.Staffs.FirstOrDefault(u => u.UserLevel == userLevel.ToString());
+                    var user = db.Staffs.FirstOrDefault(u => u.UserLevel == userLevel);
                     if (user == null || !allowedUserLevels.Contains(user.UserLevel))
                     {
                         filterContext.Result = new RedirectResult("~/Home/Unauthorized");

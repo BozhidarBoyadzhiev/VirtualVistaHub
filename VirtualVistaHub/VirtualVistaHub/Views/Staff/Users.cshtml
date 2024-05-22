@@ -23,7 +23,18 @@
                 <td>@user.Deleted</td>
                 <td>@(user.Staff?.UserLevel ?? "None")</td>
                 <td>
-                    <a href="#" class="delete-link" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-user-id="@user.UserId">Изтрий</a>
+                    @if (Session["userLevel"].ToString() == "superadmin" ||
+                        (Session["userLevel"].ToString() == "admin" && (user.Staff?.UserLevel != "admin" && user.Staff?.UserLevel != "superadmin" || user.UserId.ToString() == Session["idUser"].ToString())))
+                    {
+                        <a href="#" class="delete-link" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-user-id="@user.UserId">Изтрий</a>
+                    }
+                </td>
+                <td>
+                    @if (Session["userLevel"].ToString() == "superadmin" ||
+                        (Session["userLevel"].ToString() == "admin" && (user.Staff?.UserLevel != "admin" && user.Staff?.UserLevel != "superadmin" || user.UserId.ToString() == Session["idUser"].ToString())))
+                    {
+                        <a href="#" class="edit-link" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-user-id="@user.UserId">Промени</a>
+                    }
                 </td>
             </tr>
         }
@@ -57,8 +68,13 @@
                 userId = $(this).data('user-id');
             });
 
+            $('.edit-link').click(function () {
+                userId = $(this).data('user-id');
+                window.location.href = '@Url.Action("EditUser", "Home")?userId=' + userId;
+            });
+
             $('#confirmDeleteBtn').click(function () {
-                window.location.href = '@Url.Action("DeleteUser", "Staff")?userId=' + userId;
+                window.location.href = '@Url.Action("DeleteUser", "Home")?userId=' + userId;
             });
 
             @if (TempData["AlreadyDeleted"] != null && (bool)TempData["AlreadyDeleted"])

@@ -19,11 +19,17 @@
                                 @Html.ActionLink("Изтриване на имот", "Properties", "Staff", new { area = "" }, new { @class = "nav-link text-dark" })
                             </li>
                         }
-                        @if (Session["userLevel"].ToString() == "superadmin")
+                        @if (Session["userLevel"].ToString() == "admin" || Session["userLevel"].ToString() == "superadmin")
                         {
+                            <li class="nav-item">
+                                @Html.ActionLink("Редактиране на потребител", "Users", "Staff", new { area = "" }, new { @class = "nav-link text-dark border-start border-dark ps-3" })
+                            </li>
                             <li class="nav-item">
                                 @Html.ActionLink("Изтриване на потребител", "Users", "Staff", new { area = "" }, new { @class = "nav-link text-dark border-start border-dark ps-3" })
                             </li>
+                        }
+                        @if (Session["userLevel"].ToString() == "superadmin")
+                        {
                             <li class="nav-item">
                                 @Html.ActionLink("Промяна на ниво на потребител", "UserLevel", "Staff", new { area = "" }, new { @class = "nav-link text-dark border-start border-dark ps-3" })
                             </li>
@@ -31,10 +37,10 @@
                         @if (Session["userLevel"].ToString() == "none")
                         {
                             <li class="nav-item">
-                                @Html.ActionLink("Купи", "Buy", "Home", new { area = "" }, new { @class = "nav-link text-dark border-end border-dark pe-3" })
+                                @Html.ActionLink("За нас", "AboutUs", "Home", new { area = "" }, new { @class = "nav-link text-dark border-end border-dark pe-3" })
                             </li>
                             <li class="nav-item">
-                                @Html.ActionLink("Продай и отдай под наем", "SellRent", "Home", new { area = "" }, new { @class = "nav-link text-dark border-end border-dark pe-3" })
+                                @Html.ActionLink("Контакти", "Contacts", "Home", new { area = "" }, new { @class = "nav-link text-dark border-end border-dark pe-3" })
                             </li>
                             <li class="nav-item">
                                 @Html.ActionLink("Търси", "Search", "Home", new { area = "" }, new { @class = "nav-link text-dark pe-3" })
@@ -68,13 +74,7 @@
                             @Html.ActionLink("Одобряване на имот", "ApproveInformation", "Staff", new { area = "" }, new { @class = "nav-link text-dark border-start" })
                         </li>
                         <li class="nav-item">
-                            @Html.ActionLink("Редактиране на имот", "Logout", "Home", new { area = "" }, new { @class = "nav-link text-dark border-start border-dark ps-3" })
-                        </li>
-                    }
-                    else if (Session["userLevel"].ToString() == "admin" || Session["userLevel"].ToString() == "superadmin")
-                    {
-                        <li class="nav-item">
-                            @Html.ActionLink("Редактиране на потребител", "Logout", "Home", new { area = "" }, new { @class = "nav-link text-dark border-start border-dark ps-3" })
+                            @Html.ActionLink("Редактиране на имот", "Properties", "Staff", new { area = "" }, new { @class = "nav-link text-dark border-start border-dark ps-3" })
                         </li>
                     }
                     else

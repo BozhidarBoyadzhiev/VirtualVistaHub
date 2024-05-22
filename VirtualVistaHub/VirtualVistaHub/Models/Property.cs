@@ -11,7 +11,7 @@ namespace VirtualVistaHub.Models
 {
     using System;
     using System.Collections.Generic;
-    
+
     public partial class Property
     {
         public int PropertyId { get; set; }
@@ -19,7 +19,7 @@ namespace VirtualVistaHub.Models
         public string District { get; set; }
         public int Price { get; set; }
         public int Area { get; set; }
-        public string TypeOfContrusction { get; set; }
+        public string TypeOfConstruction { get; set; }
         public string PhoneNumber { get; set; }
         public string AdditionalInformation { get; set; }
         public string ApprovalStatus { get; set; } = "Not Approved";
