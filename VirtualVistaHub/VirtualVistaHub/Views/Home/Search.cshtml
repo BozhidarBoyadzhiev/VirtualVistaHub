@@ -1,7 +1,31 @@
-﻿
-@{
-    ViewData["Title"] = "Search";
-}
+﻿@model IEnumerable<VirtualVistaHub.Models.Property>
 
-<h1>@ViewData["Title"]</h1>
-
+<div class="container">
+    <div class="row">
+        @foreach (var property in Model)
+        {
+        <div class="col-md-12">
+            <div class="property-card">
+                <img src="placeholder-image-url.jpg" alt="Property Image">
+                <div class="property-details">
+                    <h5>@property.TypeOfProperty in @property.District</h5>
+                    <p><span class="property-price">$@property.Price</span> / month</p>
+                    <p><strong>Area:</strong> @property.Area sq. ft.</p>
+                    <p><strong>Type of Construction:</strong> @property.TypeOfConstruction</p>
+                    <p><strong>Phone Number:</strong> @property.PhoneNumber</p>
+                    <p><strong>Additional Information:</strong> @property.AdditionalInformation</p>
+                    <p><strong>Approval Status:</strong> @property.ApprovalStatus</p>
+                    @if(property.UserId.HasValue)
+                    {
+                    <p><strong>User ID:</strong> @property.UserId</p>
+                    }
+                    <div class="property-actions">
+                        <a href="#">More details and 12 photos</a>
+                        <a href="#" class="btn btn-primary">Contact</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</div>

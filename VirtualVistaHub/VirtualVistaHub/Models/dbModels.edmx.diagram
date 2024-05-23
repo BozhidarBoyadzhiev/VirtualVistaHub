@@ -4,15 +4,16 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="513ed41dde9440d1b9041da29ad96b9f" Name="Diagram1">
+      <Diagram DiagramId="9ae37319d1e6420388c6ca3b1784d856" Name="Diagram1">
         <EntityTypeShape EntityType="VirtualVistaBaseModel.Property" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="VirtualVistaBaseModel.PropertyDetailsTemplate" Width="1.5" PointX="5.25" PointY="2.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="VirtualVistaBaseModel.Staff" Width="1.5" PointX="3" PointY="5.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="VirtualVistaBaseModel.User" Width="1.5" PointX="0.75" PointY="2.875" IsExpanded="true" />
-        <AssociationConnector Association="VirtualVistaBaseModel.FK__Property__UserId__0A688BB1" ManuallyRouted="false" />
-        <AssociationConnector Association="VirtualVistaBaseModel.FK__PropertyD__Prope__0D44F85C" ManuallyRouted="false" />
-        <AssociationConnector Association="VirtualVistaBaseModel.FK__PropertyD__UserI__0E391C95" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="VirtualVistaBaseModel.PropertyDetailsTemplate" Width="1.5" PointX="5.25" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="VirtualVistaBaseModel.Staff" Width="1.5" PointX="3" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="VirtualVistaBaseModel.User" Width="1.5" PointX="0.75" PointY="3.125" IsExpanded="true" />
+        <AssociationConnector Association="VirtualVistaBaseModel.FK__Property__UserId__32767D0B" ManuallyRouted="false" />
+        <AssociationConnector Association="VirtualVistaBaseModel.FK__PropertyD__Prope__3552E9B6" ManuallyRouted="false" />
+        <AssociationConnector Association="VirtualVistaBaseModel.FK__PropertyD__UserI__36470DEF" ManuallyRouted="false" />
         <AssociationConnector Association="VirtualVistaBaseModel.FK__Staff__UserId__793DFFAF" ManuallyRouted="false" />
+        <AssociationConnector Association="VirtualVistaBaseModel.UserProperty" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

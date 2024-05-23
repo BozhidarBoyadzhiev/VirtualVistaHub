@@ -16,8 +16,8 @@ namespace VirtualVistaHub.Models
     {
         public int PropertyId { get; set; }
         public string CoordinatesOfVTour { get; set; }
-        public string Image { get; set; }
-        public string Video { get; set; }
+        public string ImagesFor3DView { get; set; }
+        public string Images { get; set; }
         public int UserId { get; set; }
     
         public virtual Property Property { get; set; }

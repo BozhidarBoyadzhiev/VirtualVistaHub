@@ -98,12 +98,11 @@ namespace VirtualVistaHub.Controllers
 
                 var propertyDetails = model.PropertyDetails;
 
-                string updatePropertyDetailsQuery = $"UPDATE {model.TableName} SET CoordinatesOfVTour = @CoordinatesOfVTour, Image = @Image, Video = @Video WHERE PropertyId = @PropertyId";
+                string updatePropertyDetailsQuery = $"UPDATE {model.TableName} SET CoordinatesOfVTour = @CoordinatesOfVTour, Images = @Images WHERE PropertyId = @PropertyId";
                 SqlParameter[] propertyDetailsParams =
                 {
                     new SqlParameter("@CoordinatesOfVTour", propertyDetails.CoordinatesOfVTour),
-                    new SqlParameter("@Image", propertyDetails.Image),
-                    new SqlParameter("@Video", propertyDetails.Video),
+                    new SqlParameter("@Images", propertyDetails.Images),
                     new SqlParameter("@PropertyId", property.PropertyId)
                 };
                 db.Database.ExecuteSqlCommand(updatePropertyDetailsQuery, propertyDetailsParams);
@@ -164,15 +163,14 @@ namespace VirtualVistaHub.Controllers
             var tableName = Session["tableDetails"];
 
             string insertSql = $@"
-            INSERT INTO {tableName} (PropertyId, CoordinatesOfVTour, Image, Video, UserId)
-            VALUES (@PropertyId, @CoordinatesOfVTour, @Image, @Video, @UserId);";
+            INSERT INTO {tableName} (PropertyId, CoordinatesOfVTour, Images, UserId)
+            VALUES (@PropertyId, @CoordinatesOfVTour, @Images, @UserId);";
 
             db.Database.ExecuteSqlCommand(
                 insertSql,
                 new SqlParameter("@PropertyId", int.Parse(propertyId.ToString())),
                 new SqlParameter("@CoordinatesOfVTour", property.CoordinatesOfVTour),
-                new SqlParameter("@Image", property.Image),
-                new SqlParameter("@Video", property.Video),
+                new SqlParameter("@Images", property.Images),
                 new SqlParameter("@UserId", int.Parse(userId.ToString()))
             );
 

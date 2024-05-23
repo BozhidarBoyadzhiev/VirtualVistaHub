@@ -11,9 +11,15 @@ namespace VirtualVistaHub.Models
 {
     using System;
     using System.Collections.Generic;
-
+    
     public partial class Property
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Property()
+        {
+            this.Users = new HashSet<User>();
+        }
+    
         public int PropertyId { get; set; }
         public string TypeOfProperty { get; set; }
         public string District { get; set; }
@@ -23,12 +29,16 @@ namespace VirtualVistaHub.Models
         public string PhoneNumber { get; set; }
         public string AdditionalInformation { get; set; }
         public string ApprovalStatus { get; set; } = "Not Approved";
+        public string TypeOfSale { get; set; }
         public bool Deleted { get; set; }
+        public bool WantToBuy { get; set; }
         public bool Sold { get; set; }
         public string PropertyDetailsTable { get; set; }
         public Nullable<int> UserId { get; set; }
     
         public virtual User User { get; set; }
         public virtual PropertyDetailsTemplate PropertyDetailsTemplate { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<User> Users { get; set; }
     }
 }

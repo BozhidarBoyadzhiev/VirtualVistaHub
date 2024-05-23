@@ -41,7 +41,8 @@ namespace VirtualVistaHub.Controllers
         [AllowAnonymous]
         public ActionResult Search()
         {
-            return View();
+            var properties = db.Properties.Where(p => p.ApprovalStatus.ToString() != "Not Approved" && p.Sold != true).ToList();
+            return View(properties);
         }
 
         [AllowAnonymous]
