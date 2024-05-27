@@ -69,10 +69,9 @@ namespace VirtualVistaHub.Controllers
                 string sql = $"SELECT * FROM {tableName} WHERE PropertyId = @propertyId";
                 var propertyIdParam = new SqlParameter("propertyId", propertyId);
                 var visual = db.Database.SqlQuery<PropertyDetailsTemplate>(sql, propertyIdParam).FirstOrDefault();
-                string folderPath = Server.MapPath($"~/Uploads/{tableName}/");
 
-                string[] imageFiles = Directory.GetFiles(folderPath);
-                string[] imagePaths = imageFiles.Select(f => Path.GetFileName(f)).ToArray();
+                string imageSql = $"SELECT Images FROM {tableName}";
+                var images = db.Database.SqlQuery<string>(imageSql).ToArray();
 
                 var model = new EditPropertyViewModel
                 {
@@ -80,7 +79,7 @@ namespace VirtualVistaHub.Controllers
                     PropertyDetails = visual,
                     TableName = tableName,
                     UserId = visual.UserId,
-                    ImagePaths = imagePaths
+                    ImagePaths = images
                 };
 
                 return View(model);
@@ -116,6 +115,9 @@ namespace VirtualVistaHub.Controllers
                 if (newImages != null)
                 {
                     string uploadDir = Server.MapPath($"~/Uploads/{tableName}");
+                    var oldImages = Request.Form.GetValues("OldImages");
+
+                    int index = 0;
                     foreach (var image in newImages)
                     {
                         if (image != null && image.ContentLength > 0)
@@ -125,7 +127,7 @@ namespace VirtualVistaHub.Controllers
                             string filePath = Path.Combine(uploadDir, randomFileName);
                             image.SaveAs(filePath);
 
-                            string oldImage = Request.Form["OldImageName"];
+                            string oldImage = oldImages[index];
                             string updateSql = $@"
                             UPDATE {tableName} 
                             SET Images = @Images 
@@ -140,6 +142,7 @@ namespace VirtualVistaHub.Controllers
 
                             DeleteImage(oldImage, property.PropertyId, model.TableName);
                         }
+                        index++;
                     }
                 }
             }

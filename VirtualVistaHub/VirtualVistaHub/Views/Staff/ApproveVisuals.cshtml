@@ -1,44 +1,43 @@
-﻿@model List<VirtualVistaHub.Models.PropertyDetailsTemplate>
+﻿@model VirtualVistaHub.Controllers.ImagesModel
 
 <h2>Visual Details</h2>
 
-@if (Model != null && Model.Count > 0)
+@if (Model != null)
 {
     <div>
-        @foreach (var property in Model)
-        {
-            <h4>Property Details</h4>
-            <hr />
-            <dl class="dl-horizontal">
-                <dt>Property Id</dt>
-                <dd>@Html.DisplayFor(modelItem => property.PropertyId)</dd>
+        <h4>Property Details</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>Property Id</dt>
+            <dd>@Html.DisplayFor(model => model.PropertyDetails.PropertyId)</dd>
 
-                <dt>Coordinates Of VTour</dt>
-                <dd>@Html.DisplayFor(modelItem => property.CoordinatesOfVTour)</dd>
+            <dt>Coordinates Of VTour</dt>
+            <dd>@Html.DisplayFor(model => model.PropertyDetails.VTour)</dd>
 
-                <dt>Image</dt>
-                <dd>@Html.DisplayFor(modelItem => property.Image)</dd>
+            <dt>User Id</dt>
+            <dd>@Html.DisplayFor(model => model.PropertyDetails.UserId)</dd>
+        </dl>
 
-                <dt>Video</dt>
-                <dd>@Html.DisplayFor(modelItem => property.Video)</dd>
+        <h4>Images</h4>
+        <div class="image-gallery">
+            @foreach (var imagePath in Model.ImagePaths)
+            {
+                <div class="image-item">
+                    <img src="@Url.Content($"~/Uploads/{Model.TableName}/{imagePath}")" alt="Property Image" class="img-thumbnail" style="max-width: 200px;" />
+                </div>
+            }
+        </div>
 
-                <dt>User Id</dt>
-                <dd>@Html.DisplayFor(modelItem => property.UserId)</dd>
-            </dl>
-
-            <!-- Button to open modal for approval/decline -->
-            <button type="button" class="btn btn-primary approve-decline-btn" data-property-id="@property.PropertyId" data-bs-toggle="modal" data-bs-target="#approveDeclineModal">
-                Approve/Decline
-            </button>
-        }
+        <button type="button" class="btn btn-primary approve-decline-btn" data-property-id="@Model.PropertyDetails.PropertyId" data-bs-toggle="modal" data-bs-target="#approveDeclineModal">
+            Approve/Decline
+        </button>
     </div>
 }
 else
 {
-    <p>No properties found for the specified criteria.</p>
+    <p>No property details found for the specified criteria.</p>
 }
 
-<!-- Modal for Approve/Decline -->
 <div class="modal fade" id="approveDeclineModal" tabindex="-1" aria-labelledby="approveDeclineModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -74,12 +73,10 @@ else
         $(document).ready(function () {
             var propertyId;
 
-            // When the modal is shown, get the property ID
             $('.approve-decline-btn').click(function () {
                 propertyId = $(this).data('property-id');
             });
 
-            // Show or hide the reason input based on the selected radio button
             $('input[name="approvalStatus"]').change(function () {
                 if ($('#declineRadio').is(':checked')) {
                     $('#reasonInput').show();
@@ -88,7 +85,6 @@ else
                 }
             });
 
-            // Handle the confirmation button click
             $('#confirmApprovalBtn').click(function () {
                 var approvalStatus = $('input[name=approvalStatus]:checked').val();
                 var reason = $('#declineReason').val();

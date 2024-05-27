@@ -11,6 +11,14 @@ using System.Data.Entity.Core.Metadata.Edm;
 
 namespace VirtualVistaHub.Controllers
 {
+   public class ImagesModel
+   {
+        public VirtualVistaHub.Models.PropertyDetailsTemplate PropertyDetails { get; set; }
+
+        public string TableName { get; set; }
+        public string[] ImagePaths { get; set; }
+        public ImagesModel() { }
+    }
     public class StaffController : Controller
     {
         readonly VirtualVistaBaseEntities db = new VirtualVistaBaseEntities();
@@ -49,9 +57,19 @@ namespace VirtualVistaHub.Controllers
         {
             string sql = $"SELECT * FROM {tableName} WHERE PropertyId = @propertyId";
             var propertyIdParam = new SqlParameter("propertyId", propertyId);
-            var properties = db.Database.SqlQuery<PropertyDetailsTemplate>(sql, propertyIdParam).ToList();
+            var properties = db.Database.SqlQuery<PropertyDetailsTemplate>(sql, propertyIdParam).FirstOrDefault();
 
-            return View(properties);
+            string imageSql = $"SELECT Images FROM {tableName}";
+            var images = db.Database.SqlQuery<string>(imageSql).ToArray();
+
+            var model = new ImagesModel
+            {
+                PropertyDetails = properties,
+                TableName = tableName,
+                ImagePaths = images
+            };
+
+            return View(model);
         }
 
         [HttpGet]
@@ -114,11 +132,6 @@ namespace VirtualVistaHub.Controllers
         public ActionResult ChangeUserLevel(int userId, string userlevel)
         {
             var user = db.Staffs.FirstOrDefault(p => p.UserId == userId);
-
-            if (user == null)
-            {
-                return RedirectToAction("NotFound", "Home");
-            }
 
             if (user == null)
             {

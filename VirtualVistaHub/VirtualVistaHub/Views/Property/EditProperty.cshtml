@@ -123,7 +123,7 @@
                         <img src="@Url.Content($"~/Uploads/{Model.TableName}/{imagePath}")" alt="Property Image" class="img-thumbnail" style="max-width: 100px;" />
                         <button type="button" class="btn btn-danger btn-delete-image" data-image="@imagePath" data-property-id="@Model.Property.PropertyId" data-table-name="@Model.TableName">Delete</button>
                         <input type="file" name="newImages" class="form-control" />
-                        <input type="hidden" name="OldImageName" value="@imagePath" />
+                        <input type="hidden" name="OldImages" value="@imagePath" /> <!-- Hidden input to store old image name -->
                     </div>
                 }
             }
