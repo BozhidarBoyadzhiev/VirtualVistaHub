@@ -14,9 +14,8 @@ namespace VirtualVistaHub.Models
     
     public partial class PropertyDetailsTemplate
     {
-        public int PropertyId { get; set; }
-        public string CoordinatesOfVTour { get; set; }
-        public string ImagesFor3DView { get; set; }
+        public Nullable<int> PropertyId { get; set; }
+        public string VTour { get; set; }
         public string Images { get; set; }
         public int UserId { get; set; }
     

@@ -29,6 +29,7 @@ CREATE TABLE Property (
 	[ApprovalStatus] NVARCHAR(50) NOT NULL DEFAULT 'Not Approved',
 	[TypeOfSale] NVARCHAR(100) NOT NULL,
 	[Deleted] BIT DEFAULT 0 NOT NULL,
+	[WantToBuy] BIT DEFAULT 0 NOT NULL,
 	[Sold] BIT DEFAULT 0 NOT NULL,
 	[PropertyDetailsTable] NVARCHAR(255) NOT NULL,
 	[UserId] INT FOREIGN KEY REFERENCES Users([UserId])
@@ -36,15 +37,15 @@ CREATE TABLE Property (
 
 CREATE TABLE PropertyDetailsTemplate (
 	[PropertyId] INT FOREIGN KEY REFERENCES Property([PropertyId]),
-	[CoordinatesOfVTour] NVARCHAR NOT NULL,
-	[Image] NVARCHAR NOT NULL,
-	[Video] NVARCHAR NOT NULL,
+	[VTour] NVARCHAR(MAX) NOT NULL,
+	[Images] NVARCHAR(MAX) NOT NULL,
 	[UserId] INT FOREIGN KEY REFERENCES Users([UserId]) NOT NULL
-	PRIMARY KEY([PropertyId])
 );
 
-/*activitylog*/
+CREATE TABLE UserProperty (
+    [UserId] INT FOREIGN KEY REFERENCES Users([UserId]),
+    [PropertyId] INT FOREIGN KEY REFERENCES Property([PropertyId]),
+    PRIMARY KEY([UserId], [PropertyId])
+)
 
-/* 
-make auto generate tables for every property
-*/
+/*activitylog*/

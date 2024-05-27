@@ -17,6 +17,7 @@ namespace VirtualVistaHub.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Property()
         {
+            this.PropertyDetailsTemplates = new HashSet<PropertyDetailsTemplate>();
             this.Users = new HashSet<User>();
         }
     
@@ -37,7 +38,8 @@ namespace VirtualVistaHub.Models
         public Nullable<int> UserId { get; set; }
     
         public virtual User User { get; set; }
-        public virtual PropertyDetailsTemplate PropertyDetailsTemplate { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PropertyDetailsTemplate> PropertyDetailsTemplates { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<User> Users { get; set; }
     }

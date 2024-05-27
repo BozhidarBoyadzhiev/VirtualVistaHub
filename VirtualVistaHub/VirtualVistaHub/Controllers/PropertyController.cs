@@ -6,6 +6,9 @@ using System;
 using System.Data.SqlClient;
 using System.Data;
 using System.Data.Entity;
+using System.Collections.Generic;
+using System.IO;
+using System.Web;
 
 namespace VirtualVistaHub.Controllers
 {
@@ -15,6 +18,7 @@ namespace VirtualVistaHub.Controllers
         public VirtualVistaHub.Models.PropertyDetailsTemplate PropertyDetails { get; set; }
         public string TableName { get; set; }
         public int UserId { get; set; }
+        public string[] ImagePaths { get; set; }
         public EditPropertyViewModel() { }
     }
 
@@ -65,13 +69,18 @@ namespace VirtualVistaHub.Controllers
                 string sql = $"SELECT * FROM {tableName} WHERE PropertyId = @propertyId";
                 var propertyIdParam = new SqlParameter("propertyId", propertyId);
                 var visual = db.Database.SqlQuery<PropertyDetailsTemplate>(sql, propertyIdParam).FirstOrDefault();
+                string folderPath = Server.MapPath($"~/Uploads/{tableName}/");
+
+                string[] imageFiles = Directory.GetFiles(folderPath);
+                string[] imagePaths = imageFiles.Select(f => Path.GetFileName(f)).ToArray();
 
                 var model = new EditPropertyViewModel
                 {
                     Property = information,
                     PropertyDetails = visual,
                     TableName = tableName,
-                    UserId = visual.UserId
+                    UserId = visual.UserId,
+                    ImagePaths = imagePaths
                 };
 
                 return View(model);
@@ -80,33 +89,59 @@ namespace VirtualVistaHub.Controllers
             {
                 return RedirectToAction("Unauthorized", "Home");
             }
-
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditProperty(EditPropertyViewModel model)
+        public ActionResult EditProperty(EditPropertyViewModel model, IEnumerable<HttpPostedFileBase> newImages)
         {
             if (ModelState.IsValid)
             {
                 var property = model.Property;
-
                 property.PropertyDetailsTable = model.TableName;
                 property.UserId = model.UserId;
                 db.Entry(property).State = EntityState.Modified;
                 db.SaveChanges();
 
                 var propertyDetails = model.PropertyDetails;
-
-                string updatePropertyDetailsQuery = $"UPDATE {model.TableName} SET CoordinatesOfVTour = @CoordinatesOfVTour, Images = @Images WHERE PropertyId = @PropertyId";
+                string tableName = model.TableName;
+                string updatePropertyDetailsQuery = $"UPDATE {tableName} SET VTour = @VTour WHERE PropertyId = @PropertyId";
                 SqlParameter[] propertyDetailsParams =
                 {
-                    new SqlParameter("@CoordinatesOfVTour", propertyDetails.CoordinatesOfVTour),
-                    new SqlParameter("@Images", propertyDetails.Images),
-                    new SqlParameter("@PropertyId", property.PropertyId)
-                };
+            new SqlParameter("@VTour", propertyDetails.VTour),
+            new SqlParameter("@PropertyId", property.PropertyId)
+        };
                 db.Database.ExecuteSqlCommand(updatePropertyDetailsQuery, propertyDetailsParams);
 
+                if (newImages != null)
+                {
+                    string uploadDir = Server.MapPath($"~/Uploads/{tableName}");
+                    foreach (var image in newImages)
+                    {
+                        if (image != null && image.ContentLength > 0)
+                        {
+                            string fileExtension = Path.GetExtension(image.FileName);
+                            string randomFileName = $"{Guid.NewGuid()}{fileExtension}";
+                            string filePath = Path.Combine(uploadDir, randomFileName);
+                            image.SaveAs(filePath);
+
+                            string oldImage = Request.Form["OldImageName"];
+                            string updateSql = $@"
+                            UPDATE {tableName} 
+                            SET Images = @Images 
+                            WHERE PropertyId = @PropertyId AND Images = @OldImage";
+
+                            db.Database.ExecuteSqlCommand(
+                                updateSql,
+                                new SqlParameter("@PropertyId", property.PropertyId),
+                                new SqlParameter("@Images", randomFileName),
+                                new SqlParameter("@OldImage", oldImage)
+                            );
+
+                            DeleteImage(oldImage, property.PropertyId, model.TableName);
+                        }
+                    }
+                }
             }
 
             if (Session["userLevel"].ToString() != "none")
@@ -114,6 +149,36 @@ namespace VirtualVistaHub.Controllers
             else
                 return RedirectToAction("Properties", "Home");
         }
+
+
+        [HttpPost]
+        [SessionAuthorize]
+        public ActionResult DeleteImage(string imageName, int propertyId, string tableName)
+        {
+            string uploadDir = Server.MapPath($"~/Uploads/{tableName}");
+            string filePath = Path.Combine(uploadDir, imageName);
+
+            if (System.IO.File.Exists(filePath))
+            {
+                System.IO.File.Delete(filePath);
+
+                string deleteSql = $@"
+        DELETE FROM {tableName}
+        WHERE PropertyId = @PropertyId AND Images = @Images";
+
+                db.Database.ExecuteSqlCommand(
+                    deleteSql,
+                    new SqlParameter("@PropertyId", propertyId),
+                    new SqlParameter("@Images", imageName)
+                );
+
+                return Json(new { success = true });
+            }
+
+            return Json(new { success = false });
+        }
+
+
 
         [HttpPost]
         [SessionAuthorize]
@@ -137,12 +202,10 @@ namespace VirtualVistaHub.Controllers
 
                 string createTableSql = $@"
                 CREATE TABLE {tableName} (
-                    [PropertyId] INT FOREIGN KEY REFERENCES Property([PropertyId]),
-                    [CoordinatesOfVTour] NVARCHAR(MAX) NOT NULL,
-                    [Image] NVARCHAR(MAX) NOT NULL,
-                    [Video] NVARCHAR(MAX) NOT NULL,
-                    [UserId] INT FOREIGN KEY REFERENCES Users([UserId]) NOT NULL,
-                    PRIMARY KEY([PropertyId])
+	                [PropertyId] INT FOREIGN KEY REFERENCES Property([PropertyId]),
+	                [VTour] NVARCHAR(MAX) NOT NULL,
+	                [Images] NVARCHAR(MAX) NOT NULL,
+	                [UserId] INT FOREIGN KEY REFERENCES Users([UserId]) NOT NULL
                 );";
 
                 db.Database.ExecuteSqlCommand(createTableSql);
@@ -155,24 +218,40 @@ namespace VirtualVistaHub.Controllers
         [HttpPost]
         [SessionAuthorize]
         [ValidateAntiForgeryToken]
-        public ActionResult Visual(PropertyDetailsTemplate property)
+        public ActionResult Visual(PropertyDetailsTemplate property, IEnumerable<HttpPostedFileBase> images)
         {
             var userId = Session["idUser"];
             var propertyId = Session["idProperty"];
-
             var tableName = Session["tableDetails"];
 
-            string insertSql = $@"
-            INSERT INTO {tableName} (PropertyId, CoordinatesOfVTour, Images, UserId)
-            VALUES (@PropertyId, @CoordinatesOfVTour, @Images, @UserId);";
+            string uploadDir = Server.MapPath($"~/Uploads/{tableName}");
+            if (!Directory.Exists(uploadDir))
+            {
+                Directory.CreateDirectory(uploadDir);
+            }
 
-            db.Database.ExecuteSqlCommand(
-                insertSql,
-                new SqlParameter("@PropertyId", int.Parse(propertyId.ToString())),
-                new SqlParameter("@CoordinatesOfVTour", property.CoordinatesOfVTour),
-                new SqlParameter("@Images", property.Images),
-                new SqlParameter("@UserId", int.Parse(userId.ToString()))
-            );
+            foreach (var image in images)
+            {
+                if (image != null && image.ContentLength > 0)
+                {
+                    string fileExtension = Path.GetExtension(image.FileName);
+                    string randomFileName = $"{Guid.NewGuid()}{fileExtension}";
+                    string filePath = Path.Combine(uploadDir, randomFileName);
+                    image.SaveAs(filePath);
+
+                    string insertSql = $@"
+                    INSERT INTO {tableName} (PropertyId, VTour, Images, UserId)
+                    VALUES (@PropertyId, @VTour, @Images, @UserId);";
+
+                    db.Database.ExecuteSqlCommand(
+                        insertSql,
+                        new SqlParameter("@PropertyId", int.Parse(propertyId.ToString())),
+                        new SqlParameter("@VTour", property.VTour),
+                        new SqlParameter("@Images", randomFileName),
+                        new SqlParameter("@UserId", int.Parse(userId.ToString()))
+                    );
+                }
+            }
 
             return RedirectToAction("Properties", "Home");
         }
