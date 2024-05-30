@@ -107,9 +107,9 @@ namespace VirtualVistaHub.Controllers
                 string updatePropertyDetailsQuery = $"UPDATE {tableName} SET VTour = @VTour WHERE PropertyId = @PropertyId";
                 SqlParameter[] propertyDetailsParams =
                 {
-            new SqlParameter("@VTour", propertyDetails.VTour),
-            new SqlParameter("@PropertyId", property.PropertyId)
-        };
+                    new SqlParameter("@VTour", propertyDetails.VTour),
+                    new SqlParameter("@PropertyId", property.PropertyId)
+                };
                 db.Database.ExecuteSqlCommand(updatePropertyDetailsQuery, propertyDetailsParams);
 
                 if (newImages != null)
@@ -153,6 +153,44 @@ namespace VirtualVistaHub.Controllers
                 return RedirectToAction("Properties", "Home");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddNewImage(int propertyId, string tableName, IEnumerable<HttpPostedFileBase> newImages)
+        {
+            if (newImages != null && newImages.Any())
+            {
+                string uploadDir = Server.MapPath($"~/Uploads/{tableName}");
+                if (!Directory.Exists(uploadDir))
+                {
+                    Directory.CreateDirectory(uploadDir);
+                }
+
+                foreach (var image in newImages)
+                {
+                    if (image != null && image.ContentLength > 0)
+                    {
+                        string fileExtension = Path.GetExtension(image.FileName);
+                        string randomFileName = $"{Guid.NewGuid()}{fileExtension}";
+                        string filePath = Path.Combine(uploadDir, randomFileName);
+                        image.SaveAs(filePath);
+
+                        string insertSql = $@"
+                        INSERT INTO {tableName} (PropertyId, VTour, Images, UserId)
+                        VALUES (@PropertyId, @VTour, @Images, @UserId);";
+
+                        db.Database.ExecuteSqlCommand(
+                            insertSql,
+                            new SqlParameter("@PropertyId", propertyId),
+                            new SqlParameter("@VTour", "None"),
+                            new SqlParameter("@Images", randomFileName),
+                            new SqlParameter("@UserId", Session["idUser"])
+                        );
+                    }
+                }
+            }
+
+            return RedirectToAction("EditProperty", new { propertyId, tableName });
+        }
 
         [HttpPost]
         [SessionAuthorize]
@@ -166,8 +204,8 @@ namespace VirtualVistaHub.Controllers
                 System.IO.File.Delete(filePath);
 
                 string deleteSql = $@"
-        DELETE FROM {tableName}
-        WHERE PropertyId = @PropertyId AND Images = @Images";
+                DELETE FROM {tableName}
+                WHERE PropertyId = @PropertyId AND Images = @Images";
 
                 db.Database.ExecuteSqlCommand(
                     deleteSql,
