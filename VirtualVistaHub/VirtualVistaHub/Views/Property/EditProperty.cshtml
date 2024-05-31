@@ -17,6 +17,7 @@
         @Html.HiddenFor(model => model.Property.PropertyId)
         @Html.HiddenFor(model => model.TableName)
         @Html.HiddenFor(model => model.UserId)
+        @Html.HiddenFor(model => model.Denied)
 
         <div class="form-group">
             @Html.LabelFor(model => model.Property.TypeOfProperty, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -123,7 +124,7 @@
                             <img src="@Url.Content($"~/Uploads/{Model.TableName}/{imagePath}")" alt="Property Image" class="img-thumbnail" style="max-width: 100px;" />
                             <button type="button" class="btn btn-danger btn-delete-image" data-image="@imagePath" data-property-id="@Model.Property.PropertyId" data-table-name="@Model.TableName">Delete</button>
                             <input type="file" name="newImages" class="form-control" />
-                            <input type="hidden" name="OldImages" value="@imagePath" /> <!-- Hidden input to store old image name -->
+                            <input type="hidden" name="OldImages" value="@imagePath" />
                         </div>
                     }
                 }

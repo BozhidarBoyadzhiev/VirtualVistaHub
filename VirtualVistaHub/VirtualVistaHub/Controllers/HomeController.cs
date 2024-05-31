@@ -56,7 +56,7 @@ namespace VirtualVistaHub.Controllers
         {
             var userId = Session["idUser"];
 
-            var properties = db.Properties.Where(p => p.UserId.ToString() == userId.ToString()).ToList();
+            var properties = db.Properties.Where(p => p.UserId.ToString() == userId.ToString() && p.ApprovalStatus.ToString() == "Approved").ToList();
             return View(properties);
         }
 

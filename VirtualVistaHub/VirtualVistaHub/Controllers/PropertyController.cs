@@ -19,7 +19,7 @@ namespace VirtualVistaHub.Controllers
         public string TableName { get; set; }
         public int UserId { get; set; }
         public string[] ImagePaths { get; set; }
-        public EditPropertyViewModel() { }
+        public bool Denied { get; set; }
     }
 
     public class PropertyController : Controller
@@ -44,6 +44,16 @@ namespace VirtualVistaHub.Controllers
         }
 
         [SessionAuthorize]
+        public ActionResult Denied()
+        {
+            var userId = Session["idUser"];
+
+            var properties = db.Properties.Where(p => p.UserId.ToString() == userId.ToString() && p.ApprovalStatus.ToString() != "Approved").ToList();
+            return View(properties);
+        }
+
+
+        [SessionAuthorize]
         public ActionResult VisualDetails(int propertyId, string tableName)
         {
             string sql = $"SELECT * FROM {tableName} WHERE PropertyId = @propertyId";
@@ -55,7 +65,7 @@ namespace VirtualVistaHub.Controllers
 
         [HttpGet]
         [SessionAuthorize]
-        public ActionResult EditProperty(int propertyId, string tableName)
+        public ActionResult EditProperty(int propertyId, string tableName, bool? denied)
         {
             var information = db.Properties.FirstOrDefault(p => p.PropertyId == propertyId);
 
@@ -79,7 +89,8 @@ namespace VirtualVistaHub.Controllers
                     PropertyDetails = visual,
                     TableName = tableName,
                     UserId = visual.UserId,
-                    ImagePaths = images
+                    ImagePaths = images,
+                    Denied = denied ?? false
                 };
 
                 return View(model);
@@ -97,6 +108,7 @@ namespace VirtualVistaHub.Controllers
             if (ModelState.IsValid)
             {
                 var property = model.Property;
+                if (model.Denied) property.ApprovalStatus = "Not Approved";
                 property.PropertyDetailsTable = model.TableName;
                 property.UserId = model.UserId;
                 db.Entry(property).State = EntityState.Modified;
