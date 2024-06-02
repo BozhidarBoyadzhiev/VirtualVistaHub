@@ -11,14 +11,6 @@ using System.Data.Entity.Core.Metadata.Edm;
 
 namespace VirtualVistaHub.Controllers
 {
-   public class ImagesModel
-   {
-        public VirtualVistaHub.Models.PropertyDetailsTemplate PropertyDetails { get; set; }
-
-        public string TableName { get; set; }
-        public string[] ImagePaths { get; set; }
-        public ImagesModel() { }
-    }
     public class StaffController : Controller
     {
         readonly VirtualVistaBaseEntities db = new VirtualVistaBaseEntities();
@@ -26,7 +18,7 @@ namespace VirtualVistaHub.Controllers
         [SessionAuthorize("admin", "superadmin", "moderator")]
         public ActionResult Properties()
         {
-            var properties = db.Properties.Include(p => p.User).ToList();
+            var properties = db.Properties.Include(p => p.User).Where(p => p.Deleted != true).ToList();
             return View(properties);
         }
 
@@ -48,7 +40,7 @@ namespace VirtualVistaHub.Controllers
         [SessionAuthorize("admin", "superadmin", "moderator")]
         public ActionResult ApproveInformation()
         {
-            var properties = db.Properties.Where(p => p.ApprovalStatus == "Not Approved").ToList();
+            var properties = db.Properties.Where(p => p.ApprovalStatus == "Not Approved" && p.Deleted != true).ToList();
             return View(properties);
         }
 

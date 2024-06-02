@@ -39,6 +39,14 @@ namespace VirtualVistaHub.Controllers
         }
 
         [AllowAnonymous]
+        public ActionResult ViewProperty(int propertyid)
+        {
+            var property = db.Properties.Where(p => p.PropertyId == propertyid).FirstOrDefault();
+
+            return View(property);
+        }
+
+        [AllowAnonymous]
         public ActionResult Search()
         {
             var properties = db.Properties.Where(p => p.ApprovalStatus.ToString() != "Not Approved" && p.Sold != true).ToList();

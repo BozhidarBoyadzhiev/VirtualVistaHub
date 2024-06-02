@@ -17,7 +17,7 @@
           <Property Name="TypeOfConstruction" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="PhoneNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="AdditionalInformation" Type="nvarchar" MaxLength="2500" Nullable="false" />
-          <Property Name="ApprovalStatus" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ApprovalStatus" Type="nvarchar" MaxLength="300" />
           <Property Name="TypeOfSale" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Deleted" Type="bit" Nullable="false" />
           <Property Name="WantToBuy" Type="bit" Nullable="false" />
@@ -52,6 +52,7 @@ warning 6002: The table/view 'VirtualVistaBase.dbo.PropertyDetailsTemplate' does
           </Key>
           <Property Name="UserId" Type="int" Nullable="false" />
           <Property Name="PropertyId" Type="int" Nullable="false" />
+          <Property Name="TypeOfRequest" Type="nvarchar" MaxLength="60" Nullable="false" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -191,7 +192,7 @@ warning 6002: The table/view 'VirtualVistaBase.dbo.PropertyDetailsTemplate' does
           <Property Name="TypeOfConstruction" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="AdditionalInformation" Type="String" MaxLength="2500" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ApprovalStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ApprovalStatus" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
           <Property Name="TypeOfSale" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Deleted" Type="Boolean" Nullable="false" />
           <Property Name="WantToBuy" Type="Boolean" Nullable="false" />
@@ -200,7 +201,7 @@ warning 6002: The table/view 'VirtualVistaBase.dbo.PropertyDetailsTemplate' does
           <Property Name="UserId" Type="Int32" />
           <NavigationProperty Name="User" Relationship="Self.FK__Property__UserId__79FD19BE" FromRole="Property" ToRole="Users" />
           <NavigationProperty Name="PropertyDetailsTemplates" Relationship="Self.FK__PropertyD__Prope__0662F0A3" FromRole="Property" ToRole="PropertyDetailsTemplate" />
-          <NavigationProperty Name="Users" Relationship="Self.UserProperty" FromRole="Property" ToRole="Users" />
+          <NavigationProperty Name="UserProperties" Relationship="Self.FK__UserPrope__Prope__00AA174D" FromRole="Property" ToRole="UserProperty" />
         </EntityType>
         <EntityType Name="Staff">
           <Key>
@@ -209,6 +210,17 @@ warning 6002: The table/view 'VirtualVistaBase.dbo.PropertyDetailsTemplate' does
           <Property Name="UserId" Type="Int32" Nullable="false" />
           <Property Name="UserLevel" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="User" Relationship="Self.FK__Staff__UserId__793DFFAF" FromRole="Staff" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="UserProperty">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="PropertyId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="PropertyId" Type="Int32" Nullable="false" />
+          <Property Name="TypeOfRequest" Type="String" MaxLength="60" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Property" Relationship="Self.FK__UserPrope__Prope__00AA174D" FromRole="UserProperty" ToRole="Property" />
+          <NavigationProperty Name="User" Relationship="Self.FK__UserPrope__UserI__7FB5F314" FromRole="UserProperty" ToRole="Users" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -222,8 +234,8 @@ warning 6002: The table/view 'VirtualVistaBase.dbo.PropertyDetailsTemplate' does
           <Property Name="Deleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Properties" Relationship="Self.FK__Property__UserId__79FD19BE" FromRole="Users" ToRole="Property" />
           <NavigationProperty Name="Staff" Relationship="Self.FK__Staff__UserId__793DFFAF" FromRole="Users" ToRole="Staff" />
+          <NavigationProperty Name="UserProperties" Relationship="Self.FK__UserPrope__UserI__7FB5F314" FromRole="Users" ToRole="UserProperty" />
           <NavigationProperty Name="PropertyDetailsTemplates" Relationship="Self.FK__PropertyD__UserI__075714DC" FromRole="Users" ToRole="PropertyDetailsTemplate" />
-          <NavigationProperty Name="Properties1" Relationship="Self.UserProperty" FromRole="Users" ToRole="Property" />
         </EntityType>
         <EntityType Name="PropertyDetailsTemplate">
           <Key>
@@ -262,6 +274,18 @@ warning 6002: The table/view 'VirtualVistaBase.dbo.PropertyDetailsTemplate' does
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__UserPrope__Prope__00AA174D">
+          <End Role="Property" Type="Self.Property" Multiplicity="1" />
+          <End Role="UserProperty" Type="Self.UserProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Property">
+              <PropertyRef Name="PropertyId" />
+            </Principal>
+            <Dependent Role="UserProperty">
+              <PropertyRef Name="PropertyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__Staff__UserId__793DFFAF">
           <End Role="Users" Type="Self.User" Multiplicity="1" />
           <End Role="Staff" Type="Self.Staff" Multiplicity="0..1" />
@@ -270,6 +294,18 @@ warning 6002: The table/view 'VirtualVistaBase.dbo.PropertyDetailsTemplate' does
               <PropertyRef Name="UserId" />
             </Principal>
             <Dependent Role="Staff">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserPrope__UserI__7FB5F314">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="UserProperty" Type="Self.UserProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="UserProperty">
               <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
@@ -286,13 +322,10 @@ warning 6002: The table/view 'VirtualVistaBase.dbo.PropertyDetailsTemplate' does
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="UserProperty">
-          <End Role="Property" Type="Self.Property" Multiplicity="*" />
-          <End Role="Users" Type="Self.User" Multiplicity="*" />
-        </Association>
         <EntityContainer Name="VirtualVistaBaseEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Properties" EntityType="Self.Property" />
           <EntitySet Name="Staffs" EntityType="Self.Staff" />
+          <EntitySet Name="UserProperties" EntityType="Self.UserProperty" />
           <EntitySet Name="Users" EntityType="Self.User" />
           <EntitySet Name="PropertyDetailsTemplates" EntityType="Self.PropertyDetailsTemplate" />
           <AssociationSet Name="FK__Property__UserId__79FD19BE" Association="Self.FK__Property__UserId__79FD19BE">
@@ -303,17 +336,21 @@ warning 6002: The table/view 'VirtualVistaBase.dbo.PropertyDetailsTemplate' does
             <End Role="Property" EntitySet="Properties" />
             <End Role="PropertyDetailsTemplate" EntitySet="PropertyDetailsTemplates" />
           </AssociationSet>
+          <AssociationSet Name="FK__UserPrope__Prope__00AA174D" Association="Self.FK__UserPrope__Prope__00AA174D">
+            <End Role="Property" EntitySet="Properties" />
+            <End Role="UserProperty" EntitySet="UserProperties" />
+          </AssociationSet>
           <AssociationSet Name="FK__Staff__UserId__793DFFAF" Association="Self.FK__Staff__UserId__793DFFAF">
             <End Role="Users" EntitySet="Users" />
             <End Role="Staff" EntitySet="Staffs" />
           </AssociationSet>
+          <AssociationSet Name="FK__UserPrope__UserI__7FB5F314" Association="Self.FK__UserPrope__UserI__7FB5F314">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="UserProperty" EntitySet="UserProperties" />
+          </AssociationSet>
           <AssociationSet Name="FK__PropertyD__UserI__075714DC" Association="Self.FK__PropertyD__UserI__075714DC">
             <End Role="Users" EntitySet="Users" />
             <End Role="PropertyDetailsTemplate" EntitySet="PropertyDetailsTemplates" />
-          </AssociationSet>
-          <AssociationSet Name="UserProperty" Association="Self.UserProperty">
-            <End Role="Property" EntitySet="Properties" />
-            <End Role="Users" EntitySet="Users" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -351,6 +388,15 @@ warning 6002: The table/view 'VirtualVistaBase.dbo.PropertyDetailsTemplate' does
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="UserProperties">
+            <EntityTypeMapping TypeName="VirtualVistaBaseModel.UserProperty">
+              <MappingFragment StoreEntitySet="UserProperty">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="PropertyId" ColumnName="PropertyId" />
+                <ScalarProperty Name="TypeOfRequest" ColumnName="TypeOfRequest" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="VirtualVistaBaseModel.User">
               <MappingFragment StoreEntitySet="Users">
@@ -373,14 +419,6 @@ warning 6002: The table/view 'VirtualVistaBase.dbo.PropertyDetailsTemplate' does
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="UserProperty" TypeName="VirtualVistaBaseModel.UserProperty" StoreEntitySet="UserProperty">
-            <EndProperty Name="Property">
-              <ScalarProperty Name="PropertyId" ColumnName="PropertyId" />
-            </EndProperty>
-            <EndProperty Name="Users">
-              <ScalarProperty Name="UserId" ColumnName="UserId" />
-            </EndProperty>
-          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

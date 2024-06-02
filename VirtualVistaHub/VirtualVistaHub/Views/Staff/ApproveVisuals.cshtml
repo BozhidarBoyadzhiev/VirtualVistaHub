@@ -1,4 +1,4 @@
-﻿@model VirtualVistaHub.Controllers.ImagesModel
+﻿@model VirtualVistaHub.Models.ImagesModel
 
 <h2>Visual Details</h2>
 
@@ -92,10 +92,10 @@ else
                 if (approvalStatus === "approve") {
                     window.location.href = '@Url.Action("Approve", "Staff")?propertyId=' + propertyId + '&approvedstatus=true';
                 } else {
-                    if (reason.length > 0 && reason.length <= 50) {
+                    if (reason.length > 0 && reason.length <= 300) {
                         window.location.href = '@Url.Action("Approve", "Staff")?propertyId=' + propertyId + '&approvedstatus=false&approvedmessage=' + encodeURIComponent(reason);
                     } else {
-                        alert("Please provide a reason for declining (Max 50 characters).");
+                        alert("Please provide a reason for declining (Max 300 characters).");
                     }
                 }
             });

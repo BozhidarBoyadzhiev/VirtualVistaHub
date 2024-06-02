@@ -27,6 +27,7 @@ namespace VirtualVistaHub.Models
     
         public virtual DbSet<Property> Properties { get; set; }
         public virtual DbSet<Staff> Staffs { get; set; }
+        public virtual DbSet<UserProperty> UserProperties { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<PropertyDetailsTemplate> PropertyDetailsTemplates { get; set; }
     }

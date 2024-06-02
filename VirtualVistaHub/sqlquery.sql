@@ -45,6 +45,7 @@ CREATE TABLE PropertyDetailsTemplate (
 CREATE TABLE UserProperty (
     [UserId] INT FOREIGN KEY REFERENCES Users([UserId]),
     [PropertyId] INT FOREIGN KEY REFERENCES Property([PropertyId]),
+	[TypeOfRequest] NVARCHAR(60) NOT NULL,
     PRIMARY KEY([UserId], [PropertyId])
 )
 

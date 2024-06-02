@@ -1,0 +1,130 @@
+﻿@model VirtualVistaHub.Models.Property
+
+@{
+    ViewBag.Title = "ViewProperty";
+}
+
+<h2>ViewProperty</h2>
+
+<div>
+    <h4>Property</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TypeOfProperty)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TypeOfProperty)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.District)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.District)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Area)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Area)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TypeOfConstruction)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TypeOfConstruction)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AdditionalInformation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AdditionalInformation)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ApprovalStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApprovalStatus)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TypeOfSale)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TypeOfSale)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Deleted)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Deleted)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.WantToBuy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WantToBuy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Sold)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sold)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PropertyDetailsTable)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PropertyDetailsTable)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserId)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.PropertyId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

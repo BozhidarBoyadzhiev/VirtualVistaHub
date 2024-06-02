@@ -149,6 +149,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\CustomModels.cs" />
     <Compile Include="Models\dbModels.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -174,6 +175,9 @@
       <DependentUpon>dbModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\User.cs">
+      <DependentUpon>dbModels.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserProperty.cs">
       <DependentUpon>dbModels.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -260,6 +264,8 @@
     <Content Include="Views\Home\EditUser.cshtml" />
     <Content Include="Views\Home\NotFound.cshtml" />
     <Content Include="Views\Property\Denied.cshtml" />
+    <Content Include="Views\Home\Search.cshtml" />
+    <Content Include="Views\Home\ViewProperty.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

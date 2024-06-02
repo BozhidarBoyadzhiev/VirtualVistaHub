@@ -77,8 +77,8 @@
         <div class="col-md-10">
             @Html.DropDownListFor(model => model.TypeOfSale, new List<SelectListItem>
             {
-                new SelectListItem { Value = "Наем", Text = "Наем" },
-                new SelectListItem { Value = "Продажба", Text = "Продажба", Selected = true }
+                new SelectListItem { Value = "Rent", Text = "Наем" },
+                new SelectListItem { Value = "Sale", Text = "Продажба", Selected = true }
             }, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.TypeOfSale, "", new { @class = "text-danger" })
         </div>
