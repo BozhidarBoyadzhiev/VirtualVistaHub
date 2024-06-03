@@ -3,6 +3,8 @@ using System.Web.Mvc;
 using VirtualVistaHub.Models;
 using VirtualVistaHub.Filters;
 using System.Data.Entity;
+using System.Data.Entity.Core.Metadata.Edm;
+using System.Data.SqlClient;
 
 namespace VirtualVistaHub.Controllers
 {
@@ -38,12 +40,26 @@ namespace VirtualVistaHub.Controllers
             return View();
         }
 
-        [AllowAnonymous]
-        public ActionResult ViewProperty(int propertyid)
+        [SessionAuthorize]
+        public ActionResult ViewProperty(int propertyId)
         {
-            var property = db.Properties.Where(p => p.PropertyId == propertyid).FirstOrDefault();
+            var property = db.Properties.Where(p => p.PropertyId == propertyId).FirstOrDefault();
 
-            return View(property);
+            string sql = $"SELECT * FROM {property.PropertyDetailsTable} WHERE PropertyId = @propertyId";
+            var propertyIdParam = new SqlParameter("propertyId", propertyId);
+            var visual = db.Database.SqlQuery<PropertyDetailsTemplate>(sql, propertyIdParam).FirstOrDefault();
+
+            string imageSql = $"SELECT Images FROM {property.PropertyDetailsTable}";
+            var images = db.Database.SqlQuery<string>(imageSql).ToArray();
+
+            var model = new ViewPropertyModel
+            {
+                Property = property,
+                PropertyDetails = visual,
+                ImagePaths = images
+            };
+
+            return View(model);
         }
 
         [AllowAnonymous]

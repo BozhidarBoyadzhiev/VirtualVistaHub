@@ -18,10 +18,8 @@ namespace VirtualVistaHub.Models
     public class ImagesModel
     {
         public VirtualVistaHub.Models.PropertyDetailsTemplate PropertyDetails { get; set; }
-
         public string TableName { get; set; }
         public string[] ImagePaths { get; set; }
-        public ImagesModel() { }
     }
 
     public class ViewPropertyModel
@@ -29,5 +27,7 @@ namespace VirtualVistaHub.Models
         public VirtualVistaHub.Models.Property Property { get; set; }
 
         public VirtualVistaHub.Models.PropertyDetailsTemplate PropertyDetails { get; set; }
+
+        public string[] ImagePaths { get; set; }
     }
 }

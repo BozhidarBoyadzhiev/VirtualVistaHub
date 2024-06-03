@@ -22,7 +22,7 @@
                             <p><strong>User ID:</strong> @property.UserId</p>
                         }
                         <div class="property-actions">
-                            <a href="#" class="btn btn-primary">Contact</a>
+                            @Html.ActionLink("View more", "ViewProperty", "Home", new { propertyId = property.PropertyId }, null)
                         </div>
                     </div>
                 </div>
@@ -49,8 +49,7 @@
                             <p><strong>User ID:</strong> @property.UserId</p>
                         }
                         <div class="property-actions">
-                            <a href="#">More details and 12 photos</a>
-                            <a href="#" class="btn btn-primary">Contact</a>
+                            @Html.ActionLink("View more", "ViewProperty", "Home", new { propertyId = property.PropertyId })
                         </div>
                     </div>
                 </div>
