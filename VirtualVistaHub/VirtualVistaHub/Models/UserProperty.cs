@@ -14,11 +14,13 @@ namespace VirtualVistaHub.Models
     
     public partial class UserProperty
     {
-        public int UserId { get; set; }
+        public int UserIdOfSeller { get; set; }
+        public int UserIdOfBuyer { get; set; }
         public int PropertyId { get; set; }
         public string TypeOfRequest { get; set; }
     
         public virtual Property Property { get; set; }
         public virtual User User { get; set; }
+        public virtual User User1 { get; set; }
     }
 }

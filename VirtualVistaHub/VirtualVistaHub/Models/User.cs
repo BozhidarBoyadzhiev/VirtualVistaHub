@@ -21,6 +21,7 @@ namespace VirtualVistaHub.Models
         {
             this.Properties = new HashSet<Property>();
             this.UserProperties = new HashSet<UserProperty>();
+            this.UserProperties1 = new HashSet<UserProperty>();
             this.PropertyDetailsTemplates = new HashSet<PropertyDetailsTemplate>();
         }
     
@@ -59,6 +60,8 @@ namespace VirtualVistaHub.Models
         public virtual Staff Staff { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserProperty> UserProperties { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserProperty> UserProperties1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PropertyDetailsTemplate> PropertyDetailsTemplates { get; set; }
     }

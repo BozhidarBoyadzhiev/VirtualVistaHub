@@ -266,6 +266,7 @@
     <Content Include="Views\Property\Denied.cshtml" />
     <Content Include="Views\Home\Search.cshtml" />
     <Content Include="Views\Home\ViewProperty.cshtml" />
+    <Content Include="Views\Property\Requests.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

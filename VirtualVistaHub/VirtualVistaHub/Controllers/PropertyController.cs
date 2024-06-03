@@ -9,6 +9,7 @@ using System.Data.Entity;
 using System.Collections.Generic;
 using System.IO;
 using System.Web;
+using System.Data.Entity.Core.Metadata.Edm;
 
 namespace VirtualVistaHub.Controllers
 {
@@ -40,6 +41,93 @@ namespace VirtualVistaHub.Controllers
 
             var properties = db.Properties.Where(p => p.UserId.ToString() == userId.ToString() && p.ApprovalStatus.ToString() != "Approved").ToList();
             return View(properties);
+        }
+
+        [SessionAuthorize]
+        public ActionResult ViewProperty(int propertyId)
+        {
+            var property = db.Properties.Where(p => p.PropertyId == propertyId).FirstOrDefault();
+
+            string sql = $"SELECT * FROM {property.PropertyDetailsTable} WHERE PropertyId = @propertyId";
+            var propertyIdParam = new SqlParameter("propertyId", propertyId);
+            var visual = db.Database.SqlQuery<PropertyDetailsTemplate>(sql, propertyIdParam).FirstOrDefault();
+
+            string imageSql = $"SELECT Images FROM {property.PropertyDetailsTable}";
+            var images = db.Database.SqlQuery<string>(imageSql).ToArray();
+
+            var model = new ViewPropertyModel
+            {
+                Property = property,
+                PropertyDetails = visual,
+                ImagePaths = images
+            };
+
+            return View(model);
+        }
+
+        [SessionAuthorize]
+        public ActionResult Requested(int propertyId, string typeofrequest)
+        {
+            var property = db.Properties.FirstOrDefault(p => p.PropertyId == propertyId);
+
+            if (property == null)
+            {
+                return RedirectToAction("NotFound", "Home");
+            }
+
+            property.WantToBuy = true;
+            db.Entry(property).State = EntityState.Modified;
+
+            var userProperty = new UserProperty()
+            {
+                UserIdOfSeller = (int)property.UserId,
+                UserIdOfBuyer = Convert.ToInt32(Session["idUser"]),
+                PropertyId = propertyId,
+                TypeOfRequest = typeofrequest
+            };
+
+            db.UserProperties.Add(userProperty);
+            db.SaveChanges();
+
+            return RedirectToAction("Requests", "Property");
+        }
+
+        [SessionAuthorize]
+        public ActionResult Requests()
+        {
+            var userId = Convert.ToInt32(Session["idUser"]);
+            var userProperties = db.UserProperties.Include(p => p.User).Where(p => p.UserIdOfBuyer == userId || p.UserIdOfSeller == userId).ToList();
+            return View(userProperties);
+        }
+
+        [HttpGet]
+        [SessionAuthorize]
+        public ActionResult MakeRequest(int propertyId, string actionType)
+        {
+            var userProperties = db.UserProperties.Where(p => p.PropertyId == propertyId).FirstOrDefault();
+            var property = db.Properties.Where(p => p.PropertyId == propertyId).FirstOrDefault();
+
+            if (actionType == "delete")
+            {
+                db.UserProperties.Remove(userProperties);
+            }
+            else if (actionType == "sold")
+            {
+                property.Sold = true;
+                db.Entry(property).State = EntityState.Modified;
+            }
+            else if (actionType == "backtomarket")
+            {
+                property.WantToBuy = false;
+                db.Entry(property).State = EntityState.Modified;
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Home");
+            }
+
+            db.SaveChanges();
+            return RedirectToAction("Requests", "Property");
         }
 
 

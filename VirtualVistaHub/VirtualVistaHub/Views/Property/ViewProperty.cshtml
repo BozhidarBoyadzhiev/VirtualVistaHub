@@ -87,7 +87,7 @@
             foreach (var imagePath in Model.ImagePaths)
             {
                 <div class="image-item">
-                    <img src="@Url.Content($"~/Uploads/{Model.Property.PropertyDetailsTable}/{imagePath}")" alt="Property Image" class="img-thumbnail" style="max-width: 100px;" />
+                    <img src="@Url.Content($"~/Uploads/{Model.Property.PropertyDetailsTable}/{imagePath}")" alt="Property Image" class="img-thumbnail" style="max-width: 100px;">
                 </div>
             }
         }
@@ -98,7 +98,8 @@
 
     </dl>
 </div>
-<a href="#" class="request-link" data-bs-toggle="modal" data-bs-target="#confirmRequestModal" data-property-id="@Model.Property.PropertyId" data-table-name="@Model.Property.PropertyDetailsTable">Delete</a>
+<a href="#" class="request-link" data-bs-toggle="modal" data-bs-target="#confirmRequestModal" data-property-id="@Model.Property.PropertyId" data-table-name="@Model.Property.PropertyDetailsTable">Make a request</a>
+
 <div class="modal fade" id="confirmRequestModal" tabindex="-1" aria-labelledby="confirmRequestModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -108,10 +109,22 @@
             </div>
             <div class="modal-body">
                 Are you sure you want to request this property?
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="requestType" id="rentOption" value="rent">
+                    <label class="form-check-label" for="rentOption">
+                        Rent
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="requestType" id="saleOption" value="sale">
+                    <label class="form-check-label" for="saleOption">
+                        Sale
+                    </label>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger" id="confirmRequest">Make a request</button>
+                <button type="button" class="btn btn-danger" id="confirmRequestBtn">Confirm</button>
             </div>
         </div>
     </div>
@@ -128,7 +141,15 @@
             });
 
             $('#confirmRequestBtn').click(function () {
-                window.location.href = '@Url.Action("Request", "Property")?propertyId=' + propertyId;
+                var requestType = $('input[name="requestType"]:checked').val();
+                if (requestType) {
+                    if (@Model.Property.UserId == @Session["idUser"])
+                        window.location.href = '@Url.Action("Unauthorized", "Home")';
+                    else
+                        window.location.href = '@Url.Action("Requested", "Property")?propertyId=' + propertyId + '&typeofrequest=' + requestType;
+                } else {
+                    alert('Please select a request type.');
+                }
             });
         });
     </script>

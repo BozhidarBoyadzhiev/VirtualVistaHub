@@ -1,0 +1,52 @@
+﻿@model IEnumerable<VirtualVistaHub.Models.UserProperty>
+
+@{
+    ViewBag.Title = "Not approved/denied";
+}
+
+<h2>Properties</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Information", "Property")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.User.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User.LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PropertyId)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PropertyId)
+            </td>
+            <td>
+                @if (Session["idUser"].ToString() == item.UserIdOfBuyer.ToString())
+                {
+                    @Html.ActionLink("Edit Property", "MakeRequest", "Property", new { propertyId = item.PropertyId, actionType = "delete" }, null) //ADD CONFIRMATION
+                }
+                else
+                {
+                    @Html.ActionLink("Продадено", "MakeRequest", "Property", new { propertyId = item.PropertyId, actionType = "sold" }, null) //ADD CONFIRMATION
+                    <br />
+                    @Html.ActionLink("Върни го на маркета", "MakeRequest", "Property", new { propertyId = item.PropertyId, actionType = "backtomarket" }, null) //ADD CONFIRMATION
+                }
+            </td>
+        </tr>
+    }
+</table>

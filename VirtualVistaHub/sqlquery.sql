@@ -43,10 +43,11 @@ CREATE TABLE PropertyDetailsTemplate (
 );
 
 CREATE TABLE UserProperty (
-    [UserId] INT FOREIGN KEY REFERENCES Users([UserId]),
-    [PropertyId] INT FOREIGN KEY REFERENCES Property([PropertyId]),
+    [UserIdOfSeller] INT FOREIGN KEY REFERENCES Users([UserId]) NOT NULL,
+	[UserIdOfBuyer] INT FOREIGN KEY REFERENCES Users([UserId]) NOT NULL,
+    [PropertyId] INT FOREIGN KEY REFERENCES Property([PropertyId]) NOT NULL,
 	[TypeOfRequest] NVARCHAR(60) NOT NULL,
-    PRIMARY KEY([UserId], [PropertyId])
+	PRIMARY KEY([PropertyId])
 )
 
 /*activitylog*/
