@@ -5,30 +5,30 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarContent">
-                <nav class="sidebar bg-light border-end">
+                <nav class="sidebar bg-light">
                     <ul class="nav flex-column">
                         <li class="nav-item text-center">
                             <a class="navbar-brand mx-auto" href="@Url.Action("Index", "Home" , new { area="" })">
                                 <img src="@Url.Content("~/Content/imgs/logo.png")" />
                             </a>
                         </li>
-                        <li class="nav-item">
-                            @Html.ActionLink("Редактиране на потребител", "Users", "Staff", new { area = "" }, new { @class = "nav-link" })
+                        <li class="nav-item my-2">
+                            @Html.Raw(Html.ActionLink("Редактиране на потребител", "Users", "Staff", new { area = "" }, new { @class = "btn btn-sidebar text-white" }).ToString().Replace(">Редактиране на потребител<", "><i class='fas fa-edit'></i> Редактиране на потребител<"))
                         </li>
-                        <li class="nav-item">
-                            @Html.ActionLink("Изтриване на потребител", "Users", "Staff", new { area = "" }, new { @class = "nav-link" })
+                        <li class="nav-item my-2">
+                            @Html.Raw(Html.ActionLink("Изтриване на потребител", "Users", "Staff", new { area = "" }, new { @class = "btn btn-sidebar text-white" }).ToString().Replace(">Изтриване на потребител<", "><i class='fas fa-user-minus'></i> Изтриване на потребител<"))
                         </li>
-                        <li class="nav-item">
-                            @Html.ActionLink("Одобряване на имот", "ApproveInformation", "Staff", new { area = "" }, new { @class = "nav-link" })
+                        <li class="nav-item my-2">
+                            @Html.Raw(Html.ActionLink("Одобряване на имот", "ApproveInformation", "Staff", new { area = "" }, new { @class = "btn btn-sidebar text-white" }).ToString().Replace(">Одобряване на имот<", "><i class='fas fa-check'></i> Одобряване на имот<"))
                         </li>
-                        <li class="nav-item">
-                            @Html.ActionLink("Редактиране на имот", "Properties", "Staff", new { area = "" }, new { @class = "nav-link" })
+                        <li class="nav-item my-2">
+                            @Html.Raw(Html.ActionLink("Редактиране на имот", "Properties", "Staff", new { area = "" }, new { @class = "btn btn-sidebar text-white" }).ToString().Replace(">Редактиране на имот<", "><i class='fas fa-edit'></i> Редактиране на имот<"))
                         </li>
-                        <li class="nav-item">
-                            @Html.ActionLink("Изтриване на имот", "Properties", "Staff", new { area = "" }, new { @class = "nav-link" })
+                        <li class="nav-item my-2">
+                            @Html.Raw(Html.ActionLink("Изтриване на имот", "Properties", "Staff", new { area = "" }, new { @class = "btn btn-sidebar text-white" }).ToString().Replace(">Изтриване на имот<", "><i class='fas fa-trash'></i> Изтриване на имот<"))
                         </li>
-                        <li class="nav-item">
-                            @Html.ActionLink("Отпиши се", "Logout", "Home", new { area = "" }, new { @class = "nav-link" })
+                        <li class="nav-item my-2">
+                            @Html.Raw(Html.ActionLink("Отпиши се", "Logout", "Home", new { area = "" }, new { @class = "btn btn-sidebar text-white" }).ToString().Replace(">Отпиши се<", "><i class='fas fa-sign-out-alt'></i> Отпиши се<"))
                         </li>
                     </ul>
                 </nav>
