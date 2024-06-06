@@ -267,6 +267,11 @@
     <Content Include="Views\Home\Search.cshtml" />
     <Content Include="Views\Home\ViewProperty.cshtml" />
     <Content Include="Views\Property\Requests.cshtml" />
+    <Content Include="Views\Shared\_PublicNav.cshtml" />
+    <Content Include="Views\Shared\_LoggedInNav.cshtml" />
+    <Content Include="Views\Shared\_SuperAdminNav.cshtml" />
+    <Content Include="Views\Shared\_AdminNav.cshtml" />
+    <Content Include="Views\Shared\_ModeratorNav.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

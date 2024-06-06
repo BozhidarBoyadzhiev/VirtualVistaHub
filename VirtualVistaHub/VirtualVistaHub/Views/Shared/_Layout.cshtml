@@ -8,105 +8,56 @@
     @Styles.Render("~/Content/css/property.css")
     @Styles.Render("~/Content/css/site.css")
     @Scripts.Render("~/bundles/modernizr")
+
+    <style>
+        /* Custom sidebar styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100; /* Ensure sidebar stays above content */
+            padding: 48px 0 0; /* Space for top navbar */
+            box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar {
+            z-index: 101; /* Ensure navbar is above sidebar */
+        }
+
+        /* Adjust main content to avoid overlapping */
+        .main-content {
+            margin-left: 250px; /* Sidebar width */
+            padding: 20px; /* Add padding to content */
+        }
+    </style>
 </head>
 <body>
     @{
         string userLevel = Session["userLevel"] as string;
         string userFirstname = Session["UserFirstname"] as string;
-        int userId = Session["userId"] != null ? Convert.ToInt32(Session["userId"]) : 0;
     }
     <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <div class="d-flex w-100 justify-content-between">
-                    <ul class="navbar-nav me-auto">
-                        @if (userLevel != "none")
-                        {
-                            <li class="nav-item">
-                                @Html.ActionLink("Изтриване на имот", "Properties", "Staff", new { area = "" }, new { @class = "nav-link text-dark" })
-                            </li>
-                        }
-                        @if (userLevel == "admin" || userLevel == "superadmin")
-                        {
-                            <li class="nav-item">
-                                @Html.ActionLink("Редактиране на потребител", "Users", "Staff", new { area = "" }, new { @class = "nav-link text-dark border-start border-dark ps-3" })
-                            </li>
-                            <li class="nav-item">
-                                @Html.ActionLink("Изтриване на потребител", "Users", "Staff", new { area = "" }, new { @class = "nav-link text-dark border-start border-dark ps-3" })
-                            </li>
-                        }
-                        @if (userLevel == "superadmin")
-                        {
-                            <li class="nav-item">
-                                @Html.ActionLink("Промяна на ниво на потребител", "UserLevel", "Staff", new { area = "" }, new { @class = "nav-link text-dark border-start border-dark ps-3" })
-                            </li>
-                        }
-                        @if (userLevel == "none")
-                        {
-                            <li class="nav-item">
-                                @Html.ActionLink("За нас", "AboutUs", "Home", new { area = "" }, new { @class = "nav-link text-dark border-end border-dark pe-3" })
-                            </li>
-                            <li class="nav-item">
-                                @Html.ActionLink("Контакти", "Contacts", "Home", new { area = "" }, new { @class = "nav-link text-dark border-end border-dark pe-3" })
-                            </li>
-                            <li class="nav-item">
-                                @Html.ActionLink("Търси", "Search", "Home", new { area = "" }, new { @class = "nav-link text-dark pe-3" })
-                            </li>
-                        }
-                    </ul>
-
-                    @if (userLevel == "none")
-                    {
-                        <a class="navbar-brand mx-auto" href="@Url.Action("Index", "Home", new { area = "" })">
-                            <img width="200" src="@Url.Content("~/Content/imgs/logo.png")" />
-                        </a>
-                    }
-
-                <ul class="navbar-nav ms-auto">
-                    @if (userFirstname != null && userLevel == "none")
-                    {
-                        <li class="nav-item">
-                            @Html.ActionLink("Заявки/Заявени", "Requests", "Property", new { area = "" }, new { @class = "nav-link text-dark" })
-                        </li>
-                        <li class="nav-item">
-                            @Html.ActionLink("Твойте имоти", "Properties", "Home", new { area = "" }, new { @class = "nav-link text-dark" })
-                        </li>
-                        <li class="nav-item">
-                            @Html.ActionLink("Акаунт", "Account", "Home", new { area = "" }, new { @class = "nav-link text-dark border-start border-dark ps-3" })
-                        </li>
-                        <li class="nav-item">
-                            @Html.ActionLink("Отпиши се", "Logout", "Home", new { area = "" }, new { @class = "nav-link text-dark border-start border-dark ps-3" })
-                        </li>
-                    }
-                    else if (userLevel != "none")
-                    {
-                        <li class="nav-item">
-                            @Html.ActionLink("Одобряване на имот", "ApproveInformation", "Staff", new { area = "" }, new { @class = "nav-link text-dark border-start" })
-                        </li>
-                        <li class="nav-item">
-                            @Html.ActionLink("Редактиране на имот", "Properties", "Staff", new { area = "" }, new { @class = "nav-link text-dark border-start border-dark ps-3" })
-                        </li>
-                    }
-                    else
-                    {
-                        <li class="nav-item">
-                            @Html.ActionLink("Впиши се", "Login", "Home", new { area = "" }, new { @class = "nav-link text-dark" })
-                        </li>
-                        <li class="nav-item">
-                            @Html.ActionLink("Регистрирай се", "Signup", "Home", new { area = "" }, new { @class = "nav-link text-dark border-start border-dark ps-3" })
-                        </li>
-                    }
-
-                    @if (userLevel != "none")
-                    {
-                    <li class="nav-item">
-                        @Html.ActionLink("Отпиши се", "Logout", "Home", new { area = "" }, new { @class = "nav-link text-dark border-start border-dark ps-3" })
-                    </li>
-                    }
-                </ul>
-                </div>
-            </div>
-        </nav>
+        @if (userLevel == "superadmin")
+        {
+            @Html.Partial("_SuperAdminNav")
+        }
+        else if (userLevel == "admin")
+        {
+            @Html.Partial("_AdminNav")
+        }
+        else if (userLevel == "moderator")
+        {
+            @Html.Partial("_ModeratorNav")
+        }
+        else if (userFirstname != null && userLevel == "none")
+        {
+            @Html.Partial("_LoggedInNav")
+        }
+        else
+        {
+            @Html.Partial("_PublicNav")
+        }
     </header>
 
     <div class="container body-content">

@@ -1,0 +1,30 @@
+﻿<nav class="sidebar">
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="navbar-brand mx-auto" href="@Url.Action("Index", "Home" , new { area="" })">
+                <img width="200" src="@Url.Content("~/Content/imgs/logo.png")" />
+            </a>
+        </li>
+        <li class="nav-item">
+            @Html.ActionLink("Редактиране на потребител", "Users", "Staff", new { area = "" }, new { @class = "nav-link" })
+        </li>
+        <li class="nav-item">
+            @Html.ActionLink("Изтриване на потребител", "Users", "Staff", new { area = "" }, new { @class = "nav-link" })
+        </li>
+        <li class="nav-item">
+            @Html.ActionLink("Промяна на ниво на потребител", "UserLevel", "Staff", new { area = "" }, new { @class = "nav-link" })
+        </li>
+        <li class="nav-item">
+            @Html.ActionLink("Одобряване на имот", "ApproveInformation", "Staff", new { area = "" }, new { @class = "nav-link" })
+        </li>
+        <li class="nav-item">
+            @Html.ActionLink("Редактиране на имот", "Properties", "Staff", new { area = "" }, new { @class = "nav-link" })
+        </li>
+        <li class="nav-item">
+            @Html.ActionLink("Изтриване на имот", "Properties", "Staff", new { area = "" }, new { @class = "nav-link" })
+        </li>
+        <li class="nav-item">
+            @Html.ActionLink("Отпиши се", "Logout", "Home", new { area = "" }, new { @class = "nav-link" })
+        </li>
+    </ul>
+</nav>

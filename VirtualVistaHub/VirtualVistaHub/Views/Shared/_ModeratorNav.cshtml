@@ -1,0 +1,32 @@
+﻿<nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <div class="container">
+        <div class="d-flex w-100 justify-content-between">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"> 
+                    @Html.ActionLink("За нас", "AboutUs", "Home", new { area = "" }, new { @class = "nav-link text-dark border-end border-dark pe-3" }) 
+                </li>
+                <li class="nav-item"> 
+                    @Html.ActionLink("Контакти", "Contacts", "Home", new { area = "" }, new { @class = "nav-link text-dark border-end border-dark pe-3" }) 
+                </li>
+                <li class="nav-item"> 
+                    @Html.ActionLink("Търси", "Search", "Home", new { area = "" }, new { @class = "nav-link text-dark pe-3" }) 
+                </li>
+            </ul>
+
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    @Html.ActionLink("Одобряване на имот", "ApproveInformation", "Staff", new { area = "" }, new { @class = "nav-link text-dark border-start" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Редактиране на имот", "Properties", "Staff", new { area = "" }, new { @class = "nav-link text-dark border-start border-dark ps-3" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Изтриване на имот", "Properties", "Staff", new { area = "" }, new { @class = "nav-link text-dark" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("Отпиши се", "Logout", "Home", new { area = "" }, new { @class = "nav-link text-dark border-start border-dark ps-3" })
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
