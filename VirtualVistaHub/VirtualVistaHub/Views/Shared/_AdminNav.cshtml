@@ -1,29 +1,38 @@
-﻿<nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
-    <div class="container">
-        <div class="d-flex w-100 justify-content-between">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    @Html.ActionLink("Редактиране на потребител", "Users", "Staff", new { area = "" }, new { @class = "nav-link text-dark border-start border-dark ps-3" })
-                </li>
-                <li class="nav-item">
-                    @Html.ActionLink("Изтриване на потребител", "Users", "Staff", new { area = "" }, new { @class = "nav-link text-dark border-start border-dark ps-3" })
-                </li>
-            </ul>
-
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    @Html.ActionLink("Одобряване на имот", "ApproveInformation", "Staff", new { area = "" }, new { @class = "nav-link text-dark border-start border-dark ps-3" })
-                </li>
-                <li class="nav-item">
-                    @Html.ActionLink("Редактиране на имот", "Properties", "Staff", new { area = "" }, new { @class = "nav-link text-dark border-start border-dark ps-3" })
-                </li>
-                <li class="nav-item">
-                    @Html.ActionLink("Изтриване на имот", "Properties", "Staff", new { area = "" }, new { @class = "nav-link text-dark" })
-                </li>
-                <li class="nav-item">
-                    @Html.ActionLink("Отпиши се", "Logout", "Home", new { area = "" }, new { @class = "nav-link text-dark border-start border-dark ps-3" })
-                </li>
-            </ul>
+﻿<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <nav class="sidebar bg-light border-end">
+                    <ul class="nav flex-column">
+                        <li class="nav-item text-center">
+                            <a class="navbar-brand mx-auto" href="@Url.Action("Index", "Home" , new { area="" })">
+                                <img src="@Url.Content("~/Content/imgs/logo.png")" />
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Редактиране на потребител", "Users", "Staff", new { area = "" }, new { @class = "nav-link" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Изтриване на потребител", "Users", "Staff", new { area = "" }, new { @class = "nav-link" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Одобряване на имот", "ApproveInformation", "Staff", new { area = "" }, new { @class = "nav-link" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Редактиране на имот", "Properties", "Staff", new { area = "" }, new { @class = "nav-link" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Изтриване на имот", "Properties", "Staff", new { area = "" }, new { @class = "nav-link" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Отпиши се", "Logout", "Home", new { area = "" }, new { @class = "nav-link" })
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
+</header>

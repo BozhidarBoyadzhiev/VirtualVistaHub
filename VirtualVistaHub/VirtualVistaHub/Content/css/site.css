@@ -1,20 +1,98 @@
-﻿/* Set padding to keep content from hitting the edges */
-.body-content {
-    margin-top: 15px;
-    padding-left: 15px;
-    padding-right: 15px;
+﻿.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: -250px;
+    z-index: 100;
+    padding: 48px 0 0;
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+    transition: left 0.3s ease;
 }
 
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
-*/
-.dl-horizontal dt {
-    white-space: normal;
+.sidebar > img {
+    max-width: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
+.sidebar img {
+    max-width: 200px;
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.sidebar a {
+    display: block;
+    padding: 10px 20px;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.sidebar a:hover {
+    background-color: #f8f9fa;
+    color: #0056b3;
+}
+
+.sidebar.open {
+    left: 0;
+}
+
+@media (min-width: 768px) {
+    .sidebar {
+        left: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        top: 56px;
+    }
+}
+
+.navbar {
+    padding: 0.5rem 1rem;
+}
+
+.pe-3 {
+    padding-right: 1rem !important;
+}
+
+.ps-3 {
+    padding-left: 1rem !important;
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-item {
+    margin: 0 0.5rem;
+}
+
+.border-end {
+    border-right: 1px solid #000 !important;
+}
+
+.border-start {
+    border-left: 1px solid #000 !important;
+}
+
+.separator {
+    width: 2rem;
+}
+
+.offcanvas {
+    width: 250px; /* Sidebar width */
+}
+
+/* Hide the sidebar on larger screens */
+@media (min-width: 576px) {
+    .offcanvas {
+        display: none;
+    }
 }

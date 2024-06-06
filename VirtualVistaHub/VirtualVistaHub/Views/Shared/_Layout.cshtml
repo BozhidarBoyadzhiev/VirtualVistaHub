@@ -8,68 +8,57 @@
     @Styles.Render("~/Content/css/property.css")
     @Styles.Render("~/Content/css/site.css")
     @Scripts.Render("~/bundles/modernizr")
-
-    <style>
-        /* Custom sidebar styles */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            z-index: 100; /* Ensure sidebar stays above content */
-            padding: 48px 0 0; /* Space for top navbar */
-            box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
-        }
-
-        .navbar {
-            z-index: 101; /* Ensure navbar is above sidebar */
-        }
-
-        /* Adjust main content to avoid overlapping */
-        .main-content {
-            margin-left: 250px; /* Sidebar width */
-            padding: 20px; /* Add padding to content */
-        }
-    </style>
 </head>
 <body>
     @{
         string userLevel = Session["userLevel"] as string;
         string userFirstname = Session["UserFirstname"] as string;
     }
-    <header>
-        @if (userLevel == "superadmin")
-        {
-            @Html.Partial("_SuperAdminNav")
-        }
-        else if (userLevel == "admin")
-        {
-            @Html.Partial("_AdminNav")
-        }
-        else if (userLevel == "moderator")
-        {
-            @Html.Partial("_ModeratorNav")
-        }
-        else if (userFirstname != null && userLevel == "none")
-        {
-            @Html.Partial("_LoggedInNav")
-        }
-        else
-        {
-            @Html.Partial("_PublicNav")
-        }
-    </header>
 
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
+    @if (userLevel == "superadmin")
+    {
+        @Html.Partial("_SuperAdminNav")
+    }
+    else if (userLevel == "admin")
+    {
+        @Html.Partial("_AdminNav")
+    }
+    else if (userLevel == "moderator")
+    {
+        @Html.Partial("_ModeratorNav")
+    }
+    else if (userFirstname != null && userLevel == "none")
+    {
+        @Html.Partial("_LoggedInNav")
+    }
+    else
+    {                     
+        @Html.Partial("_PublicNav")
+    }
+
+    <div class="container-fluid">
+        <div class="row">
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                @RenderBody()
+                <hr />
+                <footer>
+                    <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+                </footer>
+            </main>
+        </div>
     </div>
 
+    @Scripts.Render("https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
+    <script>
+        $(document).ready(function () {
+            $('.navbar-toggler').click(function () {
+                $('.sidebar').toggleClass('open');
+            });
+        });
+    </script>
 </body>
 </html>
