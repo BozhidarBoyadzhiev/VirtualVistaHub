@@ -1,4 +1,4 @@
-﻿<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom box-shadow mb-3">
+﻿<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom box-shadow">
     <div class="container">
         <a class="navbar-brand" href="@Url.Action("Index", "Home", new { area = "" })">
             <img width="200" src="@Url.Content("~/Content/imgs/logo.png")" alt="VirtualVistaHub" />
@@ -29,7 +29,7 @@
             </ul>
         </div>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
+        <button style="background-color: white; border-color: black;" class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
             <span class="navbar-toggler-icon"></span>
         </button>
     </div>
@@ -37,7 +37,7 @@
 
 <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar">
     <div class="offcanvas-header">
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <button style="background-color: white;" type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
         <ul class="navbar-nav">

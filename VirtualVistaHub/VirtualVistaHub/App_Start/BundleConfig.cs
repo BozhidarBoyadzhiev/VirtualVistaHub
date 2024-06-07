@@ -24,7 +24,24 @@ namespace VirtualVistaHub
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/css/site.css",
+                      "~/Content/css/property.css",
+                      "~/Content/dashicons.min.css",
+                      "~/Content/elementor-icons.min.css",
+                      "~/Content/fontawesome.min.css",
+                      "~/Content/frontend.css",
+                      "~/Content/frontend.min.css",
+                      "~/Content/global.css",
+                      "~/Content/global_frontend.css",
+                      "~/Content/post-499963.css",
+                      "~/Content/post-499980.css",
+                      "~/Content/post-499981.css",
+                      "~/Content/solid.min.css",
+                      "~/Content/styles-wc.min.css",
+                      "~/Content/swiper.min.css",
+                      "~/Content/woocommerce-layout.css",
+                      "~/Content/woocommerce-smallscreen.css"
+           ));
         }
     }
 }
