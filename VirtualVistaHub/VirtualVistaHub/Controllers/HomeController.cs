@@ -25,7 +25,7 @@ namespace VirtualVistaHub.Controllers
         [AllowAnonymous]
         public ActionResult Index()
         {
-            return View(db.Users.ToList());
+            return View();
         }
 
         [AllowAnonymous]

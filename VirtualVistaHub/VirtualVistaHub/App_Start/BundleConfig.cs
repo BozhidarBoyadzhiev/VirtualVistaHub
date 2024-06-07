@@ -36,6 +36,8 @@ namespace VirtualVistaHub
                       "~/Content/post-499963.css",
                       "~/Content/post-499980.css",
                       "~/Content/post-499981.css",
+                      "~/Content/post-499970.css",
+                      "~/Content/post-499969.css",
                       "~/Content/solid.min.css",
                       "~/Content/styles-wc.min.css",
                       "~/Content/swiper.min.css",
