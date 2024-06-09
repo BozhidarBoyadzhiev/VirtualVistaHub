@@ -30,4 +30,17 @@ namespace VirtualVistaHub.Models
 
         public string[] ImagePaths { get; set; }
     }
+
+    public class PropertySearchViewModel
+    {
+        public IEnumerable<Property> Properties { get; set; }
+        public string TypeOfProperty { get; set; }
+        public string District { get; set; }
+        public string Neighbourhood { get; set; }
+        public string TypeOfConstruction { get; set; }
+        public string TypeOfSale { get; set; }
+        public Dictionary<int, (string TableName, string FirstImagePath)> PropertyDetails { get; set; }
+
+    }
+
 }

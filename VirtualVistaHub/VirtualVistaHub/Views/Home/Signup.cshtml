@@ -1,7 +1,7 @@
 ﻿@model VirtualVistaHub.Models.User
 
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
-    <div class="card shadow-lg p-3 mb-5 bg-body rounded" style="width: 25rem;">
+    <div class="card shadow-lg p-3 mb-5 bg-body rounded" style="width: 50rem;">
         <div class="card-body">
             <h2 class="text-center mb-4">Signup</h2>
             @using (Html.BeginForm())
@@ -14,7 +14,7 @@
                     <div class="form-group mb-3">
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
-                            @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control", placeholder = "First Name" } })
+                            @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control", placeholder = "First Name", required = "required" } })
                         </div>
                         @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
                     </div>
@@ -22,7 +22,7 @@
                     <div class="form-group mb-3">
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
-                            @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control", placeholder = "Last Name" } })
+                            @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control", placeholder = "Last Name", required = "required" } })
                         </div>
                         @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
                     </div>
@@ -30,7 +30,7 @@
                     <div class="form-group mb-3">
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", placeholder = "Email" } })
+                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", placeholder = "Email", required = "required" } })
                         </div>
                         @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
                     </div>
@@ -38,7 +38,7 @@
                     <div class="form-group mb-3">
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", placeholder = "Password" } })
+                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", placeholder = "Password", required = "required" } })
                         </div>
                         @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
                     </div>
@@ -46,7 +46,7 @@
                     <div class="form-group mb-3">
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                            @Html.EditorFor(model => model.RePassword, new { htmlAttributes = new { @class = "form-control", placeholder = "Confirm Password" } })
+                            @Html.EditorFor(model => model.RePassword, new { htmlAttributes = new { @class = "form-control", placeholder = "Confirm Password", required = "required" } })
                         </div>
                         @Html.ValidationMessageFor(model => model.RePassword, "", new { @class = "text-danger" })
                     </div>

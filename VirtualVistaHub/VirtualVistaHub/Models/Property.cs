@@ -23,6 +23,7 @@ namespace VirtualVistaHub.Models
         public int PropertyId { get; set; }
         public string TypeOfProperty { get; set; }
         public string District { get; set; }
+        public string Neighbourhood { get; set; }
         public int Price { get; set; }
         public int Area { get; set; }
         public string TypeOfConstruction { get; set; }

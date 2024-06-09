@@ -318,30 +318,26 @@ namespace VirtualVistaHub.Controllers
         {
             var userId = Session["idUser"];
 
-            if (ModelState.IsValid)
-            {
-                property.UserId = int.Parse(userId.ToString());
-                property.PropertyDetailsTable = GenerateTableName().ToString();
-                db.Properties.Add(property);
+            property.UserId = int.Parse(userId.ToString());
+            property.PropertyDetailsTable = GenerateTableName().ToString();
+            db.Properties.Add(property);
 
-                db.SaveChanges();
+            db.SaveChanges();
 
-                Session["idProperty"] = property.PropertyId.ToString();
-                Session["tableDetails"] = property.PropertyDetailsTable.ToString();
+            Session["idProperty"] = property.PropertyId.ToString();
+            Session["tableDetails"] = property.PropertyDetailsTable.ToString();
 
-                string tableName = property.PropertyDetailsTable;
+            string tableName = property.PropertyDetailsTable;
 
-                string createTableSql = $@"
-                CREATE TABLE {tableName} (
-	                [PropertyId] INT FOREIGN KEY REFERENCES Property([PropertyId]),
-	                [VTour] NVARCHAR(MAX) NOT NULL,
-	                [Images] NVARCHAR(MAX) NOT NULL,
-	                [UserId] INT FOREIGN KEY REFERENCES Users([UserId]) NOT NULL
-                );";
+            string createTableSql = $@"
+            CREATE TABLE {tableName} (
+	            [PropertyId] INT FOREIGN KEY REFERENCES Property([PropertyId]),
+	            [VTour] NVARCHAR(MAX) NOT NULL,
+	            [Images] NVARCHAR(MAX) NOT NULL,
+	            [UserId] INT FOREIGN KEY REFERENCES Users([UserId]) NOT NULL
+            );";
 
-                db.Database.ExecuteSqlCommand(createTableSql);
-
-            }
+            db.Database.ExecuteSqlCommand(createTableSql);
 
             return RedirectToAction("Visual", "Property");
         }

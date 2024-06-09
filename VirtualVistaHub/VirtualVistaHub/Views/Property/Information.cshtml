@@ -7,11 +7,11 @@
 <h2>Information</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
-<div class="form-horizontal">
+
+<div class="container form-horizontal">
     <h4>Propety</h4>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -19,7 +19,21 @@
     <div class="form-group">
         @Html.LabelFor(model => model.TypeOfProperty, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.TypeOfProperty, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.DropDownListFor(model => model.TypeOfProperty, new List<SelectListItem>
+            {
+                new SelectListItem { Value = "1-Стаен", Text = "1-Стаен", Selected = true },
+                new SelectListItem { Value = "2-Стаен", Text = "2-Стаен" },
+                new SelectListItem { Value = "3-Стаен", Text = "3-Стаен" },
+                new SelectListItem { Value = "4-Стаен", Text = "4-Стаен" },
+                new SelectListItem { Value = "Многостаен", Text = "Многостаен" },
+                new SelectListItem { Value = "Мезонет", Text = "Мезонет" },
+                new SelectListItem { Value = "Офис", Text = "Офис" },
+                new SelectListItem { Value = "Магазин", Text = "Магазин" },
+                new SelectListItem { Value = "Склад", Text = "Склад" },
+                new SelectListItem { Value = "Хотел", Text = "Хотел" },
+                new SelectListItem { Value = "Къща", Text = "Къща" },
+                new SelectListItem { Value = "Парцел", Text = "Парцел" }
+            }, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.TypeOfProperty, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -27,16 +41,55 @@
     <div class="form-group">
         @Html.LabelFor(model => model.District, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.District, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.DropDownListFor(model => model.District, new List<SelectListItem>
+            {
+                new SelectListItem { Value = "Благоевград", Text = "Благоевград" },
+                new SelectListItem { Value = "Бургас", Text = "Бургас" },
+                new SelectListItem { Value = "Варна", Text = "Варна" },
+                new SelectListItem { Value = "ВеликоТърново", Text = "Велико Търново" },
+                new SelectListItem { Value = "Видин", Text = "Видин" },
+                new SelectListItem { Value = "Враца", Text = "Враца" },
+                new SelectListItem { Value = "Габрово", Text = "Габрово" },
+                new SelectListItem { Value = "Добрич", Text = "Добрич" },
+                new SelectListItem { Value = "Кърджали", Text = "Кърджали" },
+                new SelectListItem { Value = "Кюстендил", Text = "Кюстендил" },
+                new SelectListItem { Value = "Ловеч", Text = "Ловеч" },
+                new SelectListItem { Value = "Монтана", Text = "Монтана" },
+                new SelectListItem { Value = "Пазарджик", Text = "Пазарджик" },
+                new SelectListItem { Value = "Перник", Text = "Перник" },
+                new SelectListItem { Value = "Плевен", Text = "Плевен" },
+                new SelectListItem { Value = "Пловдив", Text = "Пловдив" },
+                new SelectListItem { Value = "Разград", Text = "Разград" },
+                new SelectListItem { Value = "Русе", Text = "Русе" },
+                new SelectListItem { Value = "Силистра", Text = "Силистра" },
+                new SelectListItem { Value = "Сливен", Text = "Сливен" },
+                new SelectListItem { Value = "Смолян", Text = "Смолян" },
+                new SelectListItem { Value = "София", Text = "София" },
+                new SelectListItem { Value = "София-област", Text = "София-област" },
+                new SelectListItem { Value = "СтараЗагора", Text = "Стара Загора" },
+                new SelectListItem { Value = "Търговище", Text = "Търговище" },
+                new SelectListItem { Value = "Хасково", Text = "Хасково" },
+                new SelectListItem { Value = "Шумен", Text = "Шумен" },
+                new SelectListItem { Value = "Ямбол", Text = "Ямбол" }
+            }, new { @class = "form-control", @id = "DistrictDropdown" })
             @Html.ValidationMessageFor(model => model.District, "", new { @class = "text-danger" })
         </div>
     </div>
+
 
     <div class="form-group">
         @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Neighbourhood, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.Neighbourhood, Enumerable.Empty<SelectListItem>(), new { @class = "form-control", @id = "NeighbourhoodDropdown" })
+            @Html.ValidationMessageFor(model => model.Neighbourhood, "", new { @class = "text-danger" })
         </div>
     </div>
 
@@ -51,7 +104,15 @@
     <div class="form-group">
         @Html.LabelFor(model => model.TypeOfConstruction, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.TypeOfConstruction, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.DropDownListFor(model => model.TypeOfConstruction, new List<SelectListItem>
+            {
+                new SelectListItem { Value = "Панел", Text = "Панел", Selected = true  },
+                new SelectListItem { Value = "Тухла", Text = "Тухла" },
+                new SelectListItem { Value = "ЕПК", Text = "ЕПК" },
+                new SelectListItem { Value = "ПК", Text = "ПК" },
+                new SelectListItem { Value = "Гредоред", Text = "Гредоред" },
+                new SelectListItem { Value = "Сглобяема конструкция", Text = "Сглобяема конструкция" }
+            }, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.TypeOfConstruction, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -77,8 +138,8 @@
         <div class="col-md-10">
             @Html.DropDownListFor(model => model.TypeOfSale, new List<SelectListItem>
             {
-                new SelectListItem { Value = "Rent", Text = "Наем" },
-                new SelectListItem { Value = "Sale", Text = "Продажба", Selected = true }
+                new SelectListItem { Value = "Наем", Text = "Наем" },
+                new SelectListItem { Value = "Продажба", Text = "Продажба", Selected = true }
             }, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.TypeOfSale, "", new { @class = "text-danger" })
         </div>
@@ -92,6 +153,4 @@
 </div>
 }
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+<script src="~/Scripts/districtAreas.js"></script>

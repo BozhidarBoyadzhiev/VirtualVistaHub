@@ -5,6 +5,7 @@ using VirtualVistaHub.Filters;
 using System.Data.Entity;
 using System.Data.Entity.Core.Metadata.Edm;
 using System.Data.SqlClient;
+using System.Collections.Generic;
 
 namespace VirtualVistaHub.Controllers
 {
@@ -41,11 +42,57 @@ namespace VirtualVistaHub.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult Search()
+        public ActionResult Search(string typeOfProperty, string district, string neighbourhood, string typeOfConstruction, string typeOfSale)
         {
-            var properties = db.Properties.Where(p => p.ApprovalStatus.ToString() != "Not Approved" && p.Sold != true).ToList();
-            return View(properties);
+            var properties = db.Properties.Where(p => p.ApprovalStatus.ToString() != "Not Approved" && p.Sold != true);
+
+            if (!string.IsNullOrEmpty(typeOfProperty))
+            {
+                properties = properties.Where(p => p.TypeOfProperty == typeOfProperty);
+            }
+            if (!string.IsNullOrEmpty(district))
+            {
+                properties = properties.Where(p => p.District == district);
+            }
+            if (!string.IsNullOrEmpty(neighbourhood))
+            {
+                properties = properties.Where(p => p.Neighbourhood == neighbourhood);
+            }
+            if (!string.IsNullOrEmpty(typeOfConstruction))
+            {
+                properties = properties.Where(p => p.TypeOfConstruction == typeOfConstruction);
+            }
+            if (!string.IsNullOrEmpty(typeOfSale))
+            {
+                properties = properties.Where(p => p.TypeOfSale == typeOfSale);
+            }
+            var propertyList = properties.ToList();
+
+            var propertyDetails = new Dictionary<int, (string TableName, string FirstImagePath)>();
+
+            foreach (var prop in propertyList)
+            {
+                string query = $"SELECT TOP 1 Images FROM {prop.PropertyDetailsTable}";
+                var image = db.Database.SqlQuery<string>(query).FirstOrDefault();
+                string firstImagePath = image ?? string.Empty;
+                propertyDetails.Add(prop.PropertyId, (prop.PropertyDetailsTable, firstImagePath));
+            }
+
+            var viewModel = new PropertySearchViewModel
+            {
+                Properties = propertyList,
+                TypeOfProperty = typeOfProperty,
+                District = district,
+                Neighbourhood = neighbourhood,
+                TypeOfConstruction = typeOfConstruction,
+                TypeOfSale = typeOfSale,
+                PropertyDetails = propertyDetails
+            };
+
+            return View(viewModel);
         }
+
+
 
         [AllowAnonymous]
         public ActionResult Signup()
