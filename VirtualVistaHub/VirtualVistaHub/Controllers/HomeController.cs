@@ -13,6 +13,17 @@ namespace VirtualVistaHub.Controllers
     {
         readonly VirtualVistaBaseEntities db = new VirtualVistaBaseEntities();
 
+        public static string HashPassword(string plainPassword)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(plainPassword);
+        }
+
+        public static bool VerifyPassword(string plainPassword, string hashedPassword)
+        {
+            return BCrypt.Net.BCrypt.Verify(plainPassword, hashedPassword);
+        }
+
+
         public ActionResult NotFound()
         {
             return View();
@@ -37,6 +48,25 @@ namespace VirtualVistaHub.Controllers
 
         [AllowAnonymous]
         public ActionResult Contacts()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public ActionResult Signup()
+        {
+            return View();
+        }
+
+        public ActionResult Logout()
+        {
+            Session.Clear();
+            Session["userLevel"] = "none";
+            return RedirectToAction("Index", "Home");
+        }
+
+        [AllowAnonymous]
+        public ActionResult Login()
         {
             return View();
         }
@@ -92,14 +122,6 @@ namespace VirtualVistaHub.Controllers
             return View(viewModel);
         }
 
-
-
-        [AllowAnonymous]
-        public ActionResult Signup()
-        {
-            return View();
-        }
-
         [SessionAuthorize]
         public ActionResult Properties()
         {
@@ -107,22 +129,6 @@ namespace VirtualVistaHub.Controllers
 
             var properties = db.Properties.Where(p => p.UserId.ToString() == userId.ToString() && p.ApprovalStatus.ToString() == "Approved").ToList();
             return View(properties);
-        }
-
-        [SessionAuthorize]
-        public ActionResult Account()
-        {
-            return View();
-        }
-
-        public static string HashPassword(string plainPassword)
-        {
-            return BCrypt.Net.BCrypt.HashPassword(plainPassword);
-        }
-
-        public static bool VerifyPassword(string plainPassword, string hashedPassword)
-        {
-            return BCrypt.Net.BCrypt.Verify(plainPassword, hashedPassword);
         }
 
         [HttpPost]
@@ -155,19 +161,6 @@ namespace VirtualVistaHub.Controllers
                     return View();
                 }
             }
-        }
-
-        public ActionResult Logout()
-        {
-            Session.Clear();
-            Session["userLevel"] = "none";
-            return RedirectToAction("Index", "Home");
-        }
-
-        [AllowAnonymous]
-        public ActionResult Login()
-        {
-            return View();
         }
 
         [HttpPost]
@@ -217,8 +210,9 @@ namespace VirtualVistaHub.Controllers
             return View();
         }
 
-        [SessionAuthorize("superadmin", "admin", "none")]
-        public ActionResult EditUser(int userId)
+        [HttpGet]
+        [SessionAuthorize]
+        public ActionResult Account(int userId)
         {
             var user = db.Users.FirstOrDefault(p => p.UserId == userId);
 
@@ -228,32 +222,36 @@ namespace VirtualVistaHub.Controllers
             }
 
             var currentUserId = Session["idUser"].ToString();
-            var currentUserLevel = Session["userLevel"].ToString();
 
-            if (currentUserLevel == "superadmin")
-            {
-                return View(user);
-            }
 
-            if (currentUserLevel == "admin")
-            {
-                var targetStaff = db.Staffs.FirstOrDefault(u => u.UserId == userId);
-                if (userId.ToString() == currentUserId || (targetStaff == null || (targetStaff.UserLevel != "admin" && targetStaff.UserLevel != "superadmin")))
-                {
-                    return View(user);
-                }
-                else
-                {
-                    return RedirectToAction("Users", "Staff");
-                }
-            }
-
-            if (currentUserLevel == "none" && userId.ToString() == currentUserId)
+            if (userId.ToString() == currentUserId)
             {
                 return View(user);
             }
 
             return RedirectToAction("Unauthorized", "Home");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [SessionAuthorize]
+        public ActionResult Account(User user)
+        {
+            var existingUser = db.Users.Find(user.UserId);
+
+            if (!string.IsNullOrWhiteSpace(user.Password) && user.Password != existingUser.Password)
+            {
+                existingUser.Password = HashPassword(user.Password);
+            }
+
+            existingUser.FirstName = user.FirstName;
+            existingUser.LastName = user.LastName;
+            existingUser.Email = user.Email;
+
+            db.Entry(existingUser).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return RedirectToAction("Account", "Home", new {userId = Session["idUser"] });
         }
 
 
@@ -292,32 +290,5 @@ namespace VirtualVistaHub.Controllers
 
             return RedirectToAction("Users", "Staff");
         }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [SessionAuthorize("superadmin", "admin", "none")]
-        public ActionResult EditUser(User user)
-        {
-            var existingUser = db.Users.Find(user.UserId);
-
-            if (!string.IsNullOrWhiteSpace(user.Password) && user.Password != existingUser.Password)
-            {
-                existingUser.Password = HashPassword(user.Password);
-            }
-
-            existingUser.FirstName = user.FirstName;
-            existingUser.LastName = user.LastName;
-            existingUser.Email = user.Email;
-
-            db.Entry(existingUser).State = EntityState.Modified;
-            db.SaveChanges();
-
-            if (Session["userLevel"].ToString() != "none")
-                return RedirectToAction("Users", "Staff");
-            else
-                return RedirectToAction("Account", "Home");
-        }
-
-
     }
 }

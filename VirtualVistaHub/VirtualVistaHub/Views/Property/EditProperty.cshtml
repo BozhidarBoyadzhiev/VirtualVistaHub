@@ -1,159 +1,197 @@
 ﻿@model VirtualVistaHub.Models.EditPropertyViewModel
 
-@{
-    ViewBag.Title = "EditProperty";
-}
-
-<h2>EditProperty</h2>
+<h1 class="text-center">Редактирай имот</h1>
 
 @using (Html.BeginForm("EditProperty", "Property", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <h4>Property</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Property.PropertyId)
-        @Html.HiddenFor(model => model.TableName)
-        @Html.HiddenFor(model => model.UserId)
-        @Html.HiddenFor(model => model.Denied)
+<div class="container mt-4">
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.Property.PropertyId)
+    @Html.HiddenFor(model => model.TableName)
+    @Html.HiddenFor(model => model.UserId)
+    @Html.HiddenFor(model => model.Denied)
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Property.TypeOfProperty, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Property.TypeOfProperty, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Property.TypeOfProperty, "", new { @class = "text-danger" })
+    <div class="mb-3 row align-items-center">
+        @Html.LabelFor(model => model.Property.TypeOfProperty, htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+        <div class="col-sm-10">
+            @Html.DropDownListFor(model => model.Property.TypeOfProperty, new List<SelectListItem>
+            {
+                new SelectListItem { Value = "1-Стаен", Text = "1-Стаен"},
+                new SelectListItem { Value = "2-Стаен", Text = "2-Стаен" },
+                new SelectListItem { Value = "3-Стаен", Text = "3-Стаен" },
+                new SelectListItem { Value = "4-Стаен", Text = "4-Стаен" },
+                new SelectListItem { Value = "Многостаен", Text = "Многостаен" },
+                new SelectListItem { Value = "Мезонет", Text = "Мезонет" },
+                new SelectListItem { Value = "Офис", Text = "Офис" },
+                new SelectListItem { Value = "Магазин", Text = "Магазин" },
+                new SelectListItem { Value = "Склад", Text = "Склад" },
+                new SelectListItem { Value = "Хотел", Text = "Хотел" },
+                new SelectListItem { Value = "Къща", Text = "Къща" },
+            }, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Property.TypeOfProperty, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="mb-3 row align-items-center">
+        @Html.LabelFor(model => model.Property.District, htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+        <div class="col-sm-10">
+            @Html.DropDownListFor(model => model.Property.District, new List<SelectListItem>
+            {
+                new SelectListItem { Value = "Благоевград", Text = "Благоевград" },
+                new SelectListItem { Value = "Бургас", Text = "Бургас" },
+                new SelectListItem { Value = "Варна", Text = "Варна" },
+                new SelectListItem { Value = "ВеликоТърново", Text = "Велико Търново" },
+                new SelectListItem { Value = "Видин", Text = "Видин" },
+                new SelectListItem { Value = "Враца", Text = "Враца" },
+                new SelectListItem { Value = "Габрово", Text = "Габрово" },
+                new SelectListItem { Value = "Добрич", Text = "Добрич" },
+                new SelectListItem { Value = "Кърджали", Text = "Кърджали" },
+                new SelectListItem { Value = "Кюстендил", Text = "Кюстендил" },
+                new SelectListItem { Value = "Ловеч", Text = "Ловеч" },
+                new SelectListItem { Value = "Монтана", Text = "Монтана" },
+                new SelectListItem { Value = "Пазарджик", Text = "Пазарджик" },
+                new SelectListItem { Value = "Перник", Text = "Перник" },
+                new SelectListItem { Value = "Плевен", Text = "Плевен" },
+                new SelectListItem { Value = "Пловдив", Text = "Пловдив" },
+                new SelectListItem { Value = "Разград", Text = "Разград" },
+                new SelectListItem { Value = "Русе", Text = "Русе" },
+                new SelectListItem { Value = "Силистра", Text = "Силистра" },
+                new SelectListItem { Value = "Сливен", Text = "Сливен" },
+                new SelectListItem { Value = "Смолян", Text = "Смолян" },
+                new SelectListItem { Value = "София", Text = "София" },
+                new SelectListItem { Value = "София-област", Text = "София-област" },
+                new SelectListItem { Value = "СтараЗагора", Text = "Стара Загора" },
+                new SelectListItem { Value = "Търговище", Text = "Търговище" },
+                new SelectListItem { Value = "Хасково", Text = "Хасково" },
+                new SelectListItem { Value = "Шумен", Text = "Шумен" },
+                new SelectListItem { Value = "Ямбол", Text = "Ямбол" }
+            }, new { @class = "form-control", @id = "DistrictDropdown" })
+            @Html.ValidationMessageFor(model => model.Property.District, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="mb-3 row align-items-center">
+        @Html.LabelFor(model => model.Property.Neighbourhood, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-sm-10">
+            @Html.DropDownListFor(model => model.Property.Neighbourhood, Enumerable.Empty<SelectListItem>(), Model.Property.Neighbourhood, new { @class = "form-control", @id = "NeighbourhoodDropdown" })
+            @Html.ValidationMessageFor(model => model.Property.Neighbourhood, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="mb-3 row align-items-center">
+        @Html.LabelFor(model => model.Property.Price, htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+        <div class="col-sm-10">
+            @Html.EditorFor(model => model.Property.Price, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+            @Html.ValidationMessageFor(model => model.Property.Price, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="mb-3 row align-items-center">
+        @Html.LabelFor(model => model.Property.Area, htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+        <div class="col-sm-10">
+            @Html.EditorFor(model => model.Property.Area, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+            @Html.ValidationMessageFor(model => model.Property.Area, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="mb-3 row align-items-center">
+        @Html.LabelFor(model => model.Property.TypeOfConstruction, htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+        <div class="col-sm-10">
+            @Html.DropDownListFor(model => model.Property.TypeOfConstruction, new List<SelectListItem>
+            {
+                new SelectListItem { Value = "Панел", Text = "Панел" },
+                new SelectListItem { Value = "Тухла", Text = "Тухла" },
+                new SelectListItem { Value = "ЕПК", Text = "ЕПК" },
+                new SelectListItem { Value = "ПК", Text = "ПК" },
+                new SelectListItem { Value = "Гредоред", Text = "Гредоред" },
+                new SelectListItem { Value = "Сглобяема конструкция", Text = "Сглобяема конструкция" }
+            }, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Property.TypeOfConstruction, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="mb-3 row align-items-center">
+        @Html.LabelFor(model => model.Property.PhoneNumber, htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+        <div class="col-sm-10">
+            @Html.EditorFor(model => model.Property.PhoneNumber, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+            @Html.ValidationMessageFor(model => model.Property.PhoneNumber, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="mb-3 row align-items-center">
+        @Html.LabelFor(model => model.Property.AdditionalInformation, htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+        <div class="col-sm-10">
+            @Html.EditorFor(model => model.Property.AdditionalInformation, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+            @Html.ValidationMessageFor(model => model.Property.AdditionalInformation, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="mb-3 row align-items-center">
+        @Html.LabelFor(model => model.Property.TypeOfSale, htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+        <div class="col-sm-10">
+            @Html.DropDownListFor(model => model.Property.TypeOfSale, new List<SelectListItem>
+            {
+                new SelectListItem { Value = "Наем", Text = "Наем" },
+                new SelectListItem { Value = "Продажба", Text = "Продажба"}
+            }, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Property.TypeOfSale, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="mb-3 row align-items-center">
+        @Html.LabelFor(model => model.Property.Sold, htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+        <div class="col-sm-10">
+            <div class="form-check">
+                @Html.EditorFor(model => model.Property.Sold, new { htmlAttributes = new { @class = "form-check-input" } })
+                @Html.ValidationMessageFor(model => model.Property.Sold, "", new { @class = "text-danger" })
             </div>
         </div>
+    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Property.District, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Property.District, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Property.District, "", new { @class = "text-danger" })
-            </div>
+    <div class="mb-3 row">
+        @Html.LabelFor(model => model.PropertyDetails.VTour, htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+        <div class="col-sm-10">
+            @Html.EditorFor(model => model.PropertyDetails.VTour, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.PropertyDetails.VTour, "", new { @class = "text-danger" })
         </div>
+    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Property.Price, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Property.Price, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Property.Price, "", new { @class = "text-danger" })
-            </div>
-        </div>        
-        
-        <div class="form-group">
-            @Html.LabelFor(model => model.Property.Neighbourhood, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Property.Neighbourhood, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Property.Neighbourhood, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Property.Area, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Property.Area, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Property.Area, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Property.TypeOfConstruction, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Property.TypeOfConstruction, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Property.TypeOfConstruction, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Property.PhoneNumber, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Property.PhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Property.PhoneNumber, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Property.AdditionalInformation, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Property.AdditionalInformation, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Property.AdditionalInformation, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Property.ApprovalStatus, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Property.ApprovalStatus, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Property.ApprovalStatus, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Property.TypeOfSale, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.Property.TypeOfSale, new List<SelectListItem>
-                {
-                    new SelectListItem { Value = "Наем", Text = "Наем" },
-                    new SelectListItem { Value = "Продажба", Text = "Продажба", Selected = true }
-                }, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Property.TypeOfSale, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Property.Sold, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.Property.Sold)
-                    @Html.ValidationMessageFor(model => model.Property.Sold, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.PropertyDetails.VTour, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.PropertyDetails.VTour, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.PropertyDetails.VTour, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="control-label col-md-2">Images</label>
-            <div class="col-md-10">
-                @if (Model.ImagePaths != null && Model.ImagePaths.Length > 0)
-                {
-                    foreach (var imagePath in Model.ImagePaths)
+    <div class="mb-3 row align-items-start">
+        <label class="col-sm-2 col-form-label">Снимки</label>
+        <div class="col-sm-10">
+            @if (Model.ImagePaths != null && Model.ImagePaths.Length > 0)
+            {
+                <div class="row">
+                    @foreach (var imagePath in Model.ImagePaths)
                     {
-                        <div class="image-item">
-                            <img src="@Url.Content($"~/Uploads/{Model.TableName}/{imagePath}")" alt="Property Image" class="img-thumbnail" style="max-width: 100px;" />
-                            <button type="button" class="btn btn-danger btn-delete-image" data-image="@imagePath" data-property-id="@Model.Property.PropertyId" data-table-name="@Model.TableName">Delete</button>
+                        <div class="mb-2 d-flex align-items-center">
+                            <a href="@Url.Content($"~/Uploads/{Model.TableName}/{imagePath}")" data-lightbox="property-images" class="me-2" style="max-width: 200px;">
+                                <img src="@Url.Content($"~/Uploads/{Model.TableName}/{imagePath}")" alt="Property Image" class="img-thumbnail me-2 w-100">
+                            </a>
+                            <button type="button" class="btn btn-danger btn-sm me-2 btn-delete-image" data-image="@imagePath" data-property-id="@Model.Property.PropertyId" data-table-name="@Model.TableName">Изтрий</button>
                             <input type="file" name="newImages" class="form-control" />
                             <input type="hidden" name="OldImages" value="@imagePath" />
                         </div>
                     }
-                }
-                else
-                {
-                    <p>No images found for this property.</p>
-                }
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
+                </div>
+            }
         </div>
     </div>
+
+    <div class="mb-3 row">
+        <div class="col-sm-10 offset-sm-2">
+            <input type="submit" value="Запази" class="btn btn-primary" />
+        </div>
+    </div>
+</div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+<hr />
+
+<h5 class="text-center">⬇️ За да добавите нова снимка трябва да изберете новата снимка и да цъкнете "Добави" ⬇️</h5>
 
 @using (Html.BeginForm("AddNewImage", "Property", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
@@ -161,24 +199,26 @@
     @Html.Hidden("PropertyId", Model.Property.PropertyId)
     @Html.Hidden("TableName", Model.TableName)
 
-    <div class="form-horizontal">
-        <div class="form-group">
-            <label class="control-label col-md-2">Add New Images</label>
-            <div class="col-md-10">
+    <div class="container mt-4">
+        <div class="mb-3 row align-items-center">
+            <label class="col-sm-2 col-form-label">Добави нова снимка</label>
+            <div class="col-sm-10">
                 <input type="file" name="newImages" class="form-control" multiple />
             </div>
         </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Upload" class="btn btn-default" />
+        <div class="mb-3 row">
+            <div class="col-sm-10 offset-sm-2">
+                <input type="submit" value="Добави" class="btn btn-success" />
             </div>
         </div>
     </div>
 }
 
+<script src="~/Scripts/districtAreas.js"></script>
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-    <script>
+<script>
         $(document).ready(function () {
             $('.btn-delete-image').click(function () {
                 var imageName = $(this).data('image');
@@ -195,5 +235,5 @@
                 }
             });
         });
-    </script>
+</script>
 }

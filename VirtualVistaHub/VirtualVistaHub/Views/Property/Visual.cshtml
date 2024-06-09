@@ -1,39 +1,34 @@
 ﻿@model VirtualVistaHub.Models.PropertyDetailsTemplate
 
-@{
-    ViewBag.Title = "Visual";
-}
+<h1 class="text-center">Визуалната част за имота</h1>
 
-<h2>Visual</h2>
-
-@using (Html.BeginForm("Visual", "Property", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Visual", "Property", FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "return validateForm()" }))
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <h4>PropertyDetailsTemplate</h4>
+    <div class="container form-horizontal">
         <hr />
 
-        <div class="form-group">
+        <div class="mb-3 row align-items-center">
             @Html.LabelFor(model => model.VTour, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.VTour, new { htmlAttributes = new { @class = "form-control" } })
+            <div class="col-sm-10">
+                @Html.EditorFor(model => model.VTour, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
                 @Html.ValidationMessageFor(model => model.VTour, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="mb-3 row align-items-center">
             @Html.LabelFor(model => model.Images, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <input type="file" name="images" multiple class="form-control" accept="image/*" onchange="checkFileCount(this)" />
+            <div class="col-sm-10">
+                <input type="file" name="images" multiple class="form-control" accept="image/*" onchange="checkFileCount(this)" id="imagesInput" />
                 @Html.ValidationMessageFor(model => model.Images, "", new { @class = "text-danger" })
-                <small class="text-muted">You can upload up to 12 photos.</small>
+                <small class="text-muted">Може да качиш минимум 2 снимки или максимум 12 снимки</small>
             </div>
         </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+        <div class="mb-3 row">
+            <div class="col-sm-10 offset-sm-2">
+                <input type="submit" value="Създай" class="btn btn-default" />
             </div>
         </div>
     </div>
@@ -43,9 +38,22 @@
     <script type="text/javascript">
         function checkFileCount(input) {
             if (input.files.length > 12) {
-                alert("You can upload a maximum of 12 images.");
+                alert("Можеш да качиш максимум 12 снимки!");
                 input.value = "";
             }
+            else if (input.files.length < 2) {
+                alert("Трябва да качиш минимум 2 снимки!");
+                input.value = "";
+            }
+        }
+
+        function validateForm() {
+            var input = document.getElementById('imagesInput');
+            if (input.files.length < 2) {
+                alert("Трябва да качиш минимум 2 снимки!");
+                return false;
+            }
+            return true;
         }
     </script>
 }

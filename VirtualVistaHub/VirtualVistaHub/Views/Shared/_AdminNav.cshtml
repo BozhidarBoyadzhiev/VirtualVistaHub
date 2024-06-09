@@ -12,6 +12,12 @@
                                 <img src="@Url.Content("~/Content/imgs/logo.png")" />
                             </a>
                         </li>
+                        <li class="nav-item navbar-nav mx-auto">
+                            Здравей, @Session["UserFirstName"]
+                        </li>
+                        <li class="nav-item navbar-nav mx-auto">
+                            Ниво на потребителя: @Session["userLevel"]
+                        </li>
                         <li class="nav-item my-2">
                             @Html.Raw(Html.ActionLink("Редактиране на потребител", "Users", "Staff", new { area = "" }, new { @class = "btn btn-sidebar text-white" }).ToString().Replace(">Редактиране на потребител<", "><i class='fas fa-edit'></i> Редактиране на потребител<"))
                         </li>

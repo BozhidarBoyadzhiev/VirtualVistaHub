@@ -44,9 +44,16 @@ namespace VirtualVistaHub.Controllers
         }
 
         [SessionAuthorize]
-        public ActionResult ViewProperty(int propertyId)
+        public ActionResult ViewProperty(int propertyId = 1)
         {
-            var property = db.Properties.Where(p => p.PropertyId == propertyId).FirstOrDefault();
+            var property = db.Properties.Where(p => p.PropertyId == propertyId && p.Deleted != true && p.Sold != true && p.WantToBuy != true).FirstOrDefault();
+
+            var users = db.Users.Where(u => u.UserId == property.UserId).FirstOrDefault();
+
+            if (property == null)
+            {
+                return RedirectToAction("NotFound", "Home");
+            }
 
             string sql = $"SELECT * FROM {property.PropertyDetailsTable} WHERE PropertyId = @propertyId";
             var propertyIdParam = new SqlParameter("propertyId", propertyId);
@@ -58,6 +65,7 @@ namespace VirtualVistaHub.Controllers
             var model = new ViewPropertyModel
             {
                 Property = property,
+                User = users,
                 PropertyDetails = visual,
                 ImagePaths = images
             };
@@ -96,7 +104,7 @@ namespace VirtualVistaHub.Controllers
         public ActionResult Requests()
         {
             var userId = Convert.ToInt32(Session["idUser"]);
-            var userProperties = db.UserProperties.Include(p => p.User).Where(p => p.UserIdOfBuyer == userId || p.UserIdOfSeller == userId).ToList();
+            var userProperties = db.UserProperties.Include(p => p.User).Include(p => p.Property).Where(p => p.UserIdOfBuyer == userId || p.UserIdOfSeller == userId).ToList();
             return View(userProperties);
         }
 
@@ -109,23 +117,23 @@ namespace VirtualVistaHub.Controllers
 
             if (actionType == "delete")
             {
-                db.UserProperties.Remove(userProperties);
+                property.WantToBuy = false;
             }
             else if (actionType == "sold")
             {
                 property.Sold = true;
-                db.Entry(property).State = EntityState.Modified;
             }
             else if (actionType == "backtomarket")
             {
                 property.WantToBuy = false;
-                db.Entry(property).State = EntityState.Modified;
             }
             else
             {
                 return RedirectToAction("NotFound", "Home");
             }
 
+            db.Entry(property).State = EntityState.Modified;
+            db.UserProperties.Remove(userProperties);
             db.SaveChanges();
             return RedirectToAction("Requests", "Property");
         }
@@ -357,6 +365,11 @@ namespace VirtualVistaHub.Controllers
                 Directory.CreateDirectory(uploadDir);
             }
 
+            if (images.Count() < 2 && images.Count() > 12)
+            {
+                return View();
+            }
+
             foreach (var image in images)
             {
                 if (image != null && image.ContentLength > 0)
@@ -382,6 +395,5 @@ namespace VirtualVistaHub.Controllers
 
             return RedirectToAction("Properties", "Home");
         }
-
     }
 }

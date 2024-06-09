@@ -155,5 +155,65 @@ namespace VirtualVistaHub.Controllers
             return RedirectToAction("Userlevel", "Staff");
         }
 
+        [SessionAuthorize("superadmin", "admin", "none")]
+        public ActionResult EditUser(int userId)
+        {
+            var user = db.Users.FirstOrDefault(p => p.UserId == userId);
+
+            if (user == null)
+            {
+                return RedirectToAction("NotFound", "Home");
+            }
+
+            var currentUserId = Session["idUser"].ToString();
+            var currentUserLevel = Session["userLevel"].ToString();
+
+            if (currentUserLevel == "superadmin")
+            {
+                return View(user);
+            }
+
+            if (currentUserLevel == "admin")
+            {
+                var targetStaff = db.Staffs.FirstOrDefault(u => u.UserId == userId);
+                if (userId.ToString() == currentUserId || (targetStaff == null || (targetStaff.UserLevel != "admin" && targetStaff.UserLevel != "superadmin")))
+                {
+                    return View(user);
+                }
+                else
+                {
+                    return RedirectToAction("Users", "Staff");
+                }
+            }
+
+            if (currentUserLevel == "none" && userId.ToString() == currentUserId)
+            {
+                return View(user);
+            }
+
+            return RedirectToAction("Unauthorized", "Home");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [SessionAuthorize("superadmin", "admin", "none")]
+        public ActionResult EditUser(User user)
+        {
+            var existingUser = db.Users.Find(user.UserId);
+
+            if (!string.IsNullOrWhiteSpace(user.Password) && user.Password != existingUser.Password)
+            {
+                existingUser.Password = HomeController.HashPassword(user.Password);
+            }
+
+            existingUser.FirstName = user.FirstName;
+            existingUser.LastName = user.LastName;
+            existingUser.Email = user.Email;
+
+            db.Entry(existingUser).State = EntityState.Modified;
+            db.SaveChanges();
+           
+            return RedirectToAction("Users", "Staff");
+        }
     }
 }

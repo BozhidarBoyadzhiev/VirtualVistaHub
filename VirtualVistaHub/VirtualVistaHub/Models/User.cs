@@ -26,23 +26,23 @@ namespace VirtualVistaHub.Models
         }
 
         public int UserId { get; set; }
-        [Display(Name = "Първо име:")]
+        [Display(Name = "Първо име")]
         [MaxLength(50, ErrorMessage = "Пъровото име трябва да не е повече от 50 букви.")]
         [MinLength(3, ErrorMessage = "Пъровото име трябва да е най-малко от 3 букви.")]
         public string FirstName { get; set; }
 
-        [Display(Name = "Фамилно име: ")]
+        [Display(Name = "Фамилно име")]
         [MaxLength(50, ErrorMessage = "Фамилното име трябва да не е повече от 50 букви.")]
         [MinLength(3, ErrorMessage = "Фамилното име трябва да е най-малко от 3 букви.")]
         public string LastName { get; set; }
 
-        [Display(Name = "Имейл:")]
+        [Display(Name = "Имейл")]
         [MaxLength(100, ErrorMessage = "Имейла трябва да не е повече от 100 символа.")]
         [MinLength(4, ErrorMessage = "Имейла трябва да е най-малко от 4 символа.")]
         [DataType(DataType.EmailAddress, ErrorMessage = "Invalid email format.")]
         public string Email { get; set; }
 
-        [Display(Name = "Парола:")]
+        [Display(Name = "Парола")]
         [MinLength(7, ErrorMessage = "Паролата трябва да е най-малко 8 символа")]
         [DataType(DataType.Password)]
         public string Password { get; set; }

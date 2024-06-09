@@ -25,6 +25,7 @@ namespace VirtualVistaHub.Models
     public class ViewPropertyModel
     { 
         public VirtualVistaHub.Models.Property Property { get; set; }
+        public VirtualVistaHub.Models.User User { get; set; }
 
         public VirtualVistaHub.Models.PropertyDetailsTemplate PropertyDetails { get; set; }
 

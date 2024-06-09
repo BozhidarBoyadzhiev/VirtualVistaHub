@@ -1,130 +1,80 @@
 ﻿@model VirtualVistaHub.Models.ViewPropertyModel
 
-@{
-    ViewBag.Title = "ViewProperty";
-}
+<div class="container property-detail">
+    <div class="header mb-4 mt-4">
+        <div class="property-info d-flex align-items-center">
+            <img src="~/Content/imgs/icon.png" alt="Logo" style="width: 30px;" class="me-3">
+            <p class="mb-0">Вид на имота: 2-Стaен</p>
+        </div>
+    </div>
 
-<h2>ViewProperty</h2>
-
-<div>
-    <h4>Property</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Property.TypeOfProperty)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Property.TypeOfProperty)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Property.District)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Property.District)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Property.Price)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Property.Price)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Property.Area)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Property.Area)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Property.TypeOfConstruction)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Property.TypeOfConstruction)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Property.PhoneNumber)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Property.PhoneNumber)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Property.AdditionalInformation)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Property.AdditionalInformation)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Property.TypeOfSale)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Property.TypeOfSale)
-        </dd>
-
-        <dt>
-            @Html.DisplayFor(model => model.PropertyDetails.VTour)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PropertyDetails.VTour)
-        </dd>
-
+    <div class="row">
+        <div class="col-md-6 seller-info">
+            <h5>Информация за продавача: </h5>
+            <p>Първо име:  @Model.User.FirstName</p>
+            <p>Фамилно име: @Model.User.LastName</p>
+            <p>Телефонен номер: @Model.Property.PhoneNumber</p>
+        </div>
+        <div class="col-md-6 flex-column align-items-center">
+            <h5>Информация за имота: </h5>
+            <p>Област: @Html.DisplayFor(model => model.Property.District)</p>
+            <p>Квартал: @Html.DisplayFor(model => model.Property.Neighbourhood)</p>
+            @if (Model.Property.TypeOfSale == "Наем")
+            {
+                <p>Цена на месец: @Model.Property.Price.ToString("N0") лв.</p>
+            }
+            else
+            {
+                <p>Цена: @Model.Property.Price.ToString("N0") лв.</p>
+            }
+            <p>Квадратура: @Model.Property.Area кв. м.</p>
+            <p>Вид на строителството: @Model.Property.TypeOfConstruction</p>
+            <p id="typeofsale">Вид на обявата: @Model.Property.TypeOfSale</p>
+        </div>
+    </div>
+    <div class="gallery mt-4">
         @if (Model.ImagePaths != null && Model.ImagePaths.Length > 0)
         {
-            foreach (var imagePath in Model.ImagePaths)
-            {
-                <div class="image-item">
-                    <img src="@Url.Content($"~/Uploads/{Model.Property.PropertyDetailsTable}/{imagePath}")" alt="Property Image" class="img-thumbnail" style="max-width: 100px;">
-                </div>
-            }
+            <div class="row">
+                @foreach (var imagePath in Model.ImagePaths)
+                {
+                    <div class="col-md-4 col-sm-6 col-12 mb-4">
+                        <a href="@Url.Content($"~/Uploads/{Model.Property.PropertyDetailsTable}/{imagePath}")" data-lightbox="property-images">
+                            <img src="@Url.Content($"~/Uploads/{Model.Property.PropertyDetailsTable}/{imagePath}")" alt="Property Image" class="img-thumbnail w-100" style="height: 400px; object-fit: cover;">
+                        </a>
+                    </div>
+                }
+            </div>
         }
-        else
-        {
-            <p>No images found for this property.</p>
-        }
+    </div>
 
-    </dl>
+    <div class="mt-4">
+        <h5>Допълнителна информация</h5>
+        <div class="additional-info border p-3 mb-4">
+            @Model.Property.AdditionalInformation
+        </div>
+    </div>
 </div>
-<a href="#" class="request-link" data-bs-toggle="modal" data-bs-target="#confirmRequestModal" data-property-id="@Model.Property.PropertyId" data-table-name="@Model.Property.PropertyDetailsTable">Make a request</a>
 
+@if (Session["userLevel"].ToString() == "none")
+{
+    <button type="button" class="request-link requestbtn btn-primary mt-4 mb-4" data-bs-toggle="modal" data-bs-target="#confirmRequestModal" data-property-id="@Model.Property.PropertyId" data-table-name="@Model.Property.PropertyDetailsTable">Направи заявка</button>
+
+}
 <div class="modal fade" id="confirmRequestModal" tabindex="-1" aria-labelledby="confirmRequestModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="confirmRequestModalLabel">Confirmation</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title" id="confirmRequestModalLabel">Потвърждение</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style=" background-color: white; border-color: black; "></button>
             </div>
             <div class="modal-body">
-                Are you sure you want to request this property?
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="requestType" id="rentOption" value="rent">
-                    <label class="form-check-label" for="rentOption">
-                        Rent
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="requestType" id="saleOption" value="sale">
-                    <label class="form-check-label" for="saleOption">
-                        Sale
-                    </label>
-                </div>
+                Наистина ли искате да заявите този имот?
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger" id="confirmRequestBtn">Confirm</button>
+                <button type="button" class="btn btn-secondary" id="rejectBtn">Откажи</button>
+                <button type="button" class="btn btn-success" id="confirmRequestBtn">Потвърди</button>
             </div>
         </div>
     </div>
@@ -132,25 +82,31 @@
 
 @section scripts {
     <script>
-        $(document).ready(function () {
-            var propertyId, tableName;
+    $(document).ready(function () {
+        var propertyId;
 
-            $('.request-link').click(function () {
-                propertyId = $(this).data('property-id');
-                tableName = $(this).data('table-name');
-            });
-
-            $('#confirmRequestBtn').click(function () {
-                var requestType = $('input[name="requestType"]:checked').val();
-                if (requestType) {
-                    if (@Model.Property.UserId == @Session["idUser"])
-                        window.location.href = '@Url.Action("Unauthorized", "Home")';
-                    else
-                        window.location.href = '@Url.Action("Requested", "Property")?propertyId=' + propertyId + '&typeofrequest=' + requestType;
-                } else {
-                    alert('Please select a request type.');
-                }
-            });
+        $('.request-link').click(function () {
+            propertyId = $(this).data('property-id');
         });
+
+        $('#rejectBtn').click(function () {
+            window.location.href = '@Url.Action("Search", "Home")';
+        });
+
+        $('#confirmRequestBtn').click(function () {
+            var element = document.getElementById('typeofsale');
+            var request;
+
+            if (element == "Наем")
+                request = "Rent"
+            else
+                request = "Sale"
+
+            if (@Model.Property.UserId == @Session["idUser"])
+                window.location.href = '@Url.Action("Unauthorized", "Home")';
+            else
+                window.location.href = '@Url.Action("Requested", "Property")?propertyId=' + propertyId + '&typeofrequest=' + request;
+        });
+    });
     </script>
 }

@@ -1,52 +1,79 @@
 ﻿@model IEnumerable<VirtualVistaHub.Models.UserProperty>
 
-@{
-    ViewBag.Title = "Not approved/denied";
-}
-
-<h2>Properties</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Information", "Property")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.User.FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.User.LastName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PropertyId)
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PropertyId)
-            </td>
-            <td>
-                @if (Session["idUser"].ToString() == item.UserIdOfBuyer.ToString())
-                {
-                    @Html.ActionLink("Edit Property", "MakeRequest", "Property", new { propertyId = item.PropertyId, actionType = "delete" }, null) //ADD CONFIRMATION
-                }
-                else
-                {
-                    @Html.ActionLink("Продадено", "MakeRequest", "Property", new { propertyId = item.PropertyId, actionType = "sold" }, null) //ADD CONFIRMATION
-                    <br />
-                    @Html.ActionLink("Върни го на маркета", "MakeRequest", "Property", new { propertyId = item.PropertyId, actionType = "backtomarket" }, null) //ADD CONFIRMATION
-                }
-            </td>
-        </tr>
-    }
-</table>
+<h1 class="text-center">Заявки</h1>
+<div class="container mt-4">
+    <section>
+        <div class="table-container">
+            <div class="d-flex justify-content-between mb-3">
+                <div>
+                    <label>
+                        Show
+                        <select class="form-select form-select-sm d-inline-block" style="width: auto;">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                        entries
+                    </label>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Property.District)</th>
+                            <th>@Html.DisplayNameFor(model => model.Property.Neighbourhood)</th>
+                            <th>@Html.DisplayNameFor(model => model.Property.Price)</th>
+                            <th>@Html.DisplayNameFor(model => model.Property.Area)</th>
+                            <th>@Html.DisplayNameFor(model => model.User.FirstName)</th>
+                            <th>@Html.DisplayNameFor(model => model.User.LastName)</th>
+                            <th>Действие</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.Property.District)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Property.Neighbourhood)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Property.Price) лв.</td>
+                                <td>@Html.DisplayFor(modelItem => item.Property.Area) кв. м.</td>
+                                <td>@Html.DisplayFor(modelItem => item.User.FirstName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.User.LastName)</td>
+                                <td>
+                                    @if (Session["idUser"].ToString() == item.UserIdOfBuyer.ToString())
+                                    {
+                                        @Html.ActionLink("Отмени заявката", "MakeRequest", "Property", new { propertyId = item.PropertyId, actionType = "delete" }, new { @class = "btn btn-primary btn-sm" })
+                                    }
+                                    else
+                                    {
+                                        @Html.ActionLink("Продадено", "MakeRequest", "Property", new { propertyId = item.PropertyId, actionType = "sold" }, new { @class = "btn btn-success me-3", @style = "color: black; font-weight: bold;" })
+                                        @Html.ActionLink("Върни го на маркета", "MakeRequest", "Property", new { propertyId = item.PropertyId, actionType = "backtomarket" }, new { @class = "btn btn-danger", @style = "color: black; font-weight: bold;" })
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex justify-content-between">
+                <div>
+                    Showing 1 to 10 of 10 entries
+                </div>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination pagination-sm mb-0">
+                        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">4</a></li>
+                        <li class="page-item"><a class="page-link" href="#">5</a></li>
+                        <li class="page-item"><a class="page-link" href="#">6</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </section>
+</div>

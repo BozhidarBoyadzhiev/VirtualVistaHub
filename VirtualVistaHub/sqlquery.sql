@@ -21,6 +21,7 @@ CREATE TABLE Property (
 	[PropertyId] INT PRIMARY KEY IDENTITY,
 	[TypeOfProperty] NVARCHAR(70) NOT NULL,
 	[District] NVARCHAR(150) NOT NULL,
+	[Neighbourhood] NVARCHAR(150) NOT NULL,
 	[Price] INT NOT NULL,
 	[Area] INT NOT NULL,
 	[TypeOfConstruction] NVARCHAR(20) NOT NULL,

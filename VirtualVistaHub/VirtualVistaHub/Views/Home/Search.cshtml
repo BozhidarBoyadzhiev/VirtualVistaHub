@@ -1,14 +1,22 @@
 ﻿@model VirtualVistaHub.Models.PropertySearchViewModel
 
+@{
+    var userId = Session["idUser"];
+
+    if (userId == null)
+    {
+        userId = 0;
+    }
+ }
+<h1 class="text-center">Търси</h1>
 <div class="container my-5">
     @using (Html.BeginForm("Search", "Home", FormMethod.Get))
     {
         <div class="row g-3 mb-4">
             <div class="col-md-3">
-                <label for="TypeOfProperty" class="form-label">Type of Property</label>
                 @Html.DropDownList("TypeOfProperty", new List<SelectListItem>
                 {
-                    new SelectListItem { Value = "1-Стаен", Text = "1-Стаен", Selected = true },
+                    new SelectListItem { Value = "1-Стаен", Text = "1-Стаен" },
                     new SelectListItem { Value = "2-Стаен", Text = "2-Стаен" },
                     new SelectListItem { Value = "3-Стаен", Text = "3-Стаен" },
                     new SelectListItem { Value = "4-Стаен", Text = "4-Стаен" },
@@ -19,17 +27,15 @@
                     new SelectListItem { Value = "Склад", Text = "Склад" },
                     new SelectListItem { Value = "Хотел", Text = "Хотел" },
                     new SelectListItem { Value = "Къща", Text = "Къща" },
-                    new SelectListItem { Value = "Парцел", Text = "Парцел" }
                 }, "Вид на имота", new { @class = "form-select" })
             </div>
             <div class="col-md-3">
-                <label for="District" class="form-label">District</label>
                 @Html.DropDownList("District", new List<SelectListItem>
                 {
                     new SelectListItem { Value = "Благоевград", Text = "Благоевград" },
                     new SelectListItem { Value = "Бургас", Text = "Бургас" },
                     new SelectListItem { Value = "Варна", Text = "Варна" },
-                    new SelectListItem { Value = "Велико Търново", Text = "Велико Търново" },
+                    new SelectListItem { Value = "ВеликоТърново", Text = "Велико Търново" },
                     new SelectListItem { Value = "Видин", Text = "Видин" },
                     new SelectListItem { Value = "Враца", Text = "Враца" },
                     new SelectListItem { Value = "Габрово", Text = "Габрово" },
@@ -48,7 +54,7 @@
                     new SelectListItem { Value = "Сливен", Text = "Сливен" },
                     new SelectListItem { Value = "Смолян", Text = "Смолян" },
                     new SelectListItem { Value = "София", Text = "София" },
-                    new SelectListItem { Value = "Стара Загора", Text = "Стара Загора" },
+                    new SelectListItem { Value = "СтараЗагора", Text = "Стара Загора" },
                     new SelectListItem { Value = "Търговище", Text = "Търговище" },
                     new SelectListItem { Value = "Хасково", Text = "Хасково" },
                     new SelectListItem { Value = "Шумен", Text = "Шумен" },
@@ -56,14 +62,11 @@
                 }, "Град", new { @class = "form-select", @id = "DistrictDropdown" })
             </div>
             <div class="col-md-3">
-                <label for="Neighbourhood" class="form-label">Neighbourhood</label>
                 @Html.DropDownList("Neighbourhood", new List<SelectListItem>
                 {
-                    new SelectListItem { Value = "", Text = "All" }
                 }, "Квартал", new { @class = "form-select", @id = "NeighbourhoodDropdown" })
             </div>
             <div class="col-md-3">
-                <label for="TypeOfConstruction" class="form-label">Type of Construction</label>
                 @Html.DropDownList("TypeOfConstruction", new List<SelectListItem>
                 {
                     new SelectListItem { Value = "Панел", Text = "Панел" },
@@ -75,7 +78,6 @@
                 }, "Вид строителство", new { @class = "form-select" })
             </div>
             <div class="col-md-3">
-                <label for="TypeOfSale" class="form-label">Type of Sale</label>
                 @Html.DropDownList("TypeOfSale", new List<SelectListItem>
                 {
                     new SelectListItem { Value = "Наем", Text = "Наем" },
@@ -83,12 +85,12 @@
                 }, "Тип на обява", new { @class = "form-select" })
             </div>
             <div class="col-md-3 align-self-end">
-                <button type="submit" class="btn btn-primary">Filter</button>
+                <button type="submit" class="btn btn-primary">Филтрирай</button>
             </div>
         </div>
     }
     <div class="row">
-        @foreach (var property in Model.Properties)
+        @foreach (var property in Model.Properties.Where(p => p.UserId.ToString() != userId.ToString() && p.Deleted != true && p.Sold != true && p.WantToBuy != true))
         {
             <div class="col-md-6 mb-4">
                 <div class="card">
@@ -105,15 +107,15 @@
                     <div class="col-md-6 d-flex flex-column">
                         <div class="card-body d-flex flex-column justify-content-between text-start" style="height: 350px;">
                                 <h5 class="card-title">@property.TypeOfProperty в @property.District, @property.Neighbourhood</h5>
-                                @if (Model.TypeOfSale == "Наем")
+                                @if (property.TypeOfSale == "Наем")
                                 {
-                                    <p class="card-text"><strong>Цена:</strong> @property.Price лв./на месец</p>
+                                    <p class="card-text"><strong>Цена:</strong> @property.Price.ToString("N0") лв./на месец</p>
                                 }
                                 else
                                 {
-                                    <p class="card-text"><strong>Цена:</strong> $@property.Price лв.</p>
+                                    <p class="card-text"><strong>Цена:</strong> @property.Price.ToString("N0") лв.</p>
                                 }
-                                <p class="card-text"><strong>Квадратура:</strong> @property.Area sq.ft.</p>
+                                <p class="card-text"><strong>Квадратура:</strong> @property.Area кв. м.</p>
                                 <p class="card-text"><strong>Тип на строителство:</strong> @property.TypeOfConstruction</p>
                                 <p class="card-text"><strong>Телефонен номер:</strong> @property.PhoneNumber</p>
                                 <p class="card-text"><strong>Тип на обявата:</strong> @property.TypeOfSale</p>
@@ -128,4 +130,5 @@
         }
     </div>
 </div>
+
 <script src="~/Scripts/districtAreas.js"></script>
