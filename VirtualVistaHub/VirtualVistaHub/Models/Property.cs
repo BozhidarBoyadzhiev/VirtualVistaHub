@@ -57,7 +57,7 @@ namespace VirtualVistaHub.Models
         [Display(Name = "Изтрит ли е?")]
         public bool Deleted { get; set; }
 
-        [Display(Name = "В процес на купуване ли е?")]
+        [Display(Name = "Купува ли се?")]
         public bool WantToBuy { get; set; }
 
         [Display(Name = "Продаден ли е?")]

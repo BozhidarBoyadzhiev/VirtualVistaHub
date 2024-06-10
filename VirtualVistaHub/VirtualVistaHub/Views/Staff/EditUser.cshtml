@@ -35,22 +35,17 @@
         </div>
     </div>
 
-    @if (Session["userLevel"].ToString() != "none")
-    {
-        <div class="mb-3 row align-items-center">
-            @Html.LabelFor(model => model.Deleted, "Status", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-sm-10">
-                @Html.DropDownListFor(model => model.Deleted,
-                    new SelectList(new[]
-                    {
-                        new { Value = "true", Text = "Deleted" },
-                        new { Value = "false", Text = "Not Deleted" }
-                    }, "Value", "Text", Model.Deleted.ToString().ToLower()),
-                    new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Deleted, "", new { @class = "text-danger" })
-            </div>
+    <div class="mb-3 row align-items-center">
+        @Html.LabelFor(model => model.Deleted, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-sm-10">
+            @Html.DropDownListFor(model => model.Deleted, new List<SelectListItem>
+            {
+                new SelectListItem { Value = "true", Text = "Изтрит" },
+                new SelectListItem { Value = "false", Text = "Неизтрит" }
+            }, new { @class = "form-control" }) 
+            @Html.ValidationMessageFor(model => model.Deleted, "", new { @class = "text-danger" })
         </div>
-    }
+    </div>
 
     <div class="mb-3 row align-items-center">
         @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })

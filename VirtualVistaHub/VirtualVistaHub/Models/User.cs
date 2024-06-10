@@ -52,6 +52,8 @@ namespace VirtualVistaHub.Models
         [Display(Name = "Въведете отново паролата си:")]
         [DataType(DataType.Password)]
         public string RePassword { get; set; }
+
+        [Display(Name = "Изтрит ли е?")]
         public bool Deleted { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

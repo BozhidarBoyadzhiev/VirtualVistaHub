@@ -13,6 +13,12 @@ namespace VirtualVistaHub.Controllers
     {
         readonly VirtualVistaBaseEntities db = new VirtualVistaBaseEntities();
 
+        protected override void HandleUnknownAction(string actionName)
+        {
+            Response.StatusCode = 404;
+            this.View("NotFound").ExecuteResult(this.ControllerContext);
+        }
+
         public static string HashPassword(string plainPassword)
         {
             return BCrypt.Net.BCrypt.HashPassword(plainPassword);
@@ -26,6 +32,7 @@ namespace VirtualVistaHub.Controllers
 
         public ActionResult NotFound()
         {
+            Response.StatusCode = 404;
             return View();
         }
 

@@ -141,6 +141,17 @@
         </div>
     </div>
 
+    @if (Session["userLevel"].ToString() != "none")
+    {
+        <div class="mb-3 row align-items-center">
+            @Html.LabelFor(model => model.Property.ApprovalStatus, htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+            <div class="col-sm-10">
+                @Html.EditorFor(model => model.Property.ApprovalStatus, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.Property.ApprovalStatus, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    }
+
     <div class="mb-3 row align-items-center">
         @Html.LabelFor(model => model.Property.Sold, htmlAttributes: new { @class = "col-sm-2 col-form-label" })
         <div class="col-sm-10">

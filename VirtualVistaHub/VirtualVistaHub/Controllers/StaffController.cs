@@ -18,7 +18,7 @@ namespace VirtualVistaHub.Controllers
         [SessionAuthorize("admin", "superadmin", "moderator")]
         public ActionResult Properties()
         {
-            var properties = db.Properties.Include(p => p.User).Where(p => p.Deleted != true).ToList();
+            var properties = db.Properties.Include(p => p.User).ToList();
             return View(properties);
         }
 
@@ -155,7 +155,8 @@ namespace VirtualVistaHub.Controllers
             return RedirectToAction("Userlevel", "Staff");
         }
 
-        [SessionAuthorize("superadmin", "admin", "none")]
+        [HttpGet]
+        [SessionAuthorize("superadmin", "admin")]
         public ActionResult EditUser(int userId)
         {
             var user = db.Users.FirstOrDefault(p => p.UserId == userId);
@@ -196,10 +197,10 @@ namespace VirtualVistaHub.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [SessionAuthorize("superadmin", "admin", "none")]
+        [SessionAuthorize("superadmin", "admin")]
         public ActionResult EditUser(User user)
         {
-            var existingUser = db.Users.Find(user.UserId);
+            var existingUser = db.Users.Where(u => u.UserId == user.UserId).FirstOrDefault();
 
             if (!string.IsNullOrWhiteSpace(user.Password) && user.Password != existingUser.Password)
             {
@@ -209,6 +210,7 @@ namespace VirtualVistaHub.Controllers
             existingUser.FirstName = user.FirstName;
             existingUser.LastName = user.LastName;
             existingUser.Email = user.Email;
+            existingUser.Deleted = user.Deleted;
 
             db.Entry(existingUser).State = EntityState.Modified;
             db.SaveChanges();
