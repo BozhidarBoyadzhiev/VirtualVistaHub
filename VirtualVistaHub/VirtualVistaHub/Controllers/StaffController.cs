@@ -16,33 +16,100 @@ namespace VirtualVistaHub.Controllers
         readonly VirtualVistaBaseEntities db = new VirtualVistaBaseEntities();
 
         [SessionAuthorize("admin", "superadmin", "moderator")]
-        public ActionResult Properties()
+        public ActionResult Properties(int page = 1, int pageSize = 10)
         {
-            var properties = db.Properties.Include(p => p.User).ToList();
-            return View(properties);
+            var properties = db.Properties.Include(p => p.User);
+
+            var totalItems = properties.Count();
+            var propertyList = properties.OrderBy(p => p.PropertyId)
+                                         .Skip((page - 1) * pageSize)
+                                         .Take(pageSize)
+                                         .ToList();
+
+            var pagination = new PaginationModel
+            {
+                Page = page,
+                PageSize = pageSize,
+                TotalItems = totalItems
+            };
+
+            var model = new Tuple<IEnumerable<Property>, PaginationModel>(propertyList, pagination);
+
+            return View(model);
+        }
+
+
+        [SessionAuthorize("admin", "superadmin")]
+        public ActionResult Users(int page = 1, int pageSize = 10)
+        {
+            var users = db.Users.Include(u => u.Staff);
+
+            var totalItems = users.Count();
+            var userList = users.OrderBy(u => u.UserId)
+                                .Skip((page - 1) * pageSize)
+                                .Take(pageSize)
+                                .ToList();
+
+            var pagination = new PaginationModel
+            {
+                Page = page,
+                PageSize = pageSize,
+                TotalItems = totalItems
+            };
+
+            var model = new Tuple<IEnumerable<User>, PaginationModel>(userList, pagination);
+
+            return View(model);
         }
 
         [SessionAuthorize("admin", "superadmin")]
-        public ActionResult Users()
+        public ActionResult UserLevel(int page = 1, int pageSize = 10)
         {
-            var users = db.Users.Include(p => p.Staff).ToList();
+            var users = db.Users.Include(u => u.Staff);
 
-            return View(users);
+            var totalItems = users.Count();
+            var userList = users.OrderBy(u => u.UserId)
+                                .Skip((page - 1) * pageSize)
+                                .Take(pageSize)
+                                .ToList();
+
+            var pagination = new PaginationModel
+            {
+                Page = page,
+                PageSize = pageSize,
+                TotalItems = totalItems
+            };
+
+            var model = new Tuple<IEnumerable<User>, PaginationModel>(userList, pagination);
+
+            return View(model);
         }
 
-        [SessionAuthorize("admin", "superadmin")]
-        public ActionResult UserLevel()
-        {
-            var users = db.Users.Include(p => p.Staff).ToList();
-            return View(users);
-        }
 
         [SessionAuthorize("admin", "superadmin", "moderator")]
-        public ActionResult ApproveInformation()
+        public ActionResult ApproveInformation(int page = 1, int pageSize = 10)
         {
-            var properties = db.Properties.Where(p => p.ApprovalStatus == "Not Approved" && p.Deleted != true).ToList();
-            return View(properties);
+            var properties = db.Properties
+                                .Where(p => p.ApprovalStatus == "Not Approved" && p.Deleted != true);
+
+            var totalItems = properties.Count();
+            var propertyList = properties.OrderBy(p => p.PropertyId)
+                                         .Skip((page - 1) * pageSize)
+                                         .Take(pageSize)
+                                         .ToList();
+
+            var pagination = new PaginationModel
+            {
+                Page = page,
+                PageSize = pageSize,
+                TotalItems = totalItems
+            };
+
+            var model = new Tuple<IEnumerable<Property>, PaginationModel>(propertyList, pagination);
+
+            return View(model);
         }
+
 
         [SessionAuthorize("admin", "superadmin", "moderator")]
         public ActionResult ApproveVisuals(int propertyId, string tableName)

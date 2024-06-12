@@ -6,6 +6,7 @@ using System.Data.Entity;
 using System.Data.Entity.Core.Metadata.Edm;
 using System.Data.SqlClient;
 using System.Collections.Generic;
+using System;
 
 namespace VirtualVistaHub.Controllers
 {
@@ -79,7 +80,7 @@ namespace VirtualVistaHub.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult Search(string typeOfProperty, string district, string neighbourhood, string typeOfConstruction, string typeOfSale)
+        public ActionResult Search(string typeOfProperty, string district, string neighbourhood, string typeOfConstruction, string typeOfSale, int page = 1, int pageSize = 6)
         {
             var properties = db.Properties.Where(p => p.ApprovalStatus.ToString() != "Not Approved" && p.Sold != true);
 
@@ -103,7 +104,9 @@ namespace VirtualVistaHub.Controllers
             {
                 properties = properties.Where(p => p.TypeOfSale == typeOfSale);
             }
-            var propertyList = properties.ToList();
+
+            var totalItems = properties.Count();
+            var propertyList = properties.OrderBy(p => p.PropertyId).Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
             var propertyDetails = new Dictionary<int, (string TableName, string FirstImagePath)>();
 
@@ -115,7 +118,7 @@ namespace VirtualVistaHub.Controllers
                 propertyDetails.Add(prop.PropertyId, (prop.PropertyDetailsTable, firstImagePath));
             }
 
-            var viewModel = new PropertySearchViewModel
+            var search = new PropertySearchViewModel
             {
                 Properties = propertyList,
                 TypeOfProperty = typeOfProperty,
@@ -123,19 +126,45 @@ namespace VirtualVistaHub.Controllers
                 Neighbourhood = neighbourhood,
                 TypeOfConstruction = typeOfConstruction,
                 TypeOfSale = typeOfSale,
-                PropertyDetails = propertyDetails
+                PropertyDetails = propertyDetails,
             };
+
+            var pagination = new PaginationModel
+            {
+                Page = page,
+                PageSize = pageSize,
+                TotalItems = totalItems
+            };
+
+            var viewModel = new Tuple<PropertySearchViewModel, PaginationModel>(search, pagination);
 
             return View(viewModel);
         }
 
+
         [SessionAuthorize]
-        public ActionResult Properties()
+        public ActionResult Properties(int page = 1, int pageSize = 10)
         {
             var userId = Session["idUser"];
 
-            var properties = db.Properties.Where(p => p.UserId.ToString() == userId.ToString() && p.ApprovalStatus.ToString() == "Approved").ToList();
-            return View(properties);
+            var properties = db.Properties.Where(p => p.UserId.ToString() == userId.ToString() && p.ApprovalStatus.ToString() == "Approved");
+
+            var totalItems = properties.Count();
+            var propertyList = properties.OrderBy(p => p.PropertyId)
+                                         .Skip((page - 1) * pageSize)
+                                         .Take(pageSize)
+                                         .ToList();
+
+            var pagination = new PaginationModel
+            {
+                Page = page,
+                PageSize = pageSize,
+                TotalItems = totalItems
+            };
+
+            var model = new Tuple<IEnumerable<Property>, PaginationModel>(propertyList, pagination);
+
+            return View(model);
         }
 
         [HttpPost]

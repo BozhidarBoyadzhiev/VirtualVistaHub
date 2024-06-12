@@ -2,6 +2,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&#038;display=swap&#038;ver=2.1.10');
 @import url('https://fonts.googleapis.com/css?family=Montserrat:100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic&#038;display=block&#038;ver=6.4.4');
 
+.pagination {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
 .sidebar {
     position: fixed;
     top: 0;

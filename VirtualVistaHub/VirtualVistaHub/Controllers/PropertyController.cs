@@ -35,12 +35,29 @@ namespace VirtualVistaHub.Controllers
         }
 
         [SessionAuthorize]
-        public ActionResult Denied()
+        public ActionResult Denied(int page = 1, int pageSize = 10)
         {
             var userId = Session["idUser"];
 
-            var properties = db.Properties.Where(p => p.UserId.ToString() == userId.ToString() && p.ApprovalStatus.ToString() != "Approved").ToList();
-            return View(properties);
+            var propertiesQuery = db.Properties.Where(p => p.UserId.ToString() == userId.ToString() && p.ApprovalStatus != "Approved");
+
+            var totalItems = propertiesQuery.Count();
+            var properties = propertiesQuery
+                .OrderBy(p => p.PropertyId)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var pagination = new PaginationModel
+            {
+                Page = page,
+                PageSize = pageSize,
+                TotalItems = totalItems
+            };
+
+            var model = new Tuple<IEnumerable<Property>, PaginationModel>(properties, pagination);
+
+            return View(model);
         }
 
         [SessionAuthorize]
@@ -101,11 +118,31 @@ namespace VirtualVistaHub.Controllers
         }
 
         [SessionAuthorize]
-        public ActionResult Requests()
+        public ActionResult Requests(int page = 1, int pageSize = 10)
         {
             var userId = Convert.ToInt32(Session["idUser"]);
-            var userProperties = db.UserProperties.Include(p => p.User).Include(p => p.Property).Where(p => p.UserIdOfBuyer == userId || p.UserIdOfSeller == userId).ToList();
-            return View(userProperties);
+            var userProperties = db.UserProperties
+                .Include(p => p.User)
+                .Include(p => p.Property)
+                .Where(p => p.UserIdOfBuyer == userId || p.UserIdOfSeller == userId);
+
+            var totalItems = userProperties.Count();
+            var propertyList = userProperties
+                .OrderBy(p => p.PropertyId)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var pagination = new PaginationModel
+            {
+                Page = page,
+                PageSize = pageSize,
+                TotalItems = totalItems
+            };
+
+            var model = new Tuple<IEnumerable<UserProperty>, PaginationModel>(propertyList, pagination);
+
+            return View(model);
         }
 
         [HttpGet]

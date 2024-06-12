@@ -57,7 +57,7 @@
     </div>
 </div>
 
-@if (Session["userLevel"].ToString() == "none")
+@if (Session["userLevel"].ToString() == "none" && Session["idUser"].ToString() != Model.User.UserId.ToString())
 {
     <button type="button" class="request-link requestbtn btn-primary mt-4 mb-4" data-bs-toggle="modal" data-bs-target="#confirmRequestModal" data-property-id="@Model.Property.PropertyId" data-table-name="@Model.Property.PropertyDetailsTable">Направи заявка</button>
 

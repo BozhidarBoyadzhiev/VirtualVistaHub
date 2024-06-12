@@ -1,15 +1,29 @@
-﻿@model VirtualVistaHub.Models.PropertySearchViewModel
+﻿@model Tuple<VirtualVistaHub.Models.PropertySearchViewModel, VirtualVistaHub.Models.PaginationModel>
 
-@{
-    var userId = Session["idUser"];
-
-    if (userId == null)
-    {
-        userId = 0;
-    }
- }
 <h1 class="text-center">Търси</h1>
 <div class="container my-5">
+    <div class="pagination-container text-center">
+        <ul class="pagination">
+            @if (Model.Item2.Page > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Search", new { typeOfProperty = Model.Item1.TypeOfProperty, district = Model.Item1.District, neighbourhood = Model.Item1.Neighbourhood, typeOfConstruction = Model.Item1.TypeOfConstruction, typeOfSale = Model.Item1.TypeOfSale, page = Model.Item2.Page - 1 })">Предишна</a>
+                </li>
+            }
+            @for (int i = 1; i <= Model.Item2.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.Item2.Page ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Search", new { typeOfProperty = Model.Item1.TypeOfProperty, district = Model.Item1.District, neighbourhood = Model.Item1.Neighbourhood, typeOfConstruction = Model.Item1.TypeOfConstruction, typeOfSale = Model.Item1.TypeOfSale, page = i })">@i</a>
+                </li>
+            }
+            @if (Model.Item2.Page < Model.Item2.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Search", new { typeOfProperty = Model.Item1.TypeOfProperty, district = Model.Item1.District, neighbourhood = Model.Item1.Neighbourhood, typeOfConstruction = Model.Item1.TypeOfConstruction, typeOfSale = Model.Item1.TypeOfSale, page = Model.Item2.Page + 1 })">Следваща</a>
+                </li>
+            }
+        </ul>
+    </div>
     @using (Html.BeginForm("Search", "Home", FormMethod.Get))
     {
         <div class="row g-3 mb-4">
@@ -90,22 +104,22 @@
         </div>
     }
     <div class="row">
-        @foreach (var property in Model.Properties.Where(p => p.UserId.ToString() != userId.ToString() && p.Deleted != true && p.Sold != true && p.WantToBuy != true))
+        @foreach (var property in Model.Item1.Properties.Where(p => p.Deleted != true && p.Sold != true && p.WantToBuy != true))
         {
             <div class="col-md-6 mb-4">
                 <div class="card">
-                <div class="row g-0">
-                    <div class="col-md-6">
-                        @{
-                            var propertyDetails = Model.PropertyDetails[property.PropertyId];
-                            var tableName = propertyDetails.TableName;
-                            var firstImagePath = propertyDetails.FirstImagePath;
-                        }
-                        <div class="property-image bg-light d-flex justify-content-center align-items-center" style="background-image: url('@Url.Content($"~/Uploads/{tableName}/{firstImagePath}")');">
+                    <div class="row g-0">
+                        <div class="col-md-6">
+                            @{
+                                var propertyDetails = Model.Item1.PropertyDetails[property.PropertyId];
+                                var tableName = propertyDetails.TableName;
+                                var firstImagePath = propertyDetails.FirstImagePath;
+                            }
+                            <div class="property-image bg-light d-flex justify-content-center align-items-center" style="background-image: url('@Url.Content($"~/Uploads/{tableName}/{firstImagePath}")');">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6 d-flex flex-column">
-                        <div class="card-body d-flex flex-column justify-content-between text-start" style="height: 350px;">
+                        <div class="col-md-6 d-flex flex-column">
+                            <div class="card-body d-flex flex-column justify-content-between text-start" style="height: 350px;">
                                 <h5 class="card-title">@property.TypeOfProperty в @property.District, @property.Neighbourhood</h5>
                                 @if (property.TypeOfSale == "Наем")
                                 {

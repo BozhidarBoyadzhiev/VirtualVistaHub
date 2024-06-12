@@ -7,8 +7,8 @@ namespace VirtualVistaHub.Models
 {
     public class EditPropertyViewModel
     {
-        public VirtualVistaHub.Models.Property Property { get; set; }
-        public VirtualVistaHub.Models.PropertyDetailsTemplate PropertyDetails { get; set; }
+        public Property Property { get; set; }
+        public PropertyDetailsTemplate PropertyDetails { get; set; }
         public string TableName { get; set; }
         public int UserId { get; set; }
         public string[] ImagePaths { get; set; }
@@ -17,17 +17,17 @@ namespace VirtualVistaHub.Models
 
     public class ImagesModel
     {
-        public VirtualVistaHub.Models.PropertyDetailsTemplate PropertyDetails { get; set; }
+        public PropertyDetailsTemplate PropertyDetails { get; set; }
         public string TableName { get; set; }
         public string[] ImagePaths { get; set; }
     }
 
     public class ViewPropertyModel
     { 
-        public VirtualVistaHub.Models.Property Property { get; set; }
-        public VirtualVistaHub.Models.User User { get; set; }
+        public Property Property { get; set; }
+        public User User { get; set; }
 
-        public VirtualVistaHub.Models.PropertyDetailsTemplate PropertyDetails { get; set; }
+        public PropertyDetailsTemplate PropertyDetails { get; set; }
 
         public string[] ImagePaths { get; set; }
     }
@@ -41,7 +41,14 @@ namespace VirtualVistaHub.Models
         public string TypeOfConstruction { get; set; }
         public string TypeOfSale { get; set; }
         public Dictionary<int, (string TableName, string FirstImagePath)> PropertyDetails { get; set; }
-
     }
 
+    public class PaginationModel
+    {
+        public int Page { get; set; }
+        public int PageSize { get; set; }
+        public int TotalItems { get; set; }
+
+        public int TotalPages => (int)Math.Ceiling((decimal)TotalItems / PageSize);
+    }
 }

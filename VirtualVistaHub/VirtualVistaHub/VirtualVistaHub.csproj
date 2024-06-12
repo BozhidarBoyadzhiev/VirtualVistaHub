@@ -262,18 +262,15 @@
     <Content Include="Views\Staff\ApproveVisuals.cshtml" />
     <Content Include="Views\Staff\ApproveInformation.cshtml" />
     <Content Include="Views\Property\EditProperty.cshtml" />
-    <Content Include="Views\Home\EditUser.cshtml" />
     <Content Include="Views\Home\NotFound.cshtml" />
     <Content Include="Views\Property\Denied.cshtml" />
     <Content Include="Views\Home\Search.cshtml" />
-    <Content Include="Views\Home\ViewProperty.cshtml" />
     <Content Include="Views\Property\Requests.cshtml" />
     <Content Include="Views\Shared\_PublicNav.cshtml" />
     <Content Include="Views\Shared\_LoggedInNav.cshtml" />
     <Content Include="Views\Shared\_SuperAdminNav.cshtml" />
     <Content Include="Views\Shared\_AdminNav.cshtml" />
     <Content Include="Views\Shared\_ModeratorNav.cshtml" />
-    <Content Include="Views\Error\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

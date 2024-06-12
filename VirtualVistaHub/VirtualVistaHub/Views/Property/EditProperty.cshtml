@@ -13,6 +13,7 @@
     @Html.HiddenFor(model => model.TableName)
     @Html.HiddenFor(model => model.UserId)
     @Html.HiddenFor(model => model.Denied)
+    @Html.HiddenFor(model => model.Property.Neighbourhood)
 
     <div class="mb-3 row align-items-center">
         @Html.LabelFor(model => model.Property.TypeOfProperty, htmlAttributes: new { @class = "col-sm-2 col-form-label" })
