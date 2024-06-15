@@ -39,7 +39,7 @@ namespace VirtualVistaHub.Controllers
         {
             var userId = Session["idUser"];
 
-            var propertiesQuery = db.Properties.Where(p => p.UserId.ToString() == userId.ToString() && p.ApprovalStatus != "Approved");
+            var propertiesQuery = db.Properties.Where(p => p.UserId.ToString() == userId.ToString() && p.ApprovalStatus != "Approved" && p.Deleted != true);
 
             var totalItems = propertiesQuery.Count();
             var properties = propertiesQuery
@@ -206,6 +206,11 @@ namespace VirtualVistaHub.Controllers
                 string imageSql = $"SELECT Images FROM {tableName}";
                 var images = db.Database.SqlQuery<string>(imageSql).ToArray();
 
+                if (visual == null)
+                {
+                    return RedirectToAction("NotFound", "Home");
+                }
+
                 var model = new EditPropertyViewModel
                 {
                     Property = information,
@@ -216,6 +221,12 @@ namespace VirtualVistaHub.Controllers
                     Denied = denied ?? false
                 };
 
+                // Check for error messages in TempData
+                if (TempData["ErrorMessage"] != null)
+                {
+                    ViewBag.ErrorMessage = TempData["ErrorMessage"];
+                }
+
                 return View(model);
             }
             else
@@ -224,9 +235,10 @@ namespace VirtualVistaHub.Controllers
             }
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditProperty(EditPropertyViewModel model, IEnumerable<HttpPostedFileBase> newImages)
+        public ActionResult EditProperty(EditPropertyViewModel model, IEnumerable<HttpPostedFileBase> newImages, HttpPostedFileBase vtourFile)
         {
             if (ModelState.IsValid)
             {
@@ -239,13 +251,6 @@ namespace VirtualVistaHub.Controllers
 
                 var propertyDetails = model.PropertyDetails;
                 string tableName = model.TableName;
-                string updatePropertyDetailsQuery = $"UPDATE {tableName} SET VTour = @VTour WHERE PropertyId = @PropertyId";
-                SqlParameter[] propertyDetailsParams =
-                {
-                    new SqlParameter("@VTour", propertyDetails.VTour),
-                    new SqlParameter("@PropertyId", property.PropertyId)
-                };
-                db.Database.ExecuteSqlCommand(updatePropertyDetailsQuery, propertyDetailsParams);
 
                 if (newImages != null)
                 {
@@ -280,6 +285,45 @@ namespace VirtualVistaHub.Controllers
                         index++;
                     }
                 }
+
+                if (vtourFile != null && vtourFile.ContentLength > 0)
+                {
+                    string vtourExtension = Path.GetExtension(vtourFile.FileName).ToLower();
+                    if (vtourExtension != ".blueprint3d")
+                    {
+                        ViewBag.ErrorMessage = "Визуализацията може да е само с .blueprint3d разширение.";
+                        return View(model);
+                    }
+                    else
+                    {
+                        try
+                        {
+                            using (var reader = new StreamReader(vtourFile.InputStream))
+                            {
+                                string fileContent = reader.ReadToEnd();
+                                // Verify if the content is valid JSON
+                                var jsonObject = Newtonsoft.Json.Linq.JObject.Parse(fileContent);
+
+                                // Store the file content directly in the database
+                                string updateSql = $@"
+                        UPDATE {tableName}
+                        SET VTour = @VTour
+                        WHERE PropertyId = @PropertyId;";
+
+                                db.Database.ExecuteSqlCommand(
+                                    updateSql,
+                                    new SqlParameter("@VTour", fileContent),
+                                    new SqlParameter("@PropertyId", property.PropertyId)
+                                );
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            ViewBag.ErrorMessage = "Не е валиден файл.";
+                            return View(model);
+                        }
+                    }
+                }
             }
 
             if (Session["userLevel"].ToString() != "none")
@@ -287,6 +331,7 @@ namespace VirtualVistaHub.Controllers
             else
                 return RedirectToAction("Properties", "Home");
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -300,11 +345,26 @@ namespace VirtualVistaHub.Controllers
                     Directory.CreateDirectory(uploadDir);
                 }
 
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+                var allowedMimeTypes = new[] { "image/jpeg", "image/png" };
+
                 foreach (var image in newImages)
                 {
                     if (image != null && image.ContentLength > 0)
                     {
-                        string fileExtension = Path.GetExtension(image.FileName);
+                        string fileExtension = Path.GetExtension(image.FileName).ToLower();
+                        if (!allowedExtensions.Contains(fileExtension))
+                        {
+                            TempData["ErrorMessage"] = $"Този файл {image.FileName} не е във валиден формат (png/jpg/jpeg).";
+                            continue;
+                        }
+
+                        if (!allowedMimeTypes.Contains(image.ContentType))
+                        {
+                            TempData["ErrorMessage"] = $"Този файл {image.FileName} не е във валиден формат (png/jpg/jpeg).";
+                            continue;
+                        }
+
                         string randomFileName = $"{Guid.NewGuid()}{fileExtension}";
                         string filePath = Path.Combine(uploadDir, randomFileName);
                         image.SaveAs(filePath);
@@ -326,6 +386,8 @@ namespace VirtualVistaHub.Controllers
 
             return RedirectToAction("EditProperty", new { propertyId, tableName });
         }
+
+
 
         [HttpPost]
         [SessionAuthorize]
@@ -390,7 +452,7 @@ namespace VirtualVistaHub.Controllers
         [HttpPost]
         [SessionAuthorize]
         [ValidateAntiForgeryToken]
-        public ActionResult Visual(PropertyDetailsTemplate property, IEnumerable<HttpPostedFileBase> images)
+        public ActionResult Visual(IEnumerable<HttpPostedFileBase> images, HttpPostedFileBase vtourFile)
         {
             var userId = Session["idUser"];
             var propertyId = Session["idProperty"];
@@ -402,8 +464,13 @@ namespace VirtualVistaHub.Controllers
                 Directory.CreateDirectory(uploadDir);
             }
 
-            if (images.Count() < 2 && images.Count() > 12)
+            var allowedImageExtensions = new[] { ".jpg", ".jpeg", ".png" };
+            var allowedImageMimeTypes = new[] { "image/jpeg", "image/png" };
+
+            // Validate number of images
+            if (images == null || images.Count() < 2 || images.Count() > 12)
             {
+                ViewBag.ErrorMessage = "Можете да качите между 2 и 12 снимки.";
                 return View();
             }
 
@@ -411,7 +478,13 @@ namespace VirtualVistaHub.Controllers
             {
                 if (image != null && image.ContentLength > 0)
                 {
-                    string fileExtension = Path.GetExtension(image.FileName);
+                    string fileExtension = Path.GetExtension(image.FileName).ToLower();
+                    if (!allowedImageExtensions.Contains(fileExtension) || !allowedImageMimeTypes.Contains(image.ContentType))
+                    {
+                        ModelState.AddModelError("", $"Този файл {image.FileName} не е във валиден формат (png/jpg/jpeg).");
+                        continue;
+                    }
+
                     string randomFileName = $"{Guid.NewGuid()}{fileExtension}";
                     string filePath = Path.Combine(uploadDir, randomFileName);
                     image.SaveAs(filePath);
@@ -423,11 +496,56 @@ namespace VirtualVistaHub.Controllers
                     db.Database.ExecuteSqlCommand(
                         insertSql,
                         new SqlParameter("@PropertyId", int.Parse(propertyId.ToString())),
-                        new SqlParameter("@VTour", property.VTour),
+                        new SqlParameter("@VTour", "none"),  // This will be updated later
                         new SqlParameter("@Images", randomFileName),
                         new SqlParameter("@UserId", int.Parse(userId.ToString()))
                     );
                 }
+            }
+
+            if (vtourFile != null && vtourFile.ContentLength > 0)
+            {
+                string vtourExtension = Path.GetExtension(vtourFile.FileName).ToLower();
+                if (vtourExtension != ".blueprint3d")
+                {
+                    ViewBag.ErrorMessage = "Визуализацията може да е само с .blueprint3d разширение.";
+                    return View();
+                }
+                else
+                {
+                    try
+                    {
+                        using (var reader = new StreamReader(vtourFile.InputStream))
+                        {
+                            string fileContent = reader.ReadToEnd();
+                            // Verify if the content is valid JSON
+                            var jsonObject = Newtonsoft.Json.Linq.JObject.Parse(fileContent);
+
+                            // Store the file content directly in the database
+                            string updateSql = $@"
+                            UPDATE {tableName}
+                            SET VTour = @VTour
+                            WHERE PropertyId = @PropertyId;";
+
+                            db.Database.ExecuteSqlCommand(
+                                updateSql,
+                                new SqlParameter("@VTour", fileContent),
+                                new SqlParameter("@PropertyId", int.Parse(propertyId.ToString()))
+                            );
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        ViewBag.ErrorMessage = "Не е валиден файл.";
+                        return View();
+                    }
+                }
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.ErrorMessage = "Има грешки във вашето подаване. Моля, проверете и опитайте отново.";
+                return View();
             }
 
             return RedirectToAction("Properties", "Home");

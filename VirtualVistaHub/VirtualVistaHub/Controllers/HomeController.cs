@@ -80,7 +80,7 @@ namespace VirtualVistaHub.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult Search(string typeOfProperty, string district, string neighbourhood, string typeOfConstruction, string typeOfSale, int page = 1, int pageSize = 6)
+        public ActionResult Search(string typeOfProperty, string district, string neighbourhood, string typeOfConstruction, string typeOfSale, int page = 1, int pageSize = 9)
         {
             var properties = db.Properties.Where(p => p.ApprovalStatus.ToString() != "Not Approved" && p.Sold != true);
 
@@ -174,7 +174,7 @@ namespace VirtualVistaHub.Controllers
         {
             if (db.Users.Any(x => x.Email == user.Email))
             {
-                ViewBag.Notification = "This account already exists";
+                ViewBag.Notification = "Този акаунт вече съществува.";
                 return View();
             }
             else
@@ -193,7 +193,7 @@ namespace VirtualVistaHub.Controllers
                 }
                 else
                 {
-                    ViewBag.Notification = "The password and confirmation password do not match.";
+                    ViewBag.Notification = "Паролата и паролата за потвърждение не съвпадат.";
                     return View();
                 }
             }
@@ -230,17 +230,17 @@ namespace VirtualVistaHub.Controllers
                     }
                     else
                     {
-                        ViewBag.Notification = "Този акаунт е изтрит";
+                        ViewBag.Notification = "Този акаунт е изтрит.";
                     }
                 }
                 else
                 {
-                    ViewBag.Notification = "Wrong email or password";
+                    ViewBag.Notification = "Грешен имейл или парола.";
                 }
             }
             else
             {
-                ViewBag.Notification = "Wrong email or password";
+                ViewBag.Notification = "Грешен имейл или парола.";
             }
 
             return View();

@@ -2,12 +2,24 @@
 
 <h1 class="text-center">Редактирай имот</h1>
 
+@{
+    var vtour = Model.PropertyDetails?.VTour ?? "none";
+}
+
 @using (Html.BeginForm("EditProperty", "Property", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
 <div class="container mt-4">
     <hr />
+
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.ErrorMessage
+        </div>
+    }
+
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     @Html.HiddenFor(model => model.Property.PropertyId)
     @Html.HiddenFor(model => model.TableName)
@@ -163,13 +175,19 @@
         </div>
     </div>
 
-    <div class="mb-3 row">
-        @Html.LabelFor(model => model.PropertyDetails.VTour, htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+    <hr />
+    <iframe id="blueprint3dFrame" width="100%" height="600px"></iframe>
+
+    <h5 class="text-center">⬇️ За да промените 3D визуализация трябва да цъкнете на бутона "Save Plan" и да качите изтегления файл.⬇️</h5>
+
+    <div class="mb-3 row align-items-center">
+        <label class="col-form-label col-md-2">Визуализация</label>
         <div class="col-sm-10">
-            @Html.EditorFor(model => model.PropertyDetails.VTour, new { htmlAttributes = new { @class = "form-control" } })
+            <input type="file" name="vtourFile" class="form-control" accept=".blueprint3d" />
             @Html.ValidationMessageFor(model => model.PropertyDetails.VTour, "", new { @class = "text-danger" })
         </div>
     </div>
+
 
     <div class="mb-3 row align-items-start">
         <label class="col-sm-2 col-form-label">Снимки</label>
@@ -230,8 +248,19 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-<script>
-        $(document).ready(function () {
+    <script>
+    $(document).ready(function () {
+            var encodedJsonData = "@vtour";
+            var jsonData = HtmlDecode(encodedJsonData);
+            var iframe = document.getElementById('blueprint3dFrame');
+
+            if (jsonData != "none") {
+                var srcUrl = 'http://localhost:8000/example?mode=edit&loadRoom=' + encodeURIComponent(JSON.stringify(jsonData));
+                iframe.src = srcUrl;
+            } else {
+                iframe.style.display = 'none';
+            }
+
             $('.btn-delete-image').click(function () {
                 var imageName = $(this).data('image');
                 var propertyId = $(this).data('property-id');
@@ -246,6 +275,14 @@
                     });
                 }
             });
+
+
+        function HtmlDecode(input) {
+            var e = document.createElement('textarea');
+            e.innerHTML = input;
+            // handle case where browser might break with &quot; decoding
+            return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+        }
         });
-</script>
+    </script>
 }

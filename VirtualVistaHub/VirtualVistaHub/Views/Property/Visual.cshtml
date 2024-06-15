@@ -9,18 +9,28 @@
     <div class="container form-horizontal">
         <hr />
 
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+        }
+
+        <iframe src="http://localhost:8000/example/" width="100%" height="600px"></iframe>
+
+        <h5 class="text-center">⬇️ За да качите 3D визуализация трябва да цъкнете на бутона "Save" и да качите изтегления файл. Ако не искате 3D визуализация, не качвайте нищо. ⬇️</h5>
+
         <div class="mb-3 row align-items-center">
-            @Html.LabelFor(model => model.VTour, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="control-label col-md-2">Визуализация</div>
             <div class="col-sm-10">
-                @Html.EditorFor(model => model.VTour, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                <input type="file" name="vtourFile" class="form-control" accept=".blueprint3d" />
                 @Html.ValidationMessageFor(model => model.VTour, "", new { @class = "text-danger" })
+                <small class="text-muted">Качи .blueprint3d файл</small>
             </div>
         </div>
 
         <div class="mb-3 row align-items-center">
-            @Html.LabelFor(model => model.Images, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="control-label col-md-2">Снимки</div>
             <div class="col-sm-10">
-                <input type="file" name="images" multiple class="form-control" accept="image/*" onchange="checkFileCount(this)" id="imagesInput" />
+                <input type="file" name="images" multiple class="form-control" accept=".jpg,.jpeg,.png" onchange="checkFileCount(this)" id="imagesInput" />
                 @Html.ValidationMessageFor(model => model.Images, "", new { @class = "text-danger" })
                 <small class="text-muted">Може да качиш минимум 2 снимки или максимум 12 снимки</small>
             </div>
@@ -40,8 +50,7 @@
             if (input.files.length > 12) {
                 alert("Можеш да качиш максимум 12 снимки!");
                 input.value = "";
-            }
-            else if (input.files.length < 2) {
+            } else if (input.files.length < 2) {
                 alert("Трябва да качиш минимум 2 снимки!");
                 input.value = "";
             }

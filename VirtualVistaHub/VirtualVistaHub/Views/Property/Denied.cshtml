@@ -40,7 +40,7 @@
                                 <td>@Html.DisplayFor(modelItem => item.Price) лв.</td>
                                 <td>@Html.DisplayFor(modelItem => item.Area) кв. м.</td>
                                 <td>@Html.DisplayFor(modelItem => item.ApprovalStatus)</td>
-                                <td>@Html.ActionLink("Edit Property", "EditProperty", "Property", new { propertyId = item.PropertyId, tableName = item.PropertyDetailsTable, denied = denied }, new { @class = "btn btn-warning me-3", @style = "color: black; font-weight: bold;" })</td>
+                                <td>@Html.ActionLink("Редактирай", "EditProperty", "Property", new { propertyId = item.PropertyId, tableName = item.PropertyDetailsTable, denied = denied }, new { @class = "btn btn-warning me-3", @style = "color: black; font-weight: bold;" })</td>
                             </tr>
                         }
                     </tbody>
