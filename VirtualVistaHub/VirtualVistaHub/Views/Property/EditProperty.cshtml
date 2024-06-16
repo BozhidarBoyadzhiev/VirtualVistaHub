@@ -176,7 +176,8 @@
     </div>
 
     <hr />
-    <iframe id="blueprint3dFrame" width="100%" height="600px"></iframe>
+    <h5 id="h5">Ако 3D визуализацията не зарежда, натиснете Ctrl + F5</h5><h5 id="h5">Ако 3D визуализацията не зарежда, натиснете Ctrl + F5</h5>
+    <iframe id="blueprint3dFrame" src="https://bojidar.maxprogress.bg/3dbuilder/example#mode=edit&loadRoom=" width="1440" height="800"></iframe>
 
     <h5 class="text-center">⬇️ За да промените 3D визуализация трябва да цъкнете на бутона "Save Plan" и да качите изтегления файл.⬇️</h5>
 
@@ -250,15 +251,17 @@
     @Scripts.Render("~/bundles/jqueryval")
     <script>
     $(document).ready(function () {
-            var encodedJsonData = "@vtour";
+            var encodedJsonData = '@vtour';
             var jsonData = HtmlDecode(encodedJsonData);
             var iframe = document.getElementById('blueprint3dFrame');
+            var h5 = document.getElementById('h5');
 
             if (jsonData != "none") {
-                var srcUrl = 'http://localhost:8000/example?mode=edit&loadRoom=' + encodeURIComponent(JSON.stringify(jsonData));
+                var srcUrl = 'https://bojidar.maxprogress.bg/3dbuilder/example#mode=edit&loadRoom=' + encodeURIComponent(JSON.stringify(jsonData));
                 iframe.src = srcUrl;
             } else {
                 iframe.style.display = 'none';
+                h5.style.display = 'none';
             }
 
             $('.btn-delete-image').click(function () {

@@ -22,31 +22,32 @@
             <p>Квартал: @Html.DisplayFor(model => model.Property.Neighbourhood)</p>
             @if (Model.Property.TypeOfSale == "Наем")
             {
-            <p>Цена на месец: @Model.Property.Price.ToString("N0") лв.</p>
+                <p>Цена на месец: @Model.Property.Price.ToString("N0") лв.</p>
             }
             else
             {
-            <p>Цена: @Model.Property.Price.ToString("N0") лв.</p>
+                <p>Цена: @Model.Property.Price.ToString("N0") лв.</p>
             }
             <p>Квадратура: @Model.Property.Area кв. м.</p>
             <p>Вид на строителството: @Model.Property.TypeOfConstruction</p>
             <p id="typeofsale">Вид на обявата: @Model.Property.TypeOfSale</p>
         </div>
     </div>
-    <iframe id="blueprint3dFrame" width="100%" height="600px"></iframe>
+    <h5 id="h5">Ако 3D визуализацията не зарежда, натиснете Ctrl + F5</h5>
+    <iframe id="blueprint3dFrame" src="https://bojidar.maxprogress.bg/3dbuilder/example#loadRoom=" width="1440" height="800"></iframe>
     <div class="gallery mt-4">
         @if (Model.ImagePaths != null && Model.ImagePaths.Length > 0)
         {
-        <div class="row">
-            @foreach (var imagePath in Model.ImagePaths)
-            {
-            <div class="col-md-4 col-sm-6 col-12 mb-4">
-                <a href="@Url.Content($"~/Uploads/{Model.Property.PropertyDetailsTable}/{imagePath}")" data-lightbox="property-images">
-                    <img src="@Url.Content($"~/Uploads/{Model.Property.PropertyDetailsTable}/{imagePath}")" alt="Property Image" class="img-thumbnail w-100" style="height: 400px; object-fit: cover;">
-                </a>
+            <div class="row">
+                @foreach (var imagePath in Model.ImagePaths)
+                {
+                    <div class="col-md-4 col-sm-6 col-12 mb-4">
+                        <a href="@Url.Content($"~/Uploads/{Model.Property.PropertyDetailsTable}/{imagePath}")" data-lightbox="property-images">
+                            <img src="@Url.Content($"~/Uploads/{Model.Property.PropertyDetailsTable}/{imagePath}")" alt="Property Image" class="img-thumbnail w-100" style="height: 400px; object-fit: cover;">
+                        </a>
+                    </div>
+                }
             </div>
-            }
-        </div>
         }
     </div>
 
@@ -87,12 +88,15 @@
         var encodedJsonData = '@Model.PropertyDetails.VTour';
         var jsonData = HtmlDecode(encodedJsonData);
         var iframe = document.getElementById('blueprint3dFrame');
-         
+        var h5 = document.getElementById('h5');
+
+
         if (jsonData != "none") {
-            var srcUrl = 'http://localhost:8000/example?loadRoom=' + encodeURIComponent(JSON.stringify(jsonData));
+            var srcUrl = 'https://bojidar.maxprogress.bg/3dbuilder/example#loadRoom=' + encodeURIComponent(JSON.stringify(jsonData));
             iframe.src = srcUrl;
         } else {
             iframe.style.display = 'none';
+            h5.style.display = 'none';
         }
 
         var propertyId;
