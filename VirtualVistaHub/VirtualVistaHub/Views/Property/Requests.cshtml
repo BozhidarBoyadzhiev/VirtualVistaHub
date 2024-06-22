@@ -1,4 +1,4 @@
-﻿@model Tuple<IEnumerable<VirtualVistaHub.Models.UserProperty>, VirtualVistaHub.Models.PaginationModel>
+@model Tuple<IEnumerable<VirtualVistaHub.Models.UserProperty>, VirtualVistaHub.Models.PaginationModel>
 
 <h1 class="text-center">Заявки</h1>
 <div class="container mt-4">
@@ -72,7 +72,7 @@
                             for (int i = 1; i <= Model.Item2.TotalPages; i++)
                             {
                                 <li class="page-item @(i == Model.Item2.Page ? "active" : "")">
-                                    <a class="page-link" href="@Url.Action("Users", new { page = i, pageSize = Model.Item2.PageSize })">@i</a>
+                                    <a class="page-link" href="@Url.Action("Requests", new { page = i, pageSize = Model.Item2.PageSize })">@i</a>
                                 </li>
                             }
                         }

@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Web.Mvc;
 using VirtualVistaHub.Models;
 using VirtualVistaHub.Filters;
@@ -80,7 +80,7 @@ namespace VirtualVistaHub.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult Search(string typeOfProperty, string district, string neighbourhood, string typeOfConstruction, string typeOfSale, int page = 1, int pageSize = 9)
+        public ActionResult Search(string typeOfProperty, string district, string neighbourhood, string typeOfConstruction, string typeOfSale, int page = 1, int pageSize = 7)
         {
             var properties = db.Properties.Where(p => p.ApprovalStatus.ToString() != "Not Approved" && p.Sold != true);
 
@@ -112,10 +112,21 @@ namespace VirtualVistaHub.Controllers
 
             foreach (var prop in propertyList)
             {
-                string query = $"SELECT TOP 1 Images FROM {prop.PropertyDetailsTable}";
-                var image = db.Database.SqlQuery<string>(query).FirstOrDefault();
-                string firstImagePath = image ?? string.Empty;
-                propertyDetails.Add(prop.PropertyId, (prop.PropertyDetailsTable, firstImagePath));
+                string firstImagePath = string.Empty;
+                string tableName = prop.PropertyDetailsTable;
+
+                // Check if the table exists in the database
+                string tableExistsQuery = $"SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{tableName}'";
+                bool tableExists = db.Database.SqlQuery<int>(tableExistsQuery).FirstOrDefault() > 0;
+
+                if (tableExists)
+                {
+                    string query = $"SELECT TOP 1 Images FROM {tableName}";
+                    var image = db.Database.SqlQuery<string>(query).FirstOrDefault();
+                    firstImagePath = image ?? string.Empty;
+                }
+
+                propertyDetails.Add(prop.PropertyId, (tableName, firstImagePath));
             }
 
             var search = new PropertySearchViewModel
@@ -140,6 +151,7 @@ namespace VirtualVistaHub.Controllers
 
             return View(viewModel);
         }
+
 
 
         [SessionAuthorize]

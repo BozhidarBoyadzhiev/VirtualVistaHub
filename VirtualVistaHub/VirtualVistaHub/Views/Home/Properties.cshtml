@@ -1,7 +1,9 @@
-﻿@model Tuple<IEnumerable<VirtualVistaHub.Models.Property>, VirtualVistaHub.Models.PaginationModel>
+@model Tuple<IEnumerable<VirtualVistaHub.Models.Property>, VirtualVistaHub.Models.PaginationModel>
 <h1 class="text-center">Имоти</h1>
-<button onclick="window.location.href = '@Url.Action("Information", "Property")'" class="btn btn-primary btn-block">Създай нов имот</button>
-<button onclick="window.location.href = '@Url.Action("Denied", "Property")'" class="btn btn-primary btn-block">Неодобрени имоти</button>
+<div class="container text-center">
+     <button onclick="window.location.href = '@Url.Action("Information", "Property")'" class="btn mb-1 btn-primary btn-block">Създай нов имот</button>
+     <button onclick="window.location.href = '@Url.Action("Denied", "Property")'" class="btn btn-primary btn-block">Неодобрени имоти</button>
+</div>
 <div class="container mt-4">
     <h5 class="text-center">В случай, че искате да изтриете някой имот се свържете с администратор</h5>
     <section>

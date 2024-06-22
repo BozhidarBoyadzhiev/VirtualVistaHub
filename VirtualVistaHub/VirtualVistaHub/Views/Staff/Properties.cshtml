@@ -1,4 +1,4 @@
-﻿@model Tuple<IEnumerable<VirtualVistaHub.Models.Property>, VirtualVistaHub.Models.PaginationModel>
+@model Tuple<IEnumerable<VirtualVistaHub.Models.Property>, VirtualVistaHub.Models.PaginationModel>
 
 <h1 class="text-center">Имоти</h1>
 <div class="container mt-4">
@@ -18,7 +18,7 @@
                     </label>
                 </div>
             </div>
-            <div class="table-responsive overflow-auto" style="overflow-y: scroll;">
+            <div class="table-responsive overflow-auto" style="overflow-x: scroll;">
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
@@ -50,11 +50,18 @@
                                 <td>@Html.DisplayFor(modelItem => item.Area) кв. м.</td>
                                 <td>@Html.DisplayFor(modelItem => item.TypeOfConstruction)</td>
                                 <td>@Html.DisplayFor(modelItem => item.PhoneNumber)</td>
-                                <td>@Html.DisplayFor(modelItem => item.ApprovalStatus)</td>
+                                <td>
+                                    @{
+                                        var status = item.ApprovalStatus == "Approved" ? "Одобрен" :
+                                                               item.ApprovalStatus == "Not Approved" ? "Неодобрен" :
+                                                               item.ApprovalStatus;
+                                    }
+                                    @status
+                                </td>
                                 <td class="text-center align-middle">@Html.DisplayFor(modelItem => item.Deleted)</td>
                                 <td class="text-center align-middle">@Html.DisplayFor(modelItem => item.Sold)</td>
                                 <td class="text-center align-middle">@Html.DisplayFor(modelItem => item.WantToBuy)</td>
-                                <td>@Html.DisplayFor(modelItem => item.AdditionalInformation)</td>
+                                <td id="data">@Html.DisplayFor(modelItem => item.AdditionalInformation)</td>
                                 <td>@Html.DisplayFor(modelItem => item.User.FirstName)</td>
                                 <td>@Html.DisplayFor(modelItem => item.User.LastName)</td>
                                 <td><a href="#" style="color: black; font-weight: bold;" class="edit-link btn btn-warning me-2" data-user-id="@item.UserId" data-property-id="@item.PropertyId" data-table-name="@item.PropertyDetailsTable">Редактирай</a></td>
@@ -79,7 +86,7 @@
                             for (int i = 1; i <= Model.Item2.TotalPages; i++)
                             {
                                 <li class="page-item @(i == Model.Item2.Page ? "active" : "")">
-                                    <a class="page-link" href="@Url.Action("Users", new { page = i, pageSize = Model.Item2.PageSize })">@i</a>
+                                    <a class="page-link" href="@Url.Action("Properties", new { page = i, pageSize = Model.Item2.PageSize })">@i</a>
                                 </li>
                             }
                         }

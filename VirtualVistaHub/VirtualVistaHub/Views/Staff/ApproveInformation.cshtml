@@ -1,4 +1,4 @@
-﻿@model Tuple<IEnumerable<VirtualVistaHub.Models.Property>, VirtualVistaHub.Models.PaginationModel>
+@model Tuple<IEnumerable<VirtualVistaHub.Models.Property>, VirtualVistaHub.Models.PaginationModel>
 
 <h1 class="text-center">Одобряване на имот</h1>
 <div class="container mt-4">
@@ -46,7 +46,7 @@
                                 <td>@Html.DisplayFor(modelItem => item.Area) кв. м.</td>
                                 <td>@Html.DisplayFor(modelItem => item.TypeOfConstruction)</td>
                                 <td>@Html.DisplayFor(modelItem => item.PhoneNumber)</td>
-                                <td>@Html.DisplayFor(modelItem => item.AdditionalInformation)</td>
+                                <td id="data" aria-haspopup="true">@Html.DisplayFor(modelItem => item.AdditionalInformation)</td>
                                 <td>@Html.DisplayFor(modelItem => item.User.FirstName)</td>
                                 <td>@Html.DisplayFor(modelItem => item.User.LastName)</td>
                                 <td style="width: 15%">
@@ -74,7 +74,7 @@
                             for (int i = 1; i <= Model.Item2.TotalPages; i++)
                             {
                                 <li class="page-item @(i == Model.Item2.Page ? "active" : "")">
-                                    <a class="page-link" href="@Url.Action("Users", new { page = i, pageSize = Model.Item2.PageSize })">@i</a>
+                                    <a class="page-link" href="@Url.Action("ApproveInformation", new { page = i, pageSize = Model.Item2.PageSize })">@i</a>
                                 </li>
                             }
                         }

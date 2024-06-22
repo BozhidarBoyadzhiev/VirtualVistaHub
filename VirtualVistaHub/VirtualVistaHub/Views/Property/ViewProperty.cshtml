@@ -1,6 +1,6 @@
-﻿@model VirtualVistaHub.Models.ViewPropertyModel
+@model VirtualVistaHub.Models.ViewPropertyModel
 
-<div class="container property-detail">
+<div class="container property-detail text-center">
     <div class="header mb-4 mt-4">
         <div class="property-info d-flex align-items-center">
             <img src="~/Content/imgs/icon.png" alt="Logo" style="width: 30px;" class="me-3">
@@ -57,13 +57,12 @@
             @Model.Property.AdditionalInformation
         </div>
     </div>
+    @if (Session["userLevel"].ToString() == "none" && Session["idUser"].ToString() != Model.User.UserId.ToString())
+    {
+        <button type="button" class="request-link requestbtn btn-primary mt-4 mb-4" data-bs-toggle="modal" data-bs-target="#confirmRequestModal" data-property-id="@Model.Property.PropertyId" data-table-name="@Model.Property.PropertyDetailsTable">Направи заявка</button>
+
+    }
 </div>
-
-@if (Session["userLevel"].ToString() == "none" && Session["idUser"].ToString() != Model.User.UserId.ToString())
-{
-    <button type="button" class="request-link requestbtn btn-primary mt-4 mb-4" data-bs-toggle="modal" data-bs-target="#confirmRequestModal" data-property-id="@Model.Property.PropertyId" data-table-name="@Model.Property.PropertyDetailsTable">Направи заявка</button>
-
-}
 <div class="modal fade" id="confirmRequestModal" tabindex="-1" aria-labelledby="confirmRequestModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

@@ -1,4 +1,4 @@
-﻿@model VirtualVistaHub.Models.Property
+@model VirtualVistaHub.Models.Property
 
 <h1 class="text-center">Информация за имота</h1>
 
@@ -33,7 +33,7 @@
     </div>
 
     <div class="mb-3 row align-items-center">
-        @Html.LabelFor(model => model.District, htmlAttributes: new { @class = "col-sm-2 col-form-label" })
+        <label class="col-sm-2 col-form-label">Град</label>
         <div class="col-sm-10">
             @Html.DropDownListFor(model => model.District, new List<SelectListItem>
             {
@@ -59,7 +59,6 @@
                 new SelectListItem { Value = "Сливен", Text = "Сливен" },
                 new SelectListItem { Value = "Смолян", Text = "Смолян" },
                 new SelectListItem { Value = "София", Text = "София" },
-                new SelectListItem { Value = "София-област", Text = "София-област" },
                 new SelectListItem { Value = "СтараЗагора", Text = "Стара Загора" },
                 new SelectListItem { Value = "Търговище", Text = "Търговище" },
                 new SelectListItem { Value = "Хасково", Text = "Хасково" },

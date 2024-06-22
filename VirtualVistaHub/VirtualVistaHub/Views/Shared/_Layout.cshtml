@@ -1,10 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en-US" class="twbb">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VirtualVistaHub</title>
-
     @Styles.Render("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css")
     @Styles.Render("https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css")
     @Styles.Render("~/Content/css")
@@ -14,12 +13,10 @@
         string userLevel = Session["userLevel"] as string;
         string userFirstname = Session["UserFirstname"] as string;
     }
-
-
     @if (userLevel == "superadmin")
     {
         <div class="d-flex" id="d-flex-container">
-            <div class="flex-shrink-0" id="d-flex-shrink">
+            <div class="flex-shrink-0 bg-light p-3" id="d-flex-shrink">
                 @Html.Partial("_SuperAdminNav")
             </div>
             <div class="flex-grow-1 ms-3 text-center" id="d-flex-grow">
@@ -30,7 +27,7 @@
     else if (userLevel == "admin")
     {
         <div class="d-flex" id="d-flex-container">
-            <div class="flex-shrink-0" id="d-flex-shrink">
+            <div class="flex-shrink-0 bg-light p-3" id="d-flex-shrink">
                 @Html.Partial("_AdminNav")
             </div>
             <div class="flex-grow-1 ms-3 text-center" id="d-flex-grow">
@@ -41,7 +38,7 @@
     else if (userLevel == "moderator")
     {
         <div class="d-flex" id="d-flex-container">
-            <div class="flex-shrink-0" id="d-flex-shrink">
+            <div class="flex-shrink-0 bg-light p-3" id="d-flex-shrink">
                 @Html.Partial("_ModeratorNav")
             </div>
             <div class="flex-grow-1 ms-3 text-center" id="d-flex-grow">
@@ -52,10 +49,10 @@
     else if (userFirstname != null && userLevel == "none")
     {
         <div class="d-flex" id="d-flex-container">
-            <div class="flex-shrink-0" id="d-flex-shrink">
+            <div class="flex-shrink-0 bg-light p-3" id="d-flex-shrink">
                 @Html.Partial("_LoggedInNav")
             </div>
-            <div class="flex-grow-1 ms-3 text-center" id="d-flex-grow">
+            <div class="flex-grow-1 ms-3" id="d-flex-grow">
                 @RenderBody()
             </div>
         </div>
