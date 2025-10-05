@@ -70,9 +70,7 @@ VirtualVistaHub/
 
 ## 🎥 Demo video showing the project
 
-<video src="Demo%20video.mp4" controls preload="metadata" width="800">
-  Your browser does not support the video tag. You can find the video at the repository root as "Demo video.mp4".
-</video>
+[![Watch the video](https://img.youtube.com/vi/BytmSl5B-1Y/maxresdefault.jpg)](https://youtu.be/BytmSl5B-1Y)
 
 ## 🔗 FurnishUp Integration
 - Link or embed the FurnishUp 3D builder from property detail pages to allow users to visualize furniture layouts.
